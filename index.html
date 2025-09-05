@@ -291,13 +291,13 @@
                 <div class="event">
                     <div class="event-icon">🏙️</div>
                     <p class="event-time">16:30 ~ 18:00</p>
-                    <h3 class="event-title clickable-title" id="tvTowerBtn">오도리 공원 & TV타워</h3>
+                    <h3 class="event-title clickable-title" id="tvTowerBtn">오도리 공원 & TV타워 ➔</h3>
                     <p class="event-description">삿포로의 중심 오도리 공원을 산책하고, TV타워 전망대에서 노을 감상</p>
                 </div>
                 <div class="event">
                     <div class="event-icon">🍽️</div>
                     <p class="event-time">18:00 ~</p>
-                    <h3 class="event-title">스스키노 저녁 & 야경</h3>
+                    <h3 class="event-title clickable-title" id="susukinoBtn">스스키노 저녁 & 야경 ➔</h3>
                     <p class="event-description">삿포로 명물 징기스칸 또는 스프카레로 저녁 식사 후 화려한 스스키노 거리 구경</p>
                 </div>
             </div>
@@ -466,6 +466,45 @@
   </div>
 </div>
 
+<!-- Susukino Restaurants Modal -->
+<div id="susukinoModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+        <span class="close-button" id="closeSusukino">&times;</span>
+        <h2>스스키노 맛집 추천 🍽️</h2>
+    </div>
+    <div class="modal-body">
+        <p>한국인 리뷰를 제외한, 현지 구글맵 평점이 높은 맛집 리스트입니다. 현지인들이 사랑하는 진짜 삿포로의 맛을 경험해 보세요!</p>
+        
+        <h3>🍛 현지인 추천 스프카레 BEST 3</h3>
+        <h4>1. SOUP CURRY KING CENTRAL</h4>
+        <p>진하고 깊은 감칠맛이 폭발하는 국물이 일품인 곳. 현지인들이 줄 서서 먹는 대표 맛집입니다.</p>
+        <ul><li><strong>주소:</strong> 北海道札幌市中央区南2条西3丁目11-1</li></ul>
+
+        <h4>2. Okushiba Shoten Soseigawa-dori</h4>
+        <p>다른 가게와 차별화되는 진한 '새우(海老) 베이스' 국물이 특징입니다. 특별한 스프카레를 원한다면 강력 추천합니다.</p>
+        <ul><li><strong>주소:</strong> 北海道札幌市中央区北4条西1丁目 ホクレンビル B1F</li></ul>
+
+        <h4>3. Soup Curry SAMURAI. Sakura</h4>
+        <p>큼직하고 신선한 홋카이도산 채소 토핑이 푸짐하게 올라가는 것으로 유명합니다. 건강하고 맛있는 한 끼를 원할 때 최고입니다.</p>
+        <ul><li><strong>주소:</strong> 北海道札幌市中央区南3条西6丁目1-3</li></ul>
+
+        <h3>🐑 현지인 추천 징기스칸 BEST 3</h3>
+        <h4>1. Sapporo Genghis Khan Shiro-kuma</h4>
+        <p>잡내 없이 신선하고 부드러운 생 양고기의 맛을 제대로 느낄 수 있는 곳. 현지 미식가들이 특히 사랑하는 곳입니다.</p>
+        <ul><li><strong>주소:</strong> 北海道札幌市中央区南6条西3丁目 ジョイフル札幌 1F</li></ul>
+        
+        <h4>2. Genghis Khan Itadakimasu</h4>
+        <p>목장에서 직접 기른 100% 순종 서퍽 양고기만을 취급하여 고기 본연의 깊은 맛을 느낄 수 있습니다.</p>
+        <ul><li><strong>주소:</strong> 北海道札幌市中央区南5条西5丁目1-6</li></ul>
+
+        <h4>3. Sapporo Genghis Khan Daruma 4.4</h4>
+        <p>'다루마' 지점 중에서도 시설이 쾌적하고 웨이팅이 덜해 현지인에게 인기 많은 곳입니다. 전통의 맛과 편안함을 동시에 잡을 수 있습니다.</p>
+        <ul><li><strong>주소:</strong> 北海道札幌市中央区南4条西4丁目 (정확한 위치는 최신 정보 확인 필요)</li></ul>
+    </div>
+  </div>
+</div>
+
 <!-- Transport Modal -->
 <div id="transportModal" class="modal">
   <div class="modal-content">
@@ -573,6 +612,7 @@
     // Setup Modals
     setupModal('transportModal', 'transportBtn', 'closeTransport');
     setupModal('tvTowerModal', 'tvTowerBtn', 'closeTvTower');
+    setupModal('susukinoModal', 'susukinoBtn', 'closeSusukino');
 
 </script>
 
