@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>삿포로 가을 여행 4박 5일</title>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+
+    body {
+        font-family: 'Noto Sans KR', sans-serif;
+        background-color: #F8F9FA;
+        margin: 0;
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .container {
+        width: 100%;
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .header {
+        text-align: center;
+        margin-bottom: 40px;
+        color: #343A40;
+    }
+
+    .header h1 {
+        font-weight: 700;
+        font-size: 2.5em;
+        margin-bottom: 10px;
+        letter-spacing: -1px;
+    }
+
+    .header p {
+        font-weight: 300;
+        font-size: 1.2em;
+        color: #6C757D;
+    }
+    
+    .day-card {
+        background-color: #FFFFFF;
+        border-radius: 15px;
+        margin-bottom: 25px;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        overflow: hidden;
+    }
+
+    .day-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+    }
+    
+    .day-header {
+        display: flex;
+        align-items: center;
+        padding: 20px 25px;
+        border-bottom: 1px solid #E9ECEF;
+    }
+
+    .day-number {
+        font-size: 2.5em;
+        font-weight: 700;
+        color: #007BFF;
+        margin-right: 20px;
+    }
+    
+    .day-info h2 {
+        font-size: 1.5em;
+        font-weight: 500;
+        margin: 0;
+        color: #212529;
+    }
+    
+    .day-info p {
+        font-size: 1em;
+        font-weight: 300;
+        margin: 5px 0 0;
+        color: #6C757D;
+    }
+    
+    .day-details {
+        padding: 0px 25px;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.5s ease-out, padding 0.5s ease-out;
+    }
+    
+    .day-card.active .day-details {
+        max-height: 500px; /* 필요에 따라 조정 */
+        padding: 25px;
+    }
+    
+    .timeline {
+        position: relative;
+        padding-left: 25px;
+        border-left: 2px solid #E9ECEF;
+    }
+    
+    .event {
+        margin-bottom: 25px;
+        position: relative;
+    }
+
+    .event:last-child {
+        margin-bottom: 0;
+    }
+    
+    .event-icon {
+        position: absolute;
+        left: -40px;
+        top: 0;
+        width: 30px;
+        height: 30px;
+        background-color: #FFFFFF;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 1.2em;
+        border: 2px solid #E9ECEF;
+    }
+    
+    .event-time {
+        font-weight: 500;
+        color: #007BFF;
+        margin-bottom: 5px;
+    }
+    
+    .event-title {
+        font-weight: 700;
+        color: #495057;
+        margin-bottom: 8px;
+    }
+    
+    .event-description {
+        font-weight: 300;
+        color: #6C757D;
+        line-height: 1.6;
+        padding-left: 10px;
+        border-left: 3px solid #DEE2E6;
+    }
+
+</style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>🍁 삿포로 4박 5일 가을 여행</h1>
+        <p>9월 29일 ~ 10월 3일</p>
+    </div>
+
+    <!-- DAY 1 -->
+    <div class="day-card">
+        <div class="day-header">
+            <div class="day-number">1</div>
+            <div class="day-info">
+                <h2>첫 만남, 삿포로!</h2>
+                <p>9월 29일 (월)</p>
+            </div>
+        </div>
+        <div class="day-details">
+            <div class="timeline">
+                <div class="event">
+                    <div class="event-icon">✈️</div>
+                    <p class="event-time">13:00 ~ 16:30</p>
+                    <h3 class="event-title">공항 도착 및 호텔 이동</h3>
+                    <p class="event-description">신치토세 공항 도착 후 JR쾌속 에어포트로 삿포로역 이동, 호텔 체크인</p>
+                </div>
+                <div class="event">
+                    <div class="event-icon">🏙️</div>
+                    <p class="event-time">16:30 ~ 18:00</p>
+                    <h3 class="event-title">오도리 공원 & TV타워</h3>
+                    <p class="event-description">삿포로의 중심 오도리 공원을 산책하고, TV타워 전망대에서 노을 감상</p>
+                </div>
+                <div class="event">
+                    <div class="event-icon">🍽️</div>
+                    <p class="event-time">18:00 ~</p>
+                    <h3 class="event-title">스스키노 저녁 & 야경</h3>
+                    <p class="event-description">삿포로 명물 징기스칸 또는 스프카레로 저녁 식사 후 화려한 스스키노 거리 구경</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- DAY 2 -->
+    <div class="day-card">
+        <div class="day-header">
+            <div class="day-number">2</div>
+            <div class="day-info">
+                <h2>그림 같은 풍경, 비에이 속으로</h2>
+                <p>9월 30일 (화)</p>
+            </div>
+        </div>
+        <div class="day-details">
+            <div class="timeline">
+                <div class="event">
+                    <div class="event-icon">🚌</div>
+                    <p class="event-time">07:00 ~ 19:00</p>
+                    <h3 class="event-title">비에이 & 후라노 버스 투어</h3>
+                    <p class="event-description">청의 호수, 흰수염 폭포, 패치워크 로드 등 아름다운 대자연을 하루 동안 만끽하는 시간</p>
+                </div>
+                <div class="event">
+                    <div class="event-icon">🍜</div>
+                    <p class="event-time">19:00 ~</p>
+                    <h3 class="event-title">삿포로 도착 및 저녁</h3>
+                    <p class="event-description">투어 종료 후 삿포로로 복귀하여 따뜻한 미소라멘으로 피로 풀기</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DAY 3 -->
+    <div class="day-card">
+        <div class="day-header">
+            <div class="day-number">3</div>
+            <div class="day-info">
+                <h2>자연의 경이로움, 노보리베츠 & 도야</h2>
+                <p>10월 1일 (수)</p>
+            </div>
+        </div>
+        <div class="day-details">
+            <div class="timeline">
+                <div class="event">
+                    <div class="event-icon">🚗</div>
+                    <p class="event-time">09:00 ~ 12:00</p>
+                    <h3 class="event-title">렌터카 여행 시작</h3>
+                    <p class="event-description">삿포로역에서 렌터카 픽업 후 노보리베츠로 드라이브</p>
+                </div>
+                <div class="event">
+                    <div class="event-icon">👹</div>
+                    <p class="event-time">12:00 ~ 16:30</p>
+                    <h3 class="event-title">노보리베츠 지옥계곡</h3>
+                    <p class="event-description">유황 연기가 피어오르는 지옥계곡과 오유누마 산책 후 도야 호수로 이동</p>
+                </div>
+                <div class="event">
+                    <div class="event-icon">🎆</div>
+                    <p class="event-time">16:30 ~</p>
+                    <h3 class="event-title">도야 호수 온천 & 불꽃놀이</h3>
+                    <p class="event-description">호수 전망의 온천 호텔에서 휴식 후 밤하늘을 수놓는 롱런 불꽃놀이 감상<br>洞爺観光ホテル(토야칸코호텔-16,632¥)</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DAY 4 -->
+    <div class="day-card">
+        <div class="day-header">
+            <div class="day-number">4</div>
+            <div class="day-info">
+                <h2>예술과 자연의 조화, 그리고 삿포로의 밤</h2>
+                <p>10월 2일 (목)</p>
+            </div>
+        </div>
+        <div class="day-details">
+            <div class="timeline">
+                <div class="event">
+                    <div class="event-icon">🙏</div>
+                    <p class="event-time">오전</p>
+                    <h3 class="event-title">대두불전 (힐 오브 더 붓다)</h3>
+                    <p class="event-description">도야호 출발, 안도 타다오 건축의 정수, 신비로운 대두불전 관람</p>
+                </div>
+                <div class="event">
+                    <div class="event-icon">🛍️</div>
+                    <p class="event-time">14:30 ~</p>
+                    <h3 class="event-title">삿포로 복귀 및 자유시간</h3>
+                    <p class="event-description">렌터카 반납 후 호텔 체크인. 삿포로 팩토리 쇼핑, 나카지마 공원 산책 등 자유시간</p>
+                </div>
+                <div class="event">
+                    <div class="event-icon">🌃</div>
+                    <p class="event-time">저녁</p>
+                    <h3 class="event-title">삿포로 마지막 밤</h3>
+                    <p class="event-description">자유로운 저녁 식사 후 JR타워 전망대에서 삿포로의 파노라마 야경 감상</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DAY 5 -->
+    <div class="day-card">
+        <div class="day-header">
+            <div class="day-number">5</div>
+            <div class="day-info">
+                <h2>아쉬운 작별, 삿포로를 추억하며</h2>
+                <p>10월 3일 (금)</p>
+            </div>
+        </div>
+        <div class="day-details">
+            <div class="timeline">
+                <div class="event">
+                    <div class="event-icon">🎁</div>
+                    <p class="event-time">~ 11:30</p>
+                    <h3 class="event-title">마지막 쇼핑 & 산책</h3>
+                    <p class="event-description">호텔 체크아웃 후 삿포로역 주변에서 기념품 쇼핑 또는 홋카이도 구 본청사 산책</p>
+                </div>
+                <div class="event">
+                    <div class="event-icon">✈️</div>
+                    <p class="event-time">11:30 ~ 14:30</p>
+                    <h3 class="event-title">공항 이동 및 출국</h3>
+                    <p class="event-description">신치토세 공항으로 이동하여 탑승 수속 후 인천으로 출발</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.querySelectorAll('.day-card').forEach(card => {
+        card.addEventListener('click', () => {
+            // 다른 열린 카드 닫기
+            document.querySelectorAll('.day-card.active').forEach(openCard => {
+                if (openCard !== card) {
+                    openCard.classList.remove('active');
+                }
+            });
+            // 현재 카드 토글
+            card.classList.toggle('active');
+        });
+    });
+</script>
+
+</body>
+</html>
