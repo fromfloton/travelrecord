@@ -8,7 +8,7 @@
     @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
 
     body {
-        font-family: 'Noto+Sans+KR', sans-serif;
+        font-family: 'Noto Sans KR', sans-serif;
         background-color: #F8F9FA;
         margin: 0;
         padding: 20px;
@@ -147,6 +147,119 @@
         padding-left: 10px;
         border-left: 3px solid #DEE2E6;
     }
+
+    /* Modal Styles */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0,0,0,0.5);
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: 5% auto;
+        padding: 30px;
+        border: 1px solid #888;
+        width: 80%;
+        max-width: 700px;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        animation-name: animatetop;
+        animation-duration: 0.4s
+    }
+
+    @keyframes animatetop {
+        from {top: -300px; opacity: 0}
+        to {top: 0; opacity: 1}
+    }
+
+    .close-button {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close-button:hover,
+    .close-button:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .modal-header {
+        padding-bottom: 15px;
+        border-bottom: 1px solid #E9ECEF;
+        margin-bottom: 20px;
+    }
+    .modal-header h2 {
+        margin: 0;
+        font-size: 1.8em;
+        color: #343A40;
+    }
+    .modal-body h3 {
+        color: #007BFF;
+        font-size: 1.4em;
+        margin-top: 25px;
+        margin-bottom: 15px;
+        padding-bottom: 5px;
+        border-bottom: 1px solid #eee;
+    }
+     .modal-body h4 {
+        font-size: 1.1em;
+        color: #343A40;
+        margin-top: 20px;
+        margin-bottom: 10px;
+    }
+    .modal-body p {
+        line-height: 1.7;
+        color: #495057;
+        margin-bottom: 15px;
+    }
+     .modal-body ul {
+        list-style-type: none;
+        padding-left: 0;
+    }
+    .modal-body li {
+        margin-bottom: 8px;
+        color: #495057;
+    }
+    .modal-body strong {
+        color: #212529;
+        font-weight: 500;
+        display: inline-block;
+        width: 80px;
+    }
+    .clickable-title {
+        cursor: pointer;
+        color: #0056b3;
+        transition: color 0.2s;
+    }
+    .clickable-title:hover {
+        color: #007BFF;
+        text-decoration: underline;
+    }
+    .timetable {
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        padding: 15px;
+        margin-top: 10px;
+    }
+    .timetable li {
+        font-size: 0.95em;
+    }
+    .footnote {
+        font-size: 0.8em;
+        color: #6C757D;
+        margin-top: 25px;
+        text-align: center;
+    }
 </style>
 </head>
 <body>
@@ -284,7 +397,7 @@
                     <p class="event-time">16:30 ~</p>
                     <h3 class="event-title">삿포로 마지막 밤</h3>
                     <p class="event-description">삿포로역에 렌터카 반납 후 호텔 체크인. 스스키노에서 저녁 식사 후 JR타워 전망대에서 반짝이는 파노라마 야경 감상<br>
-                    ホテル法華クラブ札幌[호텔호케클럽:￦88,720(조식/세금포함|무료취소9월25시16시)]</p>
+                    ホテル法華クラブ札幌[호텔호케클럽:￦88,720(조식/세금포함|무료취소9월25일16시)]</p>
                 </div>
             </div>
         </div>
@@ -317,7 +430,7 @@
                     <div class="event-icon">✈️</div>
                     <p class="event-time">11:00 ~ 12:00</p>
                     <h3 class="event-title clickable-title" id="transportBtn">공항 이동 및 출국 ➔</h3>
-                    <p class="event-description">삿포로역에서 JR쾌속 에어포트로 신치토세 공항 이동!</p>
+                    <p class="event-description">삿포로역에서 신치토세 공항으로 이동!</p>
                 </div>
             </div>
         </div>
@@ -332,25 +445,50 @@
         <h2>공항 이동 방법 비교 ✈️</h2>
     </div>
     <div class="modal-body">
-        <p>호텔 호케 클럽 삿포로는 열차와 버스 모두 이용하기에 완벽한 위치입니다. 상황에 맞게 최적의 방법을 선택하세요!</p>
+        <p>호텔 호케 클럽 삿포로는 열차와 버스 모두 이용하기에 완벽한 위치입니다. 12시까지 공항 도착을 목표로 하는 추천 시간표입니다.</p>
         
         <h3>🚆 열차 (JR 쾌속 에어포트) - 빠르고 정확하게!</h3>
         <ul>
             <li><strong>타는 곳:</strong> JR 삿포로역 (호텔 바로 앞, 도보 2~3분)</li>
             <li><strong>소요 시간:</strong> <strong>약 37분</strong> (가장 빠름)</li>
-            <li><strong>장점:</strong> 교통체증 걱정 없이 정확한 시간에 도착</li>
             <li><strong>요금:</strong> 자유석 1,150엔 / 지정석(u-seat) 1,990엔</li>
-            <li><strong>추천 대상:</strong> 시간이 가장 중요하고, 정확한 계획을 선호하는 분</li>
         </ul>
-
+        <div class="timetable">
+            <h4>추천 시간표 (10/3 금요일)</h4>
+            <ul>
+                <li><strong>11:00 출발</strong> → 11:37 도착 (가장 추천)</li>
+                <li><strong>11:15 출발</strong> → 11:52 도착 (추천)</li>
+            </ul>
+        </div>
+        
         <h3>🚌 공항 리무진 버스 - 편안하고 저렴하게!</h3>
+        <h4>옵션 1: 삿포로역 버스터미널 (가장 추천)</h4>
         <ul>
-            <li><strong>타는 곳:</strong> 삿포로역 버스터미널 (호텔 바로 앞, 도보 2~3분)</li>
-            <li><strong>소요 시간:</strong> 약 70~80분</li>
-            <li><strong>장점:</strong> 짐을 짐칸에 맡길 수 있고, 무조건 앉아서 갈 수 있음</li>
+            <li><strong>타는 곳:</strong> 호텔 바로 앞 (도보 2~3분)</li>
             <li><strong>요금:</strong> 약 1,100엔</li>
-            <li><strong>추천 대상:</strong> 짐이 많거나, 조금 더 저렴하고 편안하게 이동하고 싶은 분</li>
         </ul>
+        <div class="timetable">
+            <h4>추천 시간표 (10/3 금요일)</h4>
+            <ul>
+                <li><strong>10:05 출발</strong> → 11:15~11:25 도착 (추천)</li>
+                <li><strong>10:15 출발</strong> → 11:25~11:35 도착 (추천)</li>
+                <li><strong>10:20 출발</strong> → 11:30~11:40 도착</li>
+            </ul>
+        </div>
+
+        <h4>옵션 2: 삿포로 그랜드 호텔 앞 (대안)</h4>
+         <ul>
+            <li><strong>타는 곳:</strong> 호텔에서 오도리 공원 방향 (도보 3~4분)</li>
+            <li><strong>요금:</strong> 약 1,100엔</li>
+        </ul>
+        <div class="timetable">
+             <h4>추천 시간표 (10/3 금요일)</h4>
+            <ul>
+                <li><strong>10:04 출발</strong> → 11:15~11:25 도착 (추천)</li>
+                <li><strong>10:19 출발</strong> → 11:30~11:40 도착</li>
+            </ul>
+        </div>
+        <p class="footnote">※ 위 시간은 예상 시간이며, 여행 직전 버스/열차 회사 홈페이지에서 최종 확인하는 것을 권장합니다.</p>
     </div>
   </div>
 </div>
@@ -397,3 +535,4 @@
 
 </body>
 </html>
+
