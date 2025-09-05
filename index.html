@@ -234,7 +234,7 @@
         color: #212529;
         font-weight: 500;
         display: inline-block;
-        width: 80px;
+        min-width: 80px;
     }
     .clickable-title {
         cursor: pointer;
@@ -291,7 +291,7 @@
                 <div class="event">
                     <div class="event-icon">🏙️</div>
                     <p class="event-time">16:30 ~ 18:00</p>
-                    <h3 class="event-title">오도리 공원 & TV타워</h3>
+                    <h3 class="event-title clickable-title" id="tvTowerBtn">오도리 공원 & TV타워</h3>
                     <p class="event-description">삿포로의 중심 오도리 공원을 산책하고, TV타워 전망대에서 노을 감상</p>
                 </div>
                 <div class="event">
@@ -438,11 +438,39 @@
     </div>
 </div>
 
-<!-- The Modal -->
+<!-- TV Tower Modal -->
+<div id="tvTowerModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+        <span class="close-button" id="closeTvTower">&times;</span>
+        <h2>삿포로 TV타워 전망대 정보 🗼</h2>
+    </div>
+    <div class="modal-body">
+        <p>삿포로의 심장, 오도리 공원의 사계절과 아름다운 야경을 한눈에 담을 수 있는 최고의 장소입니다.</p>
+        
+        <h3>전망대 입장료</h3>
+        <ul class="timetable">
+            <li><strong>성인 (고등학생 이상):</strong> 1,000엔</li>
+            <li><strong>초/중학생:</strong> 500엔</li>
+            <li><strong>미취학 아동:</strong> 무료</li>
+        </ul>
+        
+        <h3>추가 팁! 💡</h3>
+        <ul>
+            <li><strong>온라인 예매:</strong> 온라인 여행 사이트(KKday, Klook 등)에서 미리 구매 시 조금 더 저렴할 수 있습니다.</li>
+            <li><strong>주야권 (Day & Night):</strong> 낮과 밤의 풍경을 모두 보고 싶다면, 약 1,500엔의 주야권을 이용해 보세요.</li>
+             <li><strong>세트권:</strong> 오도리 공원의 명물인 '옥수수'나 '소프트 아이스크림'과 입장권을 묶어서 파는 세트 상품도 있습니다.</li>
+        </ul>
+        <p class="footnote">※ 요금은 변동될 수 있으니 방문 직전 공식 홈페이지를 확인하는 것을 권장합니다.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Transport Modal -->
 <div id="transportModal" class="modal">
   <div class="modal-content">
     <div class="modal-header">
-        <span class="close-button">&times;</span>
+        <span class="close-button" id="closeTransport">&times;</span>
         <h2>공항 이동 방법 비교 ✈️</h2>
     </div>
     <div class="modal-body">
@@ -498,42 +526,54 @@
 
 
 <script>
+    // Day Card Accordion
     document.querySelectorAll('.day-card').forEach(card => {
         card.addEventListener('click', (e) => {
-            // 모달창 내부 클릭 시 카드가 닫히지 않도록
-            if (e.target.closest('#transportBtn')) {
+            // Stop card from toggling if a clickable element inside is clicked
+            if (e.target.closest('.clickable-title')) {
                 return;
             }
-            // 다른 열린 카드 닫기
+            // Close other open cards
             document.querySelectorAll('.day-card.active').forEach(openCard => {
                 if (openCard !== card) {
                     openCard.classList.remove('active');
                 }
             });
-            // 현재 카드 토글
+            // Toggle current card
             card.classList.toggle('active');
         });
     });
 
-    // Modal script
-    var modal = document.getElementById("transportModal");
-    var btn = document.getElementById("transportBtn");
-    var span = document.getElementsByClassName("close-button")[0];
+    // General Modal Function
+    function setupModal(modalId, btnId, closeBtnId) {
+        var modal = document.getElementById(modalId);
+        var btn = document.getElementById(btnId);
+        var span = document.getElementById(closeBtnId);
 
-    btn.onclick = function(e) {
-        e.stopPropagation(); // 카드 토글 방지
-        modal.style.display = "block";
-    }
-
-    span.onclick = function() {
-        modal.style.display = "none";
-    }
-
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
+        if (btn) {
+            btn.onclick = function(e) {
+                e.stopPropagation(); // Prevent card from toggling
+                modal.style.display = "block";
+            }
         }
+
+        if (span) {
+            span.onclick = function() {
+                modal.style.display = "none";
+            }
+        }
+        
+        window.addEventListener('click', function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        });
     }
+
+    // Setup Modals
+    setupModal('transportModal', 'transportBtn', 'closeTransport');
+    setupModal('tvTowerModal', 'tvTowerBtn', 'closeTvTower');
+
 </script>
 
 </body>
