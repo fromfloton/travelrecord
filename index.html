@@ -378,7 +378,7 @@
                 <div class="event">
                     <div class="event-icon">🙏</div>
                     <p class="event-time">오전</p>
-                    <h3 class="event-title">대두불전 (힐 오브 더 붓다)</h3>
+                    <h3 class="event-title clickable-title" id="daibutsuBtn">대두불전 (힐 오브 더 붓다) ➔</h3>
                     <p class="event-description">도야호 출발, 안도 타다오 건축의 정수, 신비로운 대두불전 관람</p>
                 </div>
                 <div class="event">
@@ -436,6 +436,32 @@
             </div>
         </div>
     </div>
+</div>
+
+<!-- Daibutsu Modal -->
+<div id="daibutsuModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+        <span class="close-button" id="closeDaibutsu">&times;</span>
+        <h2>대두불전 (힐 오브 더 붓다) 정보 🙏</h2>
+    </div>
+    <div class="modal-body">
+        <p>건축가 안도 타다오가 설계한, 언덕 속에 자리 잡은 거대한 불상의 모습이 인상적인 장소입니다.</p>
+        <h3>입장료 (배관료)</h3>
+        <ul class="timetable">
+            <li><strong>입장료:</strong> 무료</li>
+            <li><strong>유지 기부금:</strong> 300엔 (권장)</li>
+        </ul>
+        <p>입장 자체는 무료이지만, 불상과 시설 유지를 위해 1인당 300엔 정도의 기부금을 내는 것을 권장하고 있습니다.</p>
+        <h3>주차장 정보 🚗</h3>
+        <p>힐 오브 더 붓다가 위치한 마코마나이 타키노 영원(真駒内滝野霊園) 내의 주차장은 모두 무료입니다.</p>
+        <ul>
+            <li>가장 가까운 주차장은 입구를 지나 불상 쪽으로 계속 직진하면 나오는 전용 주차장입니다.</li>
+            <li>주차 공간이 매우 넓어 편안하게 주차하실 수 있습니다.</li>
+        </ul>
+         <p class="footnote">※ 운영 시간이나 정보는 변동될 수 있으니 방문 전 공식 정보를 확인하는 것이 좋습니다.</p>
+    </div>
+  </div>
 </div>
 
 <!-- Noboribetsu Food Modal -->
@@ -663,6 +689,7 @@
     setupModal('susukinoModal', 'susukinoBtn', 'closeSusukino');
     setupModal('noboribetsuFoodModal', 'noboribetsuBtn', 'closeNoboribetsuFood');
     setupModal('toyaFoodModal', 'toyaBtn', 'closeToyaFood');
+    setupModal('daibutsuModal', 'daibutsuBtn', 'closeDaibutsu');
 
 </script>
 
