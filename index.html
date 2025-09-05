@@ -324,8 +324,8 @@
                 <div class="event">
                     <div class="event-icon">🍜</div>
                     <p class="event-time">19:00 ~</p>
-                    <h3 class="event-title">삿포로 도착 및 저녁</h3>
-                    <p class="event-description">투어 종료 후 삿포로로 복귀하여 따뜻한 미소라멘으로 피로 풀기</p>
+                    <h3 class="event-title clickable-title" id="day2DinnerBtn">삿포로 도착 및 저녁 ➔</h3>
+                    <p class="event-description">투어 종료 후 삿포로역 근처에서 미소라멘 또는 다른 맛있는 저녁으로 피로 풀기</p>
                 </div>
             </div>
         </div>
@@ -438,6 +438,34 @@
     </div>
 </div>
 
+<!-- Day 2 Dinner Modal -->
+<div id="day2DinnerModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+        <span class="close-button" id="closeDay2Dinner">&times;</span>
+        <h2>2일차 저녁 추천 (삿포로역 근처) 🍽️</h2>
+    </div>
+    <div class="modal-body">
+        <p>비에이 투어 후 피곤한 몸을 이끌고 멀리 갈 필요 없이, 삿포로역 근처에서 즐길 수 있는 특별한 저녁 메뉴입니다.</p>
+        
+        <h3>🍣 카이센동 (해산물 덮밥) - 홋카이도의 바다 맛!</h3>
+        <h4>네무로 하나마루 (根室花まる)</h4>
+        <p>신선한 해산물이 밥 위에 보석처럼 올라간 해산물 덮밥. 회전초밥으로 유명하지만 덮밥류도 매우 훌륭합니다.</p>
+        <ul><li><strong>주소:</strong> 北海道札幌市中央区北5条西2丁目 JRタワーステラプレイス 6F</li></ul>
+
+        <h3>🍚 부타동 (돼지고기 덮밥) - 든든한 숯불 향!</h3>
+        <h4>잇핀 (いっぴん)</h4>
+        <p>숯불 향 가득한 두툼한 돼지고기를 달콤 짭짤한 특제 소스에 구워낸 덮밥. 하루의 피로를 날려버릴 든든한 맛입니다.</p>
+        <ul><li><strong>주소:</strong> 北海道札幌市中央区北5条西2丁目 JRタワーステラプレイス 6F</li></ul>
+
+        <h3>🍻 이자카야 (선술집) - 로컬의 밤 분위기!</h3>
+        <h4>우오코코로 (魚心)</h4>
+        <p>신선한 해산물을 합리적인 가격에 즐길 수 있는 이자카야. 현지 직장인들 틈에서 시원한 삿포로 클래식 생맥주 한 잔을 즐겨보세요.</p>
+        <ul><li><strong>주소:</strong> 北海道札幌市北区北7条西5丁目5-11</li></ul>
+    </div>
+  </div>
+</div>
+
 <!-- Parfait & Dessert Modal -->
 <div id="parfaitModal" class="modal">
   <div class="modal-content">
@@ -482,7 +510,7 @@
         <ul><li><strong>주소:</strong> (스스키노, 삿포로역 등 여러 지점)</li></ul>
 
         <h4>3. Sato Coffee (佐藤珈琲)</h4>
-        <p>스스키노의 번잡함에서 벗어난 정통 카페(킷사텐). 클래식하고 완성도 높은 파르페와 직접 로스팅한 깊은 맛의 커피를 함께 즐길 수 있는, 어른들의 공간입니다.</p>
+        <p>스스키노의 번잡함에서 벗어난 정통 카페. 클래식하고 완성도 높은 파르페와 직접 로스팅한 깊은 맛의 커피를 함께 즐길 수 있는, 어른들의 공간입니다.</p>
         <ul><li><strong>주소:</strong> 北海道札幌市中央区南2条西4丁目11</li></ul>
     </div>
   </div>
@@ -760,6 +788,7 @@
     setupModal('daibutsuModal', 'daibutsuBtn', 'closeDaibutsu');
     setupModal('fushimiinariModal', 'fushimiinariBtn', 'closeFushimiinari');
     setupModal('parfaitModal', 'parfaitBtn', 'closeParfait');
+    setupModal('day2DinnerModal', 'day2DinnerBtn', 'closeDay2Dinner');
 
 </script>
 
