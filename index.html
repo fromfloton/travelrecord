@@ -94,7 +94,7 @@
     }
     
     .day-card.active .day-details {
-        max-height: 800px; /* 상세 내용 길이에 맞춰 조정 */
+        max-height: 1000px; /* 모바일에서 내용이 잘리지 않도록 최대 높이를 늘렸습니다 */
         padding: 25px;
     }
     
@@ -275,7 +275,7 @@
         <div class="day-header">
             <div class="day-number">1</div>
             <div class="day-info">
-                <h2>첫 만남, 삿포로!</h2>
+                <h2>첫만남, 비에이로 출발!</h2>
                 <p>9월 29일 (월)</p>
             </div>
         </div>
@@ -283,22 +283,28 @@
             <div class="timeline">
                 <div class="event">
                     <div class="event-icon">✈️</div>
-                    <p class="event-time">13:00 ~ 16:30</p>
-                    <h3 class="event-title">공항 도착 및 호텔 이동</h3>
-                    <p class="event-description">신치토세 공항 도착 후 JR쾌속 에어포트로 삿포로역 이동하여 호텔 체크인<br>
-                        ホテル法華クラブ札幌[호텔호케클럽:18,748¥(세금포함|무료취소9월26일12시)]</p>
+                    <p class="event-time">13:00 ~ 14:30</p>
+                    <h3 class="event-title">공항 도착 및 <span class="clickable-text" id="rentacarBtn">렌터카 픽업 ➔</span></h3>
+                    <p class="event-description"><a href="https://www.hokkaido-airports.com/ko/new-chitose/access/rentacar/" target="_blank" class="clickable-text">신치토세공항</a> 도착 후, 1층 카운터에서 안내를 받아 셔틀버스로 렌터카 지점으로 이동 및 차량 픽업<br>
+                     <a href="ko_int_13.pdf" target="_blank" class="clickable-text">국제선 공항 지도(1F/3F)</a> | <a href="ko_dom_12.pdf" target="_blank" class="clickable-text">국내선 공항 지도(1F/2F)</a></p>
                 </div>
                 <div class="event">
-                    <div class="event-icon">🏙️</div>
-                    <p class="event-time">16:30 ~ 18:00</p>
-                    <h3 class="event-title clickable-title" id="tvTowerBtn">오도리 공원 & TV타워 ➔</h3>
-                    <p class="event-description">삿포로의 중심 오도리 공원을 산책하고, TV타워 전망대에서 노을 감상</p>
+                    <div class="event-icon">🚗</div>
+                    <p class="event-time">14:30 ~ 17:00</p>
+                    <h3 class="event-title">비에이로 이동</h3>
+                    <p class="event-description">고속도로를 이용해 비에이로 바로 이동합니다. (약 2시간 30분 소요)</p>
                 </div>
                 <div class="event">
-                    <div class="event-icon">🍽️</div>
+                    <div class="event-icon">💧</div>
+                    <p class="event-time">17:00 ~ 17:45</p>
+                    <h3 class="event-title">청의 호수 & 흰수염 폭포</h3>
+                    <p class="event-description">해가 지기 전, 가장 신비로운 '매직 아워'에 맞춰 두 곳을 관람합니다. (9월 말 일몰 약 17:20)</p>
+                </div>
+                <div class="event">
+                    <div class="event-icon">🏨</div>
                     <p class="event-time">18:00 ~</p>
-                    <h3 class="event-title clickable-title" id="susukinoBtn">스스키노 저녁 & 야경 ➔</h3>
-                    <p class="event-description">삿포로 명물 징기스칸 또는 스프카레로 저녁 식사 후 화려한 스스키노 거리 구경</p>
+                    <h3 class="event-title">후라노 호텔 체크인</h3>
+                    <p class="event-description">어두워지면 운전이 위험하므로, 근처 호텔로 바로 이동하여 체크인 후 저녁 식사 및 휴식<br>リゾートインノースカントリー[Resort Inn North Country:¥9,439(무료주차/세금포함|무료취소9월21일)]</p>
                 </div>
             </div>
         </div>
@@ -309,23 +315,47 @@
         <div class="day-header">
             <div class="day-number">2</div>
             <div class="day-info">
-                <h2>그림 같은 풍경, 비에이 속으로</h2>
+                <h2>그림 같은 풍경, 후라노/비에이 속으로</h2>
                 <p>9월 30일 (화)</p>
             </div>
         </div>
         <div class="day-details">
             <div class="timeline">
-                <div class="event">
-                    <div class="event-icon">🚌</div>
-                    <p class="event-time">07:00 ~ 19:00</p>
-                    <h3 class="event-title">비에이 & 후라노 버스 투어</h3>
-                    <p class="event-description">청의 호수, 흰수염 폭포, 패치워크 로드 등 아름다운 대자연을 하루 동안 만끽하는 시간</p>
+                 <div class="event">
+                    <div class="event-icon">🏞️</div>
+                    <p class="event-time">09:00 ~ 10:15</p>
+                    <h3 class="event-title">팜 토미타</h3>
+                    <p class="event-description">호텔 체크아웃 후, 후라노의 대표 명소인 팜 토미타에서 가을꽃과 라벤더 아이스크림을 즐깁니다.</p>
                 </div>
                 <div class="event">
-                    <div class="event-icon">🍜</div>
-                    <p class="event-time">19:00 ~</p>
-                    <h3 class="event-title clickable-title" id="day2DinnerBtn">삿포로 도착 및 저녁 ➔</h3>
-                    <p class="event-description">투어 종료 후 삿포로역 근처에서 미소라멘 또는 다른 맛있는 저녁으로 피로 풀기</p>
+                    <div class="event-icon">🧀</div>
+                    <p class="event-time">10:30 ~ 11:45</p>
+                    <h3 class="event-title">후라노 치즈공방 (점심)</h3>
+                    <p class="event-description">이동(약 15분) 후, 이곳에서 피자나 간식으로 점심 식사를 해결합니다.</p>
+                </div>
+                <div class="event">
+                    <div class="event-icon">🌸</div>
+                    <p class="event-time">12:30 ~ 14:00</p>
+                    <h3 class="event-title">사계체의 언덕</h3>
+                    <p class="event-description">비에이로 이동(약 45분)하여, 아름다운 가을꽃이 펼쳐진 언덕에서 여유롭게 풍경을 즐깁니다.</p>
+                </div>
+                 <div class="event">
+                    <div class="event-icon">🚗</div>
+                    <p class="event-time">14:00 ~ 16:30</p>
+                    <h3 class="event-title">삿포로로 복귀</h3>
+                    <p class="event-description">사계체의 언덕에서 바로 삿포로로 복귀합니다. 이른 도착으로 저녁 시간을 여유롭게 보낼 수 있습니다.</p>
+                </div>
+                 <div class="event">
+                    <div class="event-icon">🏨</div>
+                    <p class="event-time">16:30 ~</p>
+                    <h3 class="event-title">삿포로 호텔 체크인</h3>
+                    <p class="event-description"><span class="clickable-text" id="randorHotelBtn">란도르 레지덴셜 호텔 삿포로 스위트 ➔</span> 에 체크인 후, 저녁 식사를 위해 스스키노로 이동합니다. [Randor Residential Hotel Sapporo Suites:KRW 50,641]</p>
+                </div>
+                 <div class="event">
+                    <div class="event-icon">🌃</div>
+                    <p class="event-time">18:30 ~</p>
+                    <h3 class="event-title clickable-title" id="susukinoBtn">스스키노 저녁 & 야경 ➔</h3>
+                    <p class="event-description">삿포로 명물 징기스칸 또는 스프카레로 저녁 식사 후 화려한 스스키노 거리 구경</p>
                 </div>
             </div>
         </div>
@@ -343,20 +373,26 @@
         <div class="day-details">
             <div class="timeline">
                 <div class="event">
+                    <div class="event-icon">⛩️</div>
+                    <p class="event-time">오전</p>
+                    <h3 class="event-title clickable-title" id="fushimiinariBtn">후시미이나리 신사 드라이브 ➔</h3>
+                    <p class="event-description">삿포로 호텔 체크아웃 전, 오전에 먼저 후시미이나리 신사를 둘러봅니다.</p>
+                </div>
+                <div class="event">
                     <div class="event-icon">🚗</div>
-                    <p class="event-time">09:00 ~ 12:00</p>
-                    <h3 class="event-title clickable-title" id="rentacarBtn">렌터카 여행 시작 ➔</h3>
-                    <p class="event-description">삿포로역에서 렌터카 픽업 후 노보리베츠로 드라이브</p>
+                    <p class="event-time">11:00 ~ 13:00</p>
+                    <h3 class="event-title">노보리베츠로 이동</h3>
+                    <p class="event-description">삿포로 호텔에서 체크아웃 후 노보리베츠로 드라이브 (약 1시간 40분 소요)</p>
                 </div>
                 <div class="event">
                     <div class="event-icon">👹</div>
-                    <p class="event-time">12:00 ~ 16:30</p>
-                    <h3 class="event-title clickable-title" id="noboribetsuBtn">노보리베츠 지옥계곡 ➔</h3>
-                    <p class="event-description">유황 연기가 피어오르는 지옥계곡과 오유누마 산책 후 도야 호수로 이동</p>
+                    <p class="event-time">13:00 ~ 16:00</p>
+                    <h3 class="event-title clickable-title" id="noboribetsuBtn">노보리베츠 지옥계곡 & 점심 ➔</h3>
+                    <p class="event-description">도착 후 온천 마을에서 늦은 점심을 먹고, 유황 연기가 피어오르는 지옥계곡과 오유누마를 산책합니다.</p>
                 </div>
                 <div class="event">
                     <div class="event-icon">🎆</div>
-                    <p class="event-time">16:30 ~</p>
+                    <p class="event-time">17:00 ~</p>
                     <h3 class="event-title clickable-title" id="toyaBtn">도야 호수 온천 & 불꽃놀이 ➔</h3>
                     <p class="event-description">호수 전망의 온천 호텔에서 휴식 후 밤하늘을 수놓는 롱런 불꽃놀이 감상<br>洞爺観光ホテル[토야칸코호텔:16,632¥(예상추가세금|2인기준:950¥)]</p>
                 </div>
@@ -369,7 +405,7 @@
         <div class="day-header">
             <div class="day-number">4</div>
             <div class="day-info">
-                <h2>렌터카 완전정복! 쇼핑과 드라이브</h2>
+                <h2>삿포로 완전정복 & 자유시간</h2>
                 <p>10월 2일 (목)</p>
             </div>
         </div>
@@ -379,7 +415,7 @@
                     <div class="event-icon">🙏</div>
                     <p class="event-time">오전</p>
                     <h3 class="event-title clickable-title" id="daibutsuBtn">대두불전 (힐 오브 더 붓다) ➔</h3>
-                    <p class="event-description">도야호 출발, 안도 타다오 건축의 정수, 신비로운 대두불전 관람</p>
+                    <p class="event-description">도야호 출발, 삿포로로 돌아오는 길에 안도 타다오 건축의 정수, 신비로운 대두불전 관람 (도야 → 대두불전 약 1시간 40분)</p>
                 </div>
                 <div class="event">
                     <div class="event-icon">🛒</div>
@@ -388,17 +424,22 @@
                     <p class="event-description">삿포로 시내로 가는 길에 '이온몰 삿포로 히라오카' 등 대형 쇼핑몰 방문. 쇼핑한 짐은 차에 편하게 보관!</p>
                 </div>
                 <div class="event">
-                    <div class="event-icon">⛩️</div>
-                    <p class="event-time">15:00 ~ 16:00</p>
-                    <h3 class="event-title clickable-title" id="fushimiinariBtn">후시미이나리 신사 드라이브 ➔</h3>
-                    <p class="event-description">렌터카로 편리하게 이동하여 붉은 도리이가 늘어선 아름다운 신사 방문</p>
+                    <div class="event-icon">🏨</div>
+                    <p class="event-time">14:30 ~ 16:30</p>
+                    <h3 class="event-title clickable-title" id="hokkeHotelBtn">삿포로 호텔 체크인 ➔</h3>
+                    <p class="event-description">삿포로 시내로 이동하여 호텔에 체크인하고 잠시 휴식을 취합니다.</p>
+                </div>
+                 <div class="event">
+                    <div class="event-icon">🏙️</div>
+                    <p class="event-time">16:30 ~ 18:00</p>
+                    <h3 class="event-title clickable-title" id="jrTowerBtn">오도리 공원 & JR타워 ➔</h3>
+                    <p class="event-description">삿포로의 중심 오도리 공원을 산책하고, JR타워 전망대에서 노을 감상</p>
                 </div>
                  <div class="event">
                     <div class="event-icon">🌃</div>
-                    <p class="event-time">16:30 ~</p>
+                    <p class="event-time">18:00 ~</p>
                     <h3 class="event-title">삿포로 마지막 밤</h3>
-                    <p class="event-description">삿포로역에 렌터카 반납 후 호텔 체크인. 맛있는 저녁과 '<span class="clickable-text" id="parfaitBtn">시메 파르페 ➔</span>'를 즐기며 마지막 밤의 여유를 만끽. JR타워 전망대에서 반짝이는 파노라마 야경 감상<br>
-                    ホテル法華クラブ札幌[호텔호케클럽:￦88,720(조식/세금포함|무료취소9월25일16시)]</p>
+                    <p class="event-description">맛있는 저녁과 '<span class="clickable-text" id="parfaitBtn">시메 파르페 ➔</span>'를 즐기며 마지막 밤의 여유를 만끽.<br>ホテル法華クラブ札幌[호텔호케클럽:￦88,720(조식/세금포함|무료취소9월25일16시)]</p>
                 </div>
             </div>
         </div>
@@ -428,15 +469,97 @@
                     <p class="event-description">삿포로역 근처의 붉은 벽돌 건물을 배경으로 마지막 산책과 기념사진 남기기.</p>
                 </div>
                 <div class="event">
+                    <div class="event-icon">🚗</div>
+                    <p class="event-time">11:00 ~ 12:30</p>
+                    <h3 class="event-title">공항 이동 및 렌터카 반납</h3>
+                    <p class="event-description">삿포로 시내에서 신치토세 공항 근처 렌터카 지점으로 이동(약 1시간). 주유 후 13시까지 차량 반납</p>
+                </div>
+                 <div class="event">
                     <div class="event-icon">✈️</div>
-                    <p class="event-time">11:00 ~ 12:00</p>
-                    <h3 class="event-title clickable-title" id="transportBtn">공항 이동 및 출국 ➔</h3>
-                    <p class="event-description">삿포로역에서 신치토세 공항으로 이동!</p>
+                    <p class="event-time">12:30 ~ 14:30</p>
+                    <h3 class="event-title">공항 수속 및 출국</h3>
+                    <p class="event-description">셔틀버스로 공항 이동 후 출국 수속</p>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Hokke Hotel Parking Modal -->
+<div id="hokkeHotelModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+        <span class="close-button" id="closeHokkeHotel">&times;</span>
+        <h2>호텔 호케 클럽 삿포로 주차장 정보 🅿️</h2>
+    </div>
+    <div class="modal-body">
+        <p>호텔에는 전용 주차장이 없지만, 제휴 주차장을 이용하거나 근처 코인 주차장을 이용할 수 있습니다.</p>
+        
+        <h3>1순위: 호텔 제휴 주차장</h3>
+        <h4><a href="hotelhokeclub_parking_lot.pdf" target="_blank" class="clickable-text">마루겐파아킨구マルゲンパーキング</a></h4>
+        <p>예상 주차비 1,400¥</p>
+        <ul>
+            <li><strong>주소:</strong> 北3条西3丁目1-42</li>
+            <li><strong>전화번호:</strong> 011-251-4638</li>
+        </ul>
+
+        <h3>2순위: 호텔 제휴 주차장</h3>
+        <h4>에무텟쿠 삿포로키타 산조오비루파아킨구エムテック札幌北三条ビルパーキング</h4>
+        <p>예상 주차비 1,500¥</p>
+        <ul>
+            <li><strong>주소:</strong> 北海道札幌市中央区北三条西3-1-4</li>
+            <li><strong>전화번호:</strong> 011-232-1313</li>
+        </ul>
+        
+        <h3>3순위: 타임즈 주차장 (タイムズ北５西９)</h3>
+        <p>대략 예상 주차비 1100¥</p>
+        <ul>
+            <li><strong>주소:</strong> 北海道札幌市中央区北５条西9</li>
+        </ul>
+
+        <h3>4순위: 타임즈 주차장 (タイムズ北６西７)</h3>
+        <p>대략 예상 주차비 1700¥</p>
+        <ul>
+            <li><strong>주소:</strong> 北海道札幌市北区北６条西7</li>
+        </ul>
+
+        <h3>기타 주변 주차장 검색</h3>
+        <p>제휴 주차장이 만차일 경우, 아래 사이트에서 실시간으로 주변의 저렴한 주차장을 검색하여 찾을 수 있습니다.</p>
+        <ul>
+             <li><a href="https://pppark.com/" target="_blank" class="clickable-text">PPPark! 사이트에서 검색하기</a></li>
+        </ul>
+         <p class="footnote">※ 주차 요금은 시기나 시간에 따라 변동될 수 있으니, 이용 직전에 사이트에서 최종 확인하는 것을 권장합니다.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Randor Hotel Parking Modal -->
+<div id="randorHotelModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+        <span class="close-button" id="closeRandorHotel">&times;</span>
+        <h2>란도르 레지덴셜 호텔 주차장 정보 🅿️</h2>
+    </div>
+    <div class="modal-body">
+        <p>호텔에는 전용 주차장이 없으므로, 근처의 코인 주차장을 이용해야 합니다. 추천 주차장 정보입니다.</p>
+        
+        <h3>1순위 추천: 레지나 주차장 (レジーナ駐車場)</h3>
+        <p>온라인으로 예약이 가능한 주차장으로, 미리 예약하면 저렴하게 이용할 수 있습니다.</p>
+        <ul>
+            <li><strong>주소:</strong> 北海道札幌市中央区南七条西9丁目1024-46</li>
+            <li><a href="https://www.akippa.com/parking/73af73722e62dc79be6b5bc605fa5590" target="_blank" class="clickable-text">akippa 사이트에서 예약하기</a></li>
+        </ul>
+
+        <h3>2순위 추천: 주변 주차장 검색</h3>
+        <p>1순위 주차장이 만차일 경우, 아래 사이트에서 실시간으로 주변의 저렴한 주차장을 검색하여 찾을 수 있습니다.</p>
+        <ul>
+             <li><a href="https://pppark.com/search/%E5%8C%97%E6%B5%B7%E9%81%93/%E6%9C%AD%E5%B9%8C%E5%B8%82%E4%B8%AD%E5%A4%AE%E5%8C%BA/%E5%8D%97%E4%BA%94%E6%9D%A1%E8%A5%BF%E4%B8%83%E4%B8%8丁%E7%9B%AE" target="_blank" class="clickable-text">PPPark! 사이트에서 검색하기</a></li>
+        </ul>
+        <p class="footnote">※ 주차 요금은 시기나 시간에 따라 변동될 수 있으니, 이용 직전에 사이트에서 최종 확인하는 것을 권장합니다.</p>
+    </div>
+  </div>
+</div>
+
 
 <!-- Rentacar Modal -->
 <div id="rentacarModal" class="modal">
@@ -447,32 +570,26 @@
     </div>
     <div class="modal-body">
         <h3>예약 정보</h3>
+        <h4><a href="https://kr.tabirai.net/car/hokkaido/company/honda_hokkaido/" target="_blank" class="clickable-text">ホンダレンタリース札幌 千歳店 (렌터리스 혼다 렌트카)</a></h4>
         <ul>
-            <li><strong>대여 기간:</strong> 2025년 10월 1일 10:00 ~ 10월 2일 17:00</li>
-            <li><strong>결제 금액:</strong> 18,200¥ + ETC 330¥ (현지 결제)</li>
-            <li><strong>예약 사이트:</strong> 트립닷컴 (PIN 8944)</li>
-            <li><strong>취소 정책:</strong> 9월 28일 10:00 이전 무료 취소 (￦171,174)</li>
+            <li><strong>예약 번호:</strong> R0953J71</li>
+            <li><strong>예약자명:</strong> LEE GIYEON</li>
+            <li><strong>반납 일시:</strong> 2025년 10월 03일 13:00</li>
+            <li><strong>결제 금액:</strong> 19,150円 (세금 포함)</li>
         </ul>
         
-        <h3>대여/반납 장소</h3>
-        <h4>타임즈 렌트카 (삿포로 오도리 시계탑 앞 지점)</h4>
+        <h3>픽업 & 반납 장소</h3>
         <ul>
-            <li><strong>연락처:</strong> 011-252-3939</li>
-            <li><strong>영문명:</strong> Times Rentacar (Sapporo Odori Clock Tower)</li>
-            <li><strong>주소:</strong> Sapporo Sosei Square B2F, 1 Chome-6 Kita 1 Jonishi, Chuo Ward, Sapporo, Hokkaido</li>
-            <li><strong>맵코드:</strong> 9 523 212*83</li>
+            <li><strong>연락처:</strong> 0123-40-5353</li>
+            <li><strong>주소:</strong> 千歳市真々地4丁目11番1号 (치토세시 마마치)</li>
         </ul>
 
-        <h3>찾아가는 길 & 반납 안내</h3>
-        <h4>찾아가는 길</h4>
-        <p>※ 빌딩 내 엘리베이터는 &lt;동EV&gt; &lt;북EV&gt; &lt;남서 EV&gt; 3대 있습니다. **&lt;남서 EV&gt;**를 이용하시고 지하 2층으로 와주시길 바랍니다. 정면에 점포가 있습니다.</p>
-        <ul>
-            <li>지하철 오도리 역 **31번 출구**에서 도보 3분</li>
-            <li>지하철 삿포로 역 **22번 출구**에서 도보 5분</li>
-        </ul>
+        <h3>공항 픽업 안내</h3>
+        <h4>국제선 이용 시</h4>
+        <p>신치토세 공항 도착 후 공항 1층 렌터카 카운터로 와 주시기 바랍니다. 직원이 무료 셔틀 버스를 타고 매장까지 안내해 드립니다.</p>
 
-        <h4>반납 안내</h4>
-        <p>반납은 **지하 2층 주차장**입니다. 렌터카 반환 전용 버튼을 눌러서 입장해주시길 바랍니다. 다른 상업시설과 병용하는 주차장이기 때문에 시간적 여유를 가지고 반납을 해주시길 바랍니다.</p>
+        <h4>국내선 이용 시</h4>
+        <p>신치토세 공항 내 카운터는 없습니다. 국내선 버스정류장 왼쪽 끝 "허가차승강소(남쪽)"(승차 장소 NO.67)으로 오셔서 "혼다 렌트리스 홋카이도"라고 표기된 송영버스가 도착하면 승차해 주시기 바랍니다.</p>
     </div>
   </div>
 </div>
@@ -647,28 +764,28 @@
   </div>
 </div>
 
-<!-- TV Tower Modal -->
-<div id="tvTowerModal" class="modal">
+<!-- JR Tower Modal -->
+<div id="jrTowerModal" class="modal">
   <div class="modal-content">
     <div class="modal-header">
-        <span class="close-button" id="closeTvTower">&times;</span>
-        <h2>삿포로 TV타워 전망대 정보 🗼</h2>
+        <span class="close-button" id="closeJrTower">&times;</span>
+        <h2>JR타워 전망대 T38 정보 🏙️</h2>
     </div>
     <div class="modal-body">
-        <p>삿포로의 심장, 오도리 공원의 사계절과 아름다운 야경을 한눈에 담을 수 있는 최고의 장소입니다.</p>
+        <p>삿포로에서 가장 높은 160m 높이에서 도시 전체를 360도 파노라마 뷰로 감상할 수 있는 세련된 공간입니다.</p>
         
         <h3>전망대 입장료</h3>
         <ul class="timetable">
-            <li><strong>성인 (고등학생 이상):</strong> 1,000엔</li>
-            <li><strong>초/중학생:</strong> 500엔</li>
-            <li><strong>미취학 아동:</strong> 무료</li>
+            <li><strong>성인:</strong> 740엔</li>
+            <li><strong>중/고등학생:</strong> 520엔</li>
+            <li><strong>초등학생/어린이:</strong> 320엔</li>
         </ul>
         
         <h3>추가 팁! 💡</h3>
         <ul>
-            <li><strong>온라인 예매:</strong> 온라인 여행 사이트(KKday, Klook 등)에서 미리 구매 시 조금 더 저렴할 수 있습니다.</li>
-            <li><strong>주야권 (Day & Night):</strong> 낮과 밤의 풍경을 모두 보고 싶다면, 약 1,500엔의 주야권을 이용해 보세요.</li>
-             <li><strong>세트권:</strong> 오도리 공원의 명물인 '옥수수'나 '소프트 아이스크림'과 입장권을 묶어서 파는 세트 상품도 있습니다.</li>
+            <li><strong>가성비:</strong> TV타워보다 저렴하면서도 훨씬 높은 곳에서 탁 트인 전망을 즐길 수 있습니다.</li>
+            <li><strong>T'CAFE:</strong> 전망대 내 카페에서 커피나 칵테일을 마시며 여유롭게 야경을 감상해 보세요.</li>
+             <li><strong>접근성:</strong> 삿포로역과 바로 연결되어 있어 매우 편리합니다.</li>
         </ul>
         <p class="footnote">※ 요금은 변동될 수 있으니 방문 직전 공식 홈페이지를 확인하는 것을 권장합니다.</p>
     </div>
@@ -820,7 +937,7 @@
 
     // Setup Modals
     setupModal('transportModal', 'transportBtn', 'closeTransport');
-    setupModal('tvTowerModal', 'tvTowerBtn', 'closeTvTower');
+    setupModal('jrTowerModal', 'jrTowerBtn', 'closeJrTower');
     setupModal('susukinoModal', 'susukinoBtn', 'closeSusukino');
     setupModal('noboribetsuFoodModal', 'noboribetsuBtn', 'closeNoboribetsuFood');
     setupModal('toyaFoodModal', 'toyaBtn', 'closeToyaFood');
@@ -829,6 +946,8 @@
     setupModal('parfaitModal', 'parfaitBtn', 'closeParfait');
     setupModal('day2DinnerModal', 'day2DinnerBtn', 'closeDay2Dinner');
     setupModal('rentacarModal', 'rentacarBtn', 'closeRentacar');
+    setupModal('randorHotelModal', 'randorHotelBtn', 'closeRandorHotel');
+    setupModal('hokkeHotelModal', 'hokkeHotelBtn', 'closeHokkeHotel');
 
 </script>
 
