@@ -420,7 +420,7 @@
                 <div class="event">
                     <div class="event-icon">🛒</div>
                     <p class="event-time">12:30 ~ 14:30</p>
-                    <h3 class="event-title">이온몰에서 점심 & 쇼핑</h3>
+                    <h3 class="event-title"><span class="clickable-text" id="aeonMallBtn">이온몰 ➔</span>에서 점심 & 쇼핑</h3>
                     <p class="event-description">삿포로 시내로 가는 길에 <a href="https://sapporohiraoka.aeonmallhokkaido.com/floorguide/#target/page_no=1" target="_blank" class="clickable-text">'이온몰 삿포로 히라오카'</a> 등 대형 쇼핑몰 방문. 쇼핑한 짐은 차에 편하게 보관!<br>
                     <a href="https://sapporohiraoka.aeonmallhokkaido.com/shops" target="_blank" class="clickable-text">점포내 상점검색</a></p>
                 </div>
@@ -486,6 +486,25 @@
     </div>
 </div>
 
+<!-- Aeon Mall Modal -->
+<div id="aeonMallModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+        <span class="close-button" id="closeAeonMall">&times;</span>
+        <h2>이온몰 (삿포로 히라오카점) 정보 🛒</h2>
+    </div>
+    <div class="modal-body">
+        <h4><a href="https://www.aeon-hokkaido.jp/aeon/shop/hiraoka/?utm_source=google&utm_medium=gmb&utm_campaign=23150-aeonhokkaido_10009" target="_blank" class="clickable-text">AEON Sapporo-Hiraoka Store</a>(イオン札幌平岡店)</h4>
+        <p>식료품부터 의류, 잡화까지 다양한 상품을 쇼핑할 수 있는 대형 쇼핑몰입니다. 삿포로 시내로 돌아오는 길에 들르기 좋은 위치에 있습니다.</p>
+        <ul>
+            <li><strong>주소:</strong> 〒004-0873 北海道札幌市清田区平岡3条5丁目3-1</li>
+            <li><strong>번호:</strong> +81118895001</li>
+
+        </ul>
+    </div>
+  </div>
+</div>
+
 <!-- Hokke Hotel Parking Modal -->
 <div id="hokkeHotelModal" class="modal">
   <div class="modal-content">
@@ -518,7 +537,7 @@
             <li><strong>주소:</strong> 北海道札幌市中央区北５条西9</li>
         </ul>
 
-        <h3>4순위: 타임즈 주차장 (タイムズ北６西７)</h3>
+        <h3>4순위: タイムズ北６西７</h3>
         <p>대략 예상 주차비 1700¥</p>
         <ul>
             <li><strong>주소:</strong> 北海道札幌市北区北６条西7</li>
@@ -949,6 +968,7 @@
     setupModal('rentacarModal', 'rentacarBtn', 'closeRentacar');
     setupModal('randorHotelModal', 'randorHotelBtn', 'closeRandorHotel');
     setupModal('hokkeHotelModal', 'hokkeHotelBtn', 'closeHokkeHotel');
+    setupModal('aeonMallModal', 'aeonMallBtn', 'closeAeonMall');
 
 </script>
 
