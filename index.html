@@ -49,11 +49,57 @@
         .card.day1 { border-left-color: var(--day1-color); }
         .card.day2 { border-left-color: var(--day2-color); }
         
-        /* 예비용 카드 스타일 */
-        .card.backup {
+        /* 예비용 카드 스타일 (수정됨) */
+        details.card.backup {
             border-left-color: var(--backup-color);
             background-color: #fdfdfd;
             border: 2px dashed #bdc3c7; /* 점선으로 구분 */
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        details.card.backup summary {
+            list-style: none; /* 기본 화살표 제거 */
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+            color: #555;
+            outline: none;
+        }
+        
+        /* 크롬 등에서 기본 마커 숨기기 */
+        details.card.backup summary::-webkit-details-marker {
+            display: none;
+        }
+
+        /* 커스텀 화살표 추가 */
+        details.card.backup summary::after {
+            content: '▼';
+            font-size: 0.8em;
+            margin-left: auto; /* 우측 정렬 */
+            transition: transform 0.3s;
+            color: var(--backup-color);
+        }
+
+        details.card.backup[open] summary::after {
+            transform: rotate(180deg);
+        }
+
+        details.card.backup[open] {
+            border-style: solid; /* 열리면 실선으로 변경 */
+            background-color: #fff;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        /* 열렸을 때 내부 컨텐츠 애니메이션 효과 */
+        details.card.backup > div {
+            animation: fadeIn 0.4s ease-out;
+            margin-top: 10px; /* 요약과 내용 사이 간격 */
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .time-badge {
@@ -75,7 +121,7 @@
             border-radius: 4px;
             font-weight: bold;
             font-size: 0.9em;
-            margin-bottom: 5px;
+            margin-right: 10px;
         }
 
         .place-name {
@@ -136,7 +182,6 @@
 
     <h1>✈️ 기타큐슈 1박 2일 여행</h1>
 
-
     <!-- 1일차 -->
     <h2 class="day1-header">🗓️ 1일차: 모지코 & 야하타</h2>
 
@@ -165,17 +210,21 @@
     </div>
 
     <!-- 예비용 리스트: Hasu no Hana -->
-    <div class="card backup">
-        <span class="backup-badge">⚠️ Plan B (예비용)</span>
-        <div class="place-name">Hasu no Hana</div>
-        <div class="note">코가네무시 웨이팅이 길 경우 대안 (도보 이동 가능)</div>
-        <div class="jp-info">
-            <div class="jp-label">상호명</div>
-            蓮の花<br><br>
-            <div class="jp-label">주소</div>
-            〒801-0851 福岡県北九州市門司区東本町１丁目４−7
+    <details class="card backup">
+        <summary>
+            <span class="backup-badge">⚠️ Plan B (예비용)</span>
+            <span>Hasu no Hana (蓮の花)</span>
+        </summary>
+        <div>
+            <div class="note">코가네무시 웨이팅이 길 경우 대안 (도보 이동 가능)</div>
+            <div class="jp-info">
+                <div class="jp-label">상호명</div>
+                蓮の花<br><br>
+                <div class="jp-label">주소</div>
+                〒801-0851 福岡県北九州市門司区東本町１丁目４−7
+            </div>
         </div>
-    </div>
+    </details>
 
     <div class="card day1">
         <span class="time-badge">디저트</span>
@@ -295,17 +344,21 @@
     </div>
 
     <!-- 예비용 리스트: Udon Issho -->
-    <div class="card backup">
-        <span class="backup-badge">⚠️ Plan B (예비용)</span>
-        <div class="place-name">Udon Issho</div>
-        <div class="note">고쿠라 점심/식사 대안 (고쿠라역 인근)</div>
-        <div class="jp-info">
-            <div class="jp-label">상호명</div>
-            うどん一勝 [豊前臭打会]<br><br>
-            <div class="jp-label">주소</div>
-            〒802-0002 福岡県北九州市小倉北区小倉北区京町３丁目１２−4
+    <details class="card backup">
+        <summary>
+            <span class="backup-badge">⚠️ Plan B (예비용)</span>
+            <span>Udon Issho (うどん一勝)</span>
+        </summary>
+        <div>
+            <div class="note">고쿠라 점심/식사 대안 (고쿠라역 인근)</div>
+            <div class="jp-info">
+                <div class="jp-label">상호명</div>
+                うどん一勝 [豊前臭打会]<br><br>
+                <div class="jp-label">주소</div>
+                〒802-0002 福岡県北九州市小倉北区小倉北区京町３丁目１２−4
+            </div>
         </div>
-    </div>
+    </details>
 
     <div class="card day2">
         <span class="time-badge">오후 (시모노세키)</span>
@@ -325,17 +378,21 @@
     </div>
 
     <!-- 예비용 리스트: Shimonoseki Nikuju Sanya -->
-    <div class="card backup">
-        <span class="backup-badge">⚠️ Plan B (예비용)</span>
-        <div class="place-name">Shimonoseki Nikuju Sanya</div>
-        <div class="note">카메야마 하치만구 인근 식사 대안</div>
-        <div class="jp-info">
-            <div class="jp-label">상호명</div>
-            下關肉重 三屋<br><br>
-            <div class="jp-label">주소</div>
-            〒750-0004 山口県下関市中之町２−11 林ビル
+    <details class="card backup">
+        <summary>
+            <span class="backup-badge">⚠️ Plan B (예비용)</span>
+            <span>Shimonoseki Nikuju Sanya (三屋)</span>
+        </summary>
+        <div>
+            <div class="note">카메야마 하치만구 인근 식사 대안</div>
+            <div class="jp-info">
+                <div class="jp-label">상호명</div>
+                下關肉重 三屋<br><br>
+                <div class="jp-label">주소</div>
+                〒750-0004 山口県下関市中之町２−11 林ビル
+            </div>
         </div>
-    </div>
+    </details>
 
     <div class="card day2">
         <span class="time-badge">저녁 (복어회)</span>
