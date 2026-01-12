@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>기타큐슈 1박 2일 여행 일정표</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #e74c3c;
+            --day1-color: #3498db;
+            --day2-color: #27ae60;
+            --bg-color: #f4f4f9;
+            --card-bg: #ffffff;
+        }
+        body {
+            font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+            background-color: var(--bg-color);
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+        }
+        h2 {
+            margin-top: 30px;
+            padding: 10px;
+            border-radius: 5px;
+            color: white;
+        }
+        .day1-header { background-color: var(--day1-color); }
+        .day2-header { background-color: var(--day2-color); }
+        .shopping-header { background-color: #9b59b6; }
+        
+        .card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            padding: 15px;
+            border-left: 5px solid #ddd;
+        }
+        .card.day1 { border-left-color: var(--day1-color); }
+        .card.day2 { border-left-color: var(--day2-color); }
+        
+        .time-badge {
+            display: inline-block;
+            background-color: #eee;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.9em;
+            color: #555;
+            margin-bottom: 5px;
+        }
+        
+        .place-name {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #222;
+        }
+        
+        .jp-info {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 4px;
+            font-family: monospace; /* 텍스트 복사 용이하게 */
+            color: #444;
+        }
+        .jp-label {
+            font-size: 0.8em;
+            color: #888;
+            margin-bottom: 2px;
+        }
+        
+        .tip-box {
+            background-color: #fff3cd;
+            border: 1px solid #ffeeba;
+            color: #856404;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+            font-size: 0.95em;
+        }
+        
+        .coupon-btn {
+            display: block;
+            width: 100%;
+            text-align: center;
+            background-color: #e74c3c;
+            color: white;
+            padding: 10px;
+            margin-top: 5px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            box-sizing: border-box;
+        }
+        .coupon-btn:hover { background-color: #c0392b; }
+        .coupon-sub { font-size: 0.8em; color: white; display: block; font-weight: normal; }
+
+        .note {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>✈️ 기타큐슈 1박 2일 여행</h1>
+    <p style="text-align: center; font-size: 0.9em; color: #666;">일본어 주소는 그대로 복사해서 구글 맵에 붙여넣으세요.</p>
+
+    <!-- 1일차 -->
+    <h2 class="day1-header">🗓️ 1일차: 모지코 & 야하타</h2>
+
+    <div class="card day1">
+        <span class="time-badge">아침 (백반)</span>
+        <div class="place-name">안전입선식당 (Anzen Irifune Shokudo)</div>
+        <div class="jp-info">
+            <div class="jp-label">상호명</div>
+            安全入船食堂<br><br>
+            <div class="jp-label">주소</div>
+            〒801-0853 福岡県北九州市門司区６
+        </div>
+        <div class="note">💰 기본 350엔 + 반찬값 (현금 필수)</div>
+        <div class="tip-box">💡 아침 식사 후 근처에서 자전거를 대여하세요!(自車輸場)</div>
+    </div>
+
+    <div class="card day1">
+        <span class="time-badge">점심 (야키카레)</span>
+        <div class="place-name">코가네무시 (Koganemushi)</div>
+        <div class="jp-info">
+            <div class="jp-label">상호명</div>
+            こがねむし<br><br>
+            <div class="jp-label">주소</div>
+            〒801-0851 福岡県北九州市門司区東本町１丁目１−24 鎮西橋サンハイム
+        </div>
+        <div class="note">💰 기본 800엔 (웨이팅 주의)</div>
+    </div>
+
+    <div class="card day1">
+        <span class="time-badge">디저트</span>
+        <div class="place-name">파티세리 샤인 (Patisserie Shine)</div>
+        <div class="jp-info">
+            <div class="jp-label">상호명</div>
+            パティスリーシャイン<br><br>
+            <div class="jp-label">주소</div>
+            〒801-0863 福岡県北九州市門司区栄町１１−34
+        </div>
+        <div class="note">💰 500엔~ (생버터샌드, 케이크)</div>
+    </div>
+
+    <div class="card day1">
+        <span class="time-badge">오후 쇼핑</span>
+        <div class="place-name">이온몰 야하타히가시 & THE OUTLETS</div>
+        <div class="jp-info">
+            <div class="jp-label">장소</div>
+            イオンモール八幡東 / THE OUTLETS KITAKYUSHU
+        </div>
+        <div class="tip-box">
+            🛍️ <b>쇼핑 필수 준비물: 여권</b><br>
+            아래 쿠폰 버튼을 미리 열어두세요.
+        </div>
+        <!-- 쿠폰 섹션 -->
+        <div style="margin-top: 10px;">
+            <a href="https://kr.aeonmall.global/coupons/discount?couponid=22&mall=mall49" target="_blank" class="coupon-btn">
+                🎫 이온몰 500엔 할인 쿠폰
+                <span class="coupon-sub">5,500엔 이상 구매 시 (전문점)</span>
+            </a>
+            <a href="https://en.aeonmall.global/coupon/zone/theoutletskitakyushu" target="_blank" class="coupon-btn" style="background-color: #2980b9; margin-top:5px;">
+                🎫 THE OUTLETS 500엔 쿠폰
+                <span class="coupon-sub">인포메이션 센터에서 여권 제시 후 교환</span>
+            </a>
+            <a href="https://tw-img.vpon.com/img/campaigns/aeon/aeon_2025campaign_en/index.html" target="_blank" class="coupon-btn" style="background-color: #8e44ad; margin-top:5px;">
+                🎫 이온몰 5% + 면세 QR
+                <span class="coupon-sub">이온 직영 마트/드럭스토어용</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="card day1">
+        <span class="time-badge">저녁 (함바그)</span>
+        <div class="place-name">키와미야 함바그 야하타점</div>
+        <div class="jp-info">
+            <div class="jp-label">상호명</div>
+            極味や 八幡店 ハンバーグ ステーキ<br><br>
+            <div class="jp-label">주소</div>
+            〒805-0071 福岡県北九州市八幡東区東田４丁目１−1 ジアウトレット北九州 1F
+        </div>
+        <div class="note">💰 2500엔~ (THE OUTLETS 1층 위치)</div>
+    </div>
+
+    <div class="card day1">
+        <span class="time-badge">밤 (야경 & 관람차)</span>
+        <div class="place-name">사라쿠라산 & 차차타운</div>
+        <div class="jp-info">
+            <div class="jp-label">장소 1</div>
+            皿倉山展望台 (사라쿠라산 전망대)<br><br>
+            <div class="jp-label">장소 2</div>
+            チャチャタウン小倉 (차차타운 고쿠라)
+        </div>
+        <div class="tip-box">
+            🎡 <b>주의:</b> 차차타운 관람차는 <b>21:45</b> 탑승 마감입니다.<br>
+            사라쿠라산에서 늦지 않게 이동하세요.
+        </div>
+        <div style="margin-top: 10px;">
+            <a href="https://www.sarakurayama-cablecar.co.jp/timetable/" target="_blank" class="coupon-btn" style="background-color: #34495e;">
+                🚌 사라쿠라산 셔틀버스 시간표 확인
+                <span class="coupon-sub">JR야하타역 ↔ 케이블카 산록역</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- 2일차 -->
+    <h2 class="day2-header">🗓️ 2일차: 고쿠라 & 시모노세키</h2>
+
+    <div class="card day2">
+        <span class="time-badge">아침 (오뎅/우동)</span>
+        <div class="place-name">고쿠라성 & 아침식사</div>
+        <div class="note">아침 일찍 여는 오뎅 맛집 추천 (24시간)</div>
+        <div class="jp-info">
+            <div class="jp-label">추천 식당 (스케산 우동)</div>
+            資さんうどん 魚町店<br><br>
+            <div class="jp-label">관광지</div>
+            小倉城 (고쿠라성)
+        </div>
+    </div>
+
+    <div class="card day2">
+        <span class="time-badge">점심 (면 요리)</span>
+        <div class="place-name">Visco 근처 맛집 (무로마치)</div>
+        <div class="note">※ Visco는 저녁 영업 위주라 대안 식당 추천</div>
+        <div class="jp-info">
+            <div class="jp-label">추천 1 (소바 노포)</div>
+            助六<br>
+            (주소: 北九州市小倉北区室町2-10-22)<br><br>
+            <div class="jp-label">추천 2 (라멘 맛집)</div>
+            麺家泰人<br>
+            (주소: 北九州市小倉北区室町2-10-22)
+        </div>
+        <div class="tip-box">돈키호테 쇼핑 시 MATCHA 쿠폰 사용하세요!</div>
+    </div>
+
+    <div class="card day2">
+        <span class="time-badge">오후 (자전거)</span>
+        <div class="place-name">시모노세키 & 자전거 여행</div>
+        <div class="jp-info">
+            <div class="jp-label">장소</div>
+            カモンワーフ (카몬워프)<br>
+            赤間神宮 (아카마 신궁)
+        </div>
+        <div class="tip-box">
+            🚲 <b>자전거 주차 팁 (駐輪場):</b><br>
+            관광지 입구의 'P' 마크나 자전거 그림이 있는 구역에 주차하세요.
+        </div>
+    </div>
+
+    <div class="card day2">
+        <span class="time-badge">저녁 (복어회)</span>
+        <div class="place-name">카몬워프 복어회</div>
+        <div class="note">테이크아웃 추천</div>
+        <div class="jp-info">
+            <div class="jp-label">장소</div>
+            カモンワーフ
+        </div>
+    </div>
+
+    <!-- 통합 링크 모음 -->
+    <h2 class="shopping-header">📎 유용한 링크 모음</h2>
+    <div class="card">
+        <ul style="padding-left: 20px;">
+            <li><a href="https://kr.aeonmall.global/coupons/discount?couponid=22&mall=mall49" target="_blank">이온몰 500엔 할인 쿠폰</a></li>
+            <li><a href="https://en.aeonmall.global/coupon/zone/theoutletskitakyushu" target="_blank">THE OUTLETS 500엔 교환권 (인포메이션)</a></li>
+            <li><a href="https://tw-img.vpon.com/img/campaigns/aeon/aeon_2025campaign_en/index.html" target="_blank">이온몰 5% 할인 + 면세 QR</a></li>
+            <li><a href="https://www.welcome-aeon.com/coupon/web_coupon.php?id=92&cid=cp1755845686&cv=1" target="_blank">이온몰 지점 전용 웹 쿠폰</a></li>
+            <li><a href="https://matcha-jp.com/ko/coupon" target="_blank">MATCHA 쿠폰 (돈키호테/드럭스토어)</a></li>
+            <li><a href="https://kr.aeonmall.global/mall/theoutletskitakyushu" target="_blank">THE OUTLETS 공식 홈페이지 (한국어)</a></li>
+            <li><a href="https://www.sarakurayama-cablecar.co.jp/timetable/" target="_blank">사라쿠라산 셔틀버스 시간표</a></li>
+        </ul>
+    </div>
+
+</body>
+</html>
