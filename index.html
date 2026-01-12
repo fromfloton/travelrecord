@@ -12,6 +12,7 @@
             --day2-color: #27ae60;
             --bg-color: #f4f4f9;
             --card-bg: #ffffff;
+            --backup-color: #7f8c8d;
         }
         body {
             font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
@@ -48,6 +49,13 @@
         .card.day1 { border-left-color: var(--day1-color); }
         .card.day2 { border-left-color: var(--day2-color); }
         
+        /* 예비용 카드 스타일 */
+        .card.backup {
+            border-left-color: var(--backup-color);
+            background-color: #fdfdfd;
+            border: 2px dashed #bdc3c7; /* 점선으로 구분 */
+        }
+
         .time-badge {
             display: inline-block;
             background-color: #eee;
@@ -59,6 +67,17 @@
             margin-bottom: 5px;
         }
         
+        .backup-badge {
+            display: inline-block;
+            background-color: var(--backup-color);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+
         .place-name {
             font-size: 1.2em;
             font-weight: bold;
@@ -116,7 +135,7 @@
 <body>
 
     <h1>✈️ 기타큐슈 1박 2일 여행</h1>
-    <p style="text-align: center; font-size: 0.9em; color: #666;">일본어 주소는 그대로 복사해서 구글 맵에 붙여넣으세요.</p>
+
 
     <!-- 1일차 -->
     <h2 class="day1-header">🗓️ 1일차: 모지코 & 야하타</h2>
@@ -143,6 +162,19 @@
             〒801-0851 福岡県北九州市門司区東本町１丁目１−24 鎮西橋サンハイム
         </div>
         <div class="note">💰 기본 800엔 (웨이팅 주의)</div>
+    </div>
+
+    <!-- 예비용 리스트: Hasu no Hana -->
+    <div class="card backup">
+        <span class="backup-badge">⚠️ Plan B (예비용)</span>
+        <div class="place-name">Hasu no Hana</div>
+        <div class="note">코가네무시 웨이팅이 길 경우 대안 (도보 이동 가능)</div>
+        <div class="jp-info">
+            <div class="jp-label">상호명</div>
+            蓮の花<br><br>
+            <div class="jp-label">주소</div>
+            〒801-0851 福岡県北九州市門司区東本町１丁目４−7
+        </div>
     </div>
 
     <div class="card day1">
@@ -234,31 +266,74 @@
     </div>
 
     <div class="card day2">
-        <span class="time-badge">점심 (면 요리)</span>
-        <div class="place-name">Visco 근처 맛집 (무로마치)</div>
-        <div class="note">※ Visco는 저녁 영업 위주라 대안 식당 추천</div>
+        <span class="time-badge">오전 (쇼핑)</span>
+        <div class="place-name">하타노코노헤야 & 탄가시장</div>
+        <div class="note">셀렉트 샵 & 시장 구경</div>
         <div class="jp-info">
-            <div class="jp-label">추천 1 (소바 노포)</div>
-            助六<br>
-            (주소: 北九州市小倉北区室町2-10-22)<br><br>
-            <div class="jp-label">추천 2 (라멘 맛집)</div>
-            麺家泰人<br>
-            (주소: 北九州市小倉北区室町2-10-22)
+            <div class="jp-label">상호명 (셀렉트 샵)</div>
+            セレクトショップ 畑の子の部屋<br><br>
+            <div class="jp-label">주소</div>
+            〒802-0006 福岡県北九州市小倉北区魚町３丁目２−12 木下ビル １F
         </div>
-        <div class="tip-box">돈키호테 쇼핑 시 MATCHA 쿠폰 사용하세요!</div>
+        <div class="tip-box">고쿠라성 구경 후 탄가시장 가는 길에 들르기 좋습니다.</div>
     </div>
 
     <div class="card day2">
-        <span class="time-badge">오후 (자전거)</span>
-        <div class="place-name">시모노세키 & 자전거 여행</div>
+        <span class="time-badge">오전/점심 (클래식카)</span>
+        <div class="place-name">Vintage Car VISCO</div>
+        <div class="note">🚗 일본 클래식카 성지 (하코스카, GTR 등)</div>
         <div class="jp-info">
-            <div class="jp-label">장소</div>
+            <div class="jp-label">상호명</div>
+            Vintage Car VISCO<br><br>
+            <div class="jp-label">주소</div>
+            〒802-0045 福岡県北九州市小倉北区神岳２丁目６−28
+        </div>
+        <div class="tip-box">
+            🚕 <b>이동 팁:</b> 고쿠라성/시내에서 택시(약 10분) 또는 버스 이용.<br>
+            식사는 근처 로컬 식당이나 고쿠라역 복귀 후 추천.
+        </div>
+    </div>
+
+    <!-- 예비용 리스트: Udon Issho -->
+    <div class="card backup">
+        <span class="backup-badge">⚠️ Plan B (예비용)</span>
+        <div class="place-name">Udon Issho</div>
+        <div class="note">고쿠라 점심/식사 대안 (고쿠라역 인근)</div>
+        <div class="jp-info">
+            <div class="jp-label">상호명</div>
+            うどん一勝 [豊前臭打会]<br><br>
+            <div class="jp-label">주소</div>
+            〒802-0002 福岡県北九州市小倉北区小倉北区京町３丁目１２−4
+        </div>
+    </div>
+
+    <div class="card day2">
+        <span class="time-badge">오후 (시모노세키)</span>
+        <div class="place-name">카몬워프 & 카메야마 하치만구</div>
+        <div class="jp-info">
+            <div class="jp-label">신사 (세계 최대 복어 동상)</div>
+            亀山八幡宮（亀山宮）<br>
+            〒750-0004 山口県下関市中之町１−1<br><br>
+            <div class="jp-label">관광지</div>
             カモンワーフ (카몬워프)<br>
             赤間神宮 (아카마 신궁)
         </div>
         <div class="tip-box">
             🚲 <b>자전거 주차 팁 (自車輸場):</b><br>
             관광지 입구의 'P' 마크나 자전거 그림이 있는 구역에 주차하세요.
+        </div>
+    </div>
+
+    <!-- 예비용 리스트: Shimonoseki Nikuju Sanya -->
+    <div class="card backup">
+        <span class="backup-badge">⚠️ Plan B (예비용)</span>
+        <div class="place-name">Shimonoseki Nikuju Sanya</div>
+        <div class="note">카메야마 하치만구 인근 식사 대안</div>
+        <div class="jp-info">
+            <div class="jp-label">상호명</div>
+            下關肉重 三屋<br><br>
+            <div class="jp-label">주소</div>
+            〒750-0004 山口県下関市中之町２−11 林ビル
         </div>
     </div>
 
