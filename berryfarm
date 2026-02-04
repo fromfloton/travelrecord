@@ -23,9 +23,7 @@
         <!-- Top Image Placeholder -->
         <!-- You can replace the background-color or add an <img> tag inside here later -->
         <div class="w-full h-64 bg-gray-200 flex flex-col items-center justify-center text-gray-400 relative">
-            <i class="fa-regular fa-image text-4xl mb-2"></i>
-            <span class="font-medium">Farm Photo Placeholder</span>
-            <p class="text-xs mt-1">(Add your photo here)</p>
+            <img src="site.jpg" class="w-full h-64 object-cover" alt="Farm View">
         </div>
 
         <!-- Header Title -->
