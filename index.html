@@ -9,35 +9,43 @@
     <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&family=Noto+Sans+TC:wght@400;700&display=swap');
         body {
-            font-family: 'Noto Sans', sans-serif;
+            font-family: 'Noto Sans', 'Noto Sans TC', sans-serif;
+        }
+        .lang-transition {
+            transition: opacity 0.2s ease-in-out;
         }
     </style>
 </head>
 <body class="bg-pink-50 text-gray-800">
 
-    <!-- Main Container (Mobile First, centered on larger screens) -->
+    <!-- Main Container -->
     <div class="max-w-md mx-auto bg-white min-h-screen shadow-xl sm:my-8 sm:rounded-2xl sm:min-h-0 overflow-hidden relative">
+        
+        <!-- Language Switcher -->
+        <div class="absolute top-4 right-4 z-10 flex gap-2">
+            <button onclick="setLanguage('en')" id="btn-en" class="px-3 py-1 rounded-full text-xs font-bold border transition-colors bg-red-500 text-white border-red-500">EN</button>
+            <button onclick="setLanguage('tw')" id="btn-tw" class="px-3 py-1 rounded-full text-xs font-bold border transition-colors bg-white text-gray-600 border-gray-300">TW</button>
+        </div>
 
-        <!-- Top Image Placeholder -->
-        <!-- You can replace the background-color or add an <img> tag inside here later -->
+        <!-- Top Image -->
         <div class="w-full h-64 bg-gray-200 flex flex-col items-center justify-center text-gray-400 relative">
-            <img src="site.jpg" class="w-full h-64 object-cover" alt="Farm View">
+            <img src="site.jpg" class="w-full h-64 object-cover" alt="Farm View" onerror="this.src='https://images.unsplash.com/photo-1518635017498-87f514b751ba?auto=format&fit=crop&w=800&q=80'">
         </div>
 
         <!-- Header Title -->
         <div class="px-6 pt-6 pb-2 text-center">
-            <span class="bg-red-100 text-red-600 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">Welcome</span>
+            <span id="badge-welcome" class="bg-red-100 text-red-600 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">Welcome</span>
             <h1 class="text-2xl font-bold text-gray-900 mt-3 leading-tight">
                 Berry Busan<br>
-                <span class="text-red-500">Strawberry Picking</span><br>
-                Quick Guide
+                <span id="main-title" class="text-red-500">Strawberry Picking</span><br>
+                <span id="sub-title">Quick Guide</span>
             </h1>
         </div>
 
         <!-- Content Sections -->
-        <div class="p-6 space-y-8">
+        <div class="p-6 space-y-8 lang-transition" id="content-area">
 
             <!-- 1. Location -->
             <section>
@@ -45,18 +53,18 @@
                     <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center text-red-500">
                         <i class="fa-solid fa-map-location-dot text-lg"></i>
                     </div>
-                    <h2 class="text-xl font-bold text-gray-800">1. Location</h2>
+                    <h2 id="sec1-title" class="text-xl font-bold text-gray-800">1. Location</h2>
                 </div>
                 
                 <div class="bg-gray-50 p-4 rounded-xl border border-gray-100">
                     <p class="text-sm text-gray-600 leading-relaxed mb-3">
-                        Search for <strong>Seomyeon Seongwon Parking Lot</strong>.
+                        <span id="sec1-search-text">Search for</span> <strong>Seomyeon Seongwon Parking Lot</strong>.
                     </p>
                     <div class="flex items-start gap-2 text-sm text-gray-500 mb-3 bg-white p-2 rounded border border-gray-200">
                         <i class="fa-solid fa-location-dot mt-1 text-red-400"></i>
                         <span>25 Bujeon-ro 140beon-gil, Busanjin-gu</span>
                     </div>
-                    <p class="text-sm text-gray-600 leading-relaxed">
+                    <p id="sec1-desc" class="text-sm text-gray-600 leading-relaxed">
                         After passing the parking gate, enter the <strong>alley to your left</strong> (look for the bulletin board). The venue is located in the 3-story building inside that alley.
                     </p>
                 </div>
@@ -68,15 +76,15 @@
                     <div class="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-600">
                         <i class="fa-solid fa-triangle-exclamation text-lg"></i>
                     </div>
-                    <h2 class="text-xl font-bold text-gray-800">2. Inside the Farm</h2>
+                    <h2 id="sec2-title" class="text-xl font-bold text-gray-800">2. Inside the Farm</h2>
                 </div>
 
                 <!-- Safety Card -->
                 <div class="mb-4">
                     <h3 class="font-bold text-gray-700 mb-2 flex items-center gap-2">
-                        <i class="fa-solid fa-hard-hat text-yellow-500"></i> Safety First
+                        <i class="fa-solid fa-hard-hat text-yellow-500"></i> <span id="sec2-safety-title">Safety First</span>
                     </h3>
-                    <ul class="text-sm text-gray-600 space-y-2 list-disc list-outside pl-4">
+                    <ul id="sec2-safety-list" class="text-sm text-gray-600 space-y-2 list-disc list-outside pl-4">
                         <li>The Smart Farm floor has rails. <strong>Please do not run or walk backward</strong>, as you may trip and fall.</li>
                         <li>Many parts of the facility have sharp edges.</li>
                         <li>To avoid injury, please <strong>only touch the strawberries</strong> and avoid touching equipment.</li>
@@ -86,14 +94,14 @@
                 <!-- Bees Card -->
                 <div class="bg-yellow-50 p-4 rounded-xl border border-yellow-100">
                     <h3 class="font-bold text-yellow-800 mb-2 flex items-center gap-2">
-                        <i class="fa-solid fa-bug"></i> Pollinating Bees
+                        <i class="fa-solid fa-bug"></i> <span id="sec2-bees-title">Pollinating Bees</span>
                     </h3>
-                    <p class="text-sm text-gray-700 leading-relaxed mb-2">
+                    <p id="sec2-bees-desc" class="text-sm text-gray-700 leading-relaxed mb-2">
                         There are bees flying around. Although they are large, they are attracted to flowers, not people.
                     </p>
                     <div class="flex items-start gap-2 bg-white/60 p-2 rounded text-sm text-yellow-900 font-medium">
                         <i class="fa-solid fa-circle-info mt-1"></i>
-                        <p>If a bee comes near, stay still and it will not sting. Never swing your arms or shrink away suddenly.</p>
+                        <p id="sec2-bees-note">If a bee comes near, stay still and it will not sting. Never swing your arms or shrink away suddenly.</p>
                     </div>
                 </div>
             </section>
@@ -104,22 +112,22 @@
                     <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center text-red-500">
                         <i class="fa-solid fa-scissors text-lg"></i>
                     </div>
-                    <h2 class="text-xl font-bold text-gray-800">3. Picking Strawberries</h2>
+                    <h2 id="sec3-title" class="text-xl font-bold text-gray-800">3. Picking Strawberries</h2>
                 </div>
 
                 <div class="bg-white border border-gray-200 p-4 rounded-xl shadow-sm">
                     <div class="mb-4 pb-4 border-b border-gray-100">
-                        <p class="text-sm text-gray-600 mb-2">
+                        <p id="sec3-delicate" class="text-sm text-gray-600 mb-2">
                             Strawberries are delicate. Once touched, they can bruise or develop mold.
                         </p>
-                        <p class="text-sm font-semibold text-red-500">
+                        <p id="sec3-warning" class="text-sm font-semibold text-red-500">
                             <i class="fa-solid fa-hand-point-up"></i> Please Do not touch the fruit with your hands if you do not want to pick it.
                         </p>
                     </div>
                     
                     <div>
-                        <h4 class="font-bold text-gray-700 text-sm mb-2">How to pick:</h4>
-                        <ul class="space-y-2">
+                        <h4 id="sec3-how-to" class="font-bold text-gray-700 text-sm mb-2">How to pick:</h4>
+                        <ul id="sec3-steps" class="space-y-2">
                             <li class="flex items-start gap-2 text-sm text-gray-600">
                                 <i class="fa-solid fa-check text-green-500 mt-1"></i>
                                 <span><strong>Check ripeness:</strong> The redder the strawberry, the riper and tastier it is.</span>
@@ -139,14 +147,14 @@
                     <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-500">
                         <i class="fa-solid fa-faucet-drip text-lg"></i>
                     </div>
-                    <h2 class="text-xl font-bold text-gray-800">4. Eating</h2>
+                    <h2 id="sec4-title" class="text-xl font-bold text-gray-800">4. Eating</h2>
                 </div>
 
                 <div class="bg-blue-50 p-4 rounded-xl text-center border border-blue-100">
-                    <p class="text-sm text-blue-900 mb-2">
+                    <p id="sec4-clean" class="text-sm text-blue-900 mb-2">
                         While our Smart Farm is clean, dust and residue may still remain.
                     </p>
-                    <p class="font-bold text-blue-700 flex justify-center items-center gap-2">
+                    <p id="sec4-wash" class="font-bold text-blue-700 flex justify-center items-center gap-2">
                         <i class="fa-solid fa-hands-bubbles"></i>
                         For your safety, please wash the strawberries before eating.
                     </p>
@@ -157,11 +165,132 @@
 
         <!-- Footer -->
         <div class="bg-gray-800 text-gray-400 text-center py-6 px-6 text-sm">
-            <p class="mb-2">Have a sweet time at Berry Busan!</p>
+            <p id="footer-msg" class="mb-2">Have a sweet time at Berry Busan!</p>
             <p class="text-xs opacity-50">&copy; Berry Busan Smart Farm</p>
         </div>
 
     </div>
 
+    <script>
+        const translations = {
+            en: {
+                welcome: "Welcome",
+                mainTitle: "Strawberry Picking",
+                subTitle: "Quick Guide",
+                sec1Title: "1. Location",
+                sec1Search: "Search for",
+                sec1Desc: "After passing the parking gate, enter the <strong>alley to your left</strong> (look for the bulletin board). The venue is located in the 3-story building inside that alley.",
+                sec2Title: "2. Inside the Farm",
+                sec2Safety: "Safety First",
+                sec2SafetyList: `
+                    <li>The Smart Farm floor has rails. <strong>Please do not run or walk backward</strong>, as you may trip and fall.</li>
+                    <li>Many parts of the facility have sharp edges.</li>
+                    <li>To avoid injury, please <strong>only touch the strawberries</strong> and avoid touching equipment.</li>
+                `,
+                sec2BeesTitle: "Pollinating Bees",
+                sec2BeesDesc: "There are bees flying around. Although they are large, they are attracted to flowers, not people.",
+                sec2BeesNote: "If a bee comes near, stay still and it will not sting. Never swing your arms or shrink away suddenly.",
+                sec3Title: "3. Picking Strawberries",
+                sec3Delicate: "Strawberries are delicate. Once touched, they can bruise or develop mold.",
+                sec3Warning: "<i class='fa-solid fa-hand-point-up'></i> Please Do not touch the fruit with your hands if you do not want to pick it.",
+                sec3HowTo: "How to pick:",
+                sec3Steps: `
+                    <li class="flex items-start gap-2 text-sm text-gray-600">
+                        <i class="fa-solid fa-check text-green-500 mt-1"></i>
+                        <span><strong>Check ripeness:</strong> The redder the strawberry, the riper and tastier it is.</span>
+                    </li>
+                    <li class="flex items-start gap-2 text-sm text-gray-600">
+                        <i class="fa-solid fa-xmark text-red-500 mt-1"></i>
+                        <span><strong>Caution:</strong> Be careful not to cut unripened (green) strawberries growing next to the ripe ones.</span>
+                    </li>
+                `,
+                sec4Title: "4. Eating",
+                sec4Clean: "While our Smart Farm is clean, dust and residue may still remain.",
+                sec4Wash: "<i class='fa-solid fa-hands-bubbles'></i> For your safety, please wash the strawberries before eating.",
+                footerMsg: "Have a sweet time at Berry Busan!"
+            },
+            tw: {
+                welcome: "歡迎光臨",
+                mainTitle: "草莓採摘",
+                subTitle: "快速指南",
+                sec1Title: "1. 地點資訊",
+                sec1Search: "請搜尋",
+                sec1Desc: "通過停車場閘門後，進入<strong>左側小巷</strong>（請留意佈告欄）。活動場地位於該巷內的3層建築中。",
+                sec2Title: "2. 農場內部",
+                sec2Safety: "安全第一",
+                sec2SafetyList: `
+                    <li>智慧農場地面設有軌道。<strong>請勿奔跑或倒退行走</strong>，以免絆倒。</li>
+                    <li>設施內有多處尖銳邊緣。</li>
+                    <li>為避免受傷，請<strong>僅觸摸草莓</strong>，切勿觸摸任何設備。</li>
+                `,
+                sec2BeesTitle: "授粉蜜蜂",
+                sec2BeesDesc: "農場內有蜜蜂飛行。雖然體型較大，但牠們只會被花朵吸引，不會主動攻擊人。",
+                sec2BeesNote: "若蜜蜂靠近，請保持靜止，牠們就不會叮人。切勿揮動手臂或突然躲閃。",
+                sec3Title: "3. 採摘草莓",
+                sec3Delicate: "草莓非常脆弱。一旦觸摸，可能會造成壓傷或發霉。",
+                sec3Warning: "<i class='fa-solid fa-hand-point-up'></i> 如果不打算採摘，請勿用手觸摸果實。",
+                sec3HowTo: "如何採摘：",
+                sec3Steps: `
+                    <li class="flex items-start gap-2 text-sm text-gray-600">
+                        <i class="fa-solid fa-check text-green-500 mt-1"></i>
+                        <span><strong>確認成熟度：</strong>草莓越紅，代表越成熟、越甜。</span>
+                    </li>
+                    <li class="flex items-start gap-2 text-sm text-gray-600">
+                        <i class="fa-solid fa-xmark text-red-500 mt-1"></i>
+                        <span><strong>注意：</strong>剪草莓時，請小心不要剪到紅草莓旁邊未成熟的（綠色）草莓。</span>
+                    </li>
+                `,
+                sec4Title: "4. 食用說明",
+                sec4Clean: "雖然智慧農場環境乾淨，但可能仍有灰塵或殘留物。",
+                sec4Wash: "<i class='fa-solid fa-hands-bubbles'></i> 為了您的健康安全，請清洗後再食用。",
+                footerMsg: "祝您在 Berry Busan 度過甜蜜時光！"
+            }
+        };
+
+        function setLanguage(lang) {
+            const content = document.getElementById('content-area');
+            content.style.opacity = '0';
+            
+            setTimeout(() => {
+                const t = translations[lang];
+                
+                document.getElementById('badge-welcome').innerText = t.welcome;
+                document.getElementById('main-title').innerText = t.mainTitle;
+                document.getElementById('sub-title').innerText = t.subTitle;
+                document.getElementById('sec1-title').innerText = t.sec1Title;
+                document.getElementById('sec1-search-text').innerText = t.sec1Search;
+                document.getElementById('sec1-desc').innerHTML = t.sec1Desc;
+                document.getElementById('sec2-title').innerText = t.sec2Title;
+                document.getElementById('sec2-safety-title').innerText = t.sec2Safety;
+                document.getElementById('sec2-safety-list').innerHTML = t.sec2SafetyList;
+                document.getElementById('sec2-bees-title').innerText = t.sec2BeesTitle;
+                document.getElementById('sec2-bees-desc').innerText = t.sec2BeesDesc;
+                document.getElementById('sec2-bees-note').innerText = t.sec2BeesNote;
+                document.getElementById('sec3-title').innerText = t.sec3Title;
+                document.getElementById('sec3-delicate').innerText = t.sec3Delicate;
+                document.getElementById('sec3-warning').innerHTML = t.sec3Warning;
+                document.getElementById('sec3-how-to').innerText = t.sec3HowTo;
+                document.getElementById('sec3-steps').innerHTML = t.sec3Steps;
+                document.getElementById('sec4-title').innerText = t.sec4Title;
+                document.getElementById('sec4-clean').innerText = t.sec4Clean;
+                document.getElementById('sec4-wash').innerHTML = t.sec4Wash;
+                document.getElementById('footer-msg').innerText = t.footerMsg;
+
+                // Update Button Styles
+                const btnEn = document.getElementById('btn-en');
+                const btnTw = document.getElementById('btn-tw');
+                
+                if(lang === 'en') {
+                    btnEn.className = "px-3 py-1 rounded-full text-xs font-bold border transition-colors bg-red-500 text-white border-red-500";
+                    btnTw.className = "px-3 py-1 rounded-full text-xs font-bold border transition-colors bg-white text-gray-600 border-gray-300";
+                } else {
+                    btnTw.className = "px-3 py-1 rounded-full text-xs font-bold border transition-colors bg-red-500 text-white border-red-500";
+                    btnEn.className = "px-3 py-1 rounded-full text-xs font-bold border transition-colors bg-white text-gray-600 border-gray-300";
+                }
+
+                content.style.opacity = '1';
+            }, 200);
+        }
+    </script>
 </body>
 </html>
