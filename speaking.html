@@ -42,7 +42,7 @@
 
     <main class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8" id="app">
         <!-- Topic 1 -->
-        <div class="bg-white rounded-2xl p-6 shadow-sm logic-card border border-slate-100">
+        <div class="bg-white rounded-2xl p-6 shadow-sm logic-card border border-slate-100 flex flex-col">
             <div class="flex items-center gap-3 mb-4">
                 <div class="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600">
                     <i class="fa-solid fa-briefcase"></i>
@@ -50,7 +50,7 @@
                 <h2 class="text-xl font-bold text-slate-800">Topic 1: Work</h2>
             </div>
             
-            <div class="space-y-6">
+            <div class="space-y-6 flex-grow">
                 <div>
                     <p class="text-sm font-medium text-slate-400 mb-2">Q: Work or Student?</p>
                     <div class="text-slate-700 leading-relaxed">
@@ -83,13 +83,16 @@
             <button onclick="toggleScript(this)" class="mt-6 w-full py-2 text-xs font-bold uppercase tracking-wider text-slate-400 hover:text-indigo-600 transition-colors border-t border-dashed pt-4">
                 Reveal Full Script
             </button>
-            <div class="hidden mt-4 text-sm text-slate-600 bg-slate-50 p-4 rounded-lg italic">
-                "Currently, I run my own business which combines software and agriculture. I’ve been in this role for about five years now; I find it quite challenging, but it is highly rewarding. The best part is the sense of achievement... I'm on the fence because of the rapid growth of AI."
+            <div class="hidden mt-4 text-sm text-slate-600 bg-slate-50 p-4 rounded-lg space-y-3">
+                <p><strong>Q1:</strong> "Currently, I run my own business which combines software and agriculture. I’ve been in this role for about five years now; I find it quite challenging, but it is highly rewarding."</p>
+                <p><strong>Q2:</strong> "The best part is definitely the sense of achievement. I get to brainstorm revenue strategies, so no two days are ever the same. Every day feels new, which keeps things challenging and engaging."</p>
+                <p><strong>Q3:</strong> "As a business owner, I wear many hats. Since I run a one-man business, I’m responsible for everything from the ground up. I manage the agricultural operations while also handling the financial planning. It’s quite a heavy workload, but I really enjoy the variety of tasks."</p>
+                <p><strong>Q4:</strong> "To be honest, I’m on the fence. While I’m very passionate about combining software with farming, the rapid growth of the AI market makes me wonder about the future. I’m carefully considering how these changes will affect the industry, so I’m keeping a close eye on trends to ensure I don’t fall behind."</p>
             </div>
         </div>
 
         <!-- Topic 2 -->
-        <div class="bg-white rounded-2xl p-6 shadow-sm logic-card border border-slate-100">
+        <div class="bg-white rounded-2xl p-6 shadow-sm logic-card border border-slate-100 flex flex-col">
             <div class="flex items-center gap-3 mb-4">
                 <div class="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600">
                     <i class="fa-solid fa-city"></i>
@@ -97,7 +100,7 @@
                 <h2 class="text-xl font-bold text-slate-800">Topic 2: Hometown</h2>
             </div>
             
-            <div class="space-y-6">
+            <div class="space-y-6 flex-grow">
                 <div>
                     <p class="text-sm font-medium text-slate-400 mb-2">Q: Location?</p>
                     <div class="text-slate-700 leading-relaxed">
@@ -130,13 +133,16 @@
             <button onclick="toggleScript(this)" class="mt-6 w-full py-2 text-xs font-bold uppercase tracking-wider text-slate-400 hover:text-emerald-600 transition-colors border-t border-dashed pt-4">
                 Reveal Full Script
             </button>
-            <div class="hidden mt-4 text-sm text-slate-600 bg-slate-50 p-4 rounded-lg italic">
-                "I come from a city in the central-eastern part... It used to be a major industrial hub for textile. The highlight is the old town with hillside houses. It has changed dramatically with modern malls... I dislike the traffic congestion due to narrow roads."
+            <div class="hidden mt-4 text-sm text-slate-600 bg-slate-50 p-4 rounded-lg space-y-3">
+                <p><strong>Q1:</strong> "I come from a city in the central-eastern part of my country. It used to be a major industrial hub, especially for the textile and fashion industry, but today it isn’t as bustling as it once was."</p>
+                <p><strong>Q2:</strong> "The most interesting part is the old town area, especially the hillside houses. It has a nostalgic and slightly exotic vibe that many tourists find fascinating."</p>
+                <p><strong>Q3:</strong> "My town has changed dramatically. Due to rapid urban development, modern shopping malls and apartments have replaced the old residential areas. While it’s more convenient now, I sometimes miss the peaceful atmosphere of the past."</p>
+                <p><strong>Q4:</strong> "If there’s one thing I dislike, it’s definitely the traffic congestion. The roads are quite narrow, so during rush hour, the traffic often comes to a standstill, which can be quite frustrating."</p>
             </div>
         </div>
 
         <!-- Topic 3 -->
-        <div class="bg-white rounded-2xl p-6 shadow-sm logic-card border border-slate-100">
+        <div class="bg-white rounded-2xl p-6 shadow-sm logic-card border border-slate-100 flex flex-col">
             <div class="flex items-center gap-3 mb-4">
                 <div class="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center text-orange-600">
                     <i class="fa-solid fa-house"></i>
@@ -144,7 +150,7 @@
                 <h2 class="text-xl font-bold text-slate-800">Topic 3: Home</h2>
             </div>
             
-            <div class="space-y-6">
+            <div class="space-y-6 flex-grow">
                 <div>
                     <p class="text-sm font-medium text-slate-400 mb-2">Q: Describe it?</p>
                     <div class="text-slate-700 leading-relaxed">
@@ -170,13 +176,15 @@
             <button onclick="toggleScript(this)" class="mt-6 w-full py-2 text-xs font-bold uppercase tracking-wider text-slate-400 hover:text-orange-600 transition-colors border-t border-dashed pt-4">
                 Reveal Full Script
             </button>
-            <div class="hidden mt-4 text-sm text-slate-600 bg-slate-50 p-4 rounded-lg italic">
-                "I live on the 7th floor, maintaining a minimalist lifestyle. My favorite place is the coffee station in the living room. The neighborhood is unique because of the mountains and ocean proximity."
+            <div class="hidden mt-4 text-sm text-slate-600 bg-slate-50 p-4 rounded-lg space-y-3">
+                <p><strong>Q1:</strong> "I currently live in an apartment on the 7th floor. I maintain a minimalist lifestyle, so my home is quite simple but cozy. One of the highlights is having four large windows that let in plenty of natural light, making the space feel open and airy."</p>
+                <p><strong>Q2:</strong> "My favorite place is definitely the living room. I’ve set up a small coffee station there, so it’s where I spend most of my time sipping coffee and unwinding after a long day."</p>
+                <p><strong>Q3:</strong> "The neighborhood is quite unique. It’s nestled with mountains right behind it and the ocean just a five-minute drive away. It has a very quiet, almost rural feel, with quaint local stores that give it a lot of character."</p>
             </div>
         </div>
 
         <!-- Topic 4 -->
-        <div class="bg-white rounded-2xl p-6 shadow-sm logic-card border border-slate-100">
+        <div class="bg-white rounded-2xl p-6 shadow-sm logic-card border border-slate-100 flex flex-col">
             <div class="flex items-center gap-3 mb-4">
                 <div class="w-10 h-10 bg-pink-100 rounded-full flex items-center justify-center text-pink-600">
                     <i class="fa-solid fa-heart"></i>
@@ -184,7 +192,7 @@
                 <h2 class="text-xl font-bold text-slate-800">Topic 4: Hobbies</h2>
             </div>
             
-            <div class="space-y-6">
+            <div class="space-y-6 flex-grow">
                 <div>
                     <p class="text-sm font-medium text-slate-400 mb-2">Q: Free time?</p>
                     <div class="text-slate-700 leading-relaxed">
@@ -210,8 +218,10 @@
             <button onclick="toggleScript(this)" class="mt-6 w-full py-2 text-xs font-bold uppercase tracking-wider text-slate-400 hover:text-pink-600 transition-colors border-t border-dashed pt-4">
                 Reveal Full Script
             </button>
-            <div class="hidden mt-4 text-sm text-slate-600 bg-slate-50 p-4 rounded-lg italic">
-                "I love traveling to Japan when I find cheap flights. I used to have active hobbies but now I watch Netflix to recharge. In the future, I want to explore AI creative tools to stay ahead of the curve."
+            <div class="hidden mt-4 text-sm text-slate-600 bg-slate-50 p-4 rounded-lg space-y-3">
+                <p><strong>Q1:</strong> "Whenever I have some free time, I love traveling, especially to Japan. Since I can often find cheap flight tickets, I take short trips there just to enjoy the fresh air and do some shopping."</p>
+                <p><strong>Q2:</strong> "In the past, I had more active hobbies like playing the guitar or baking, but these days, I find myself just wanting to recharge. I usually spend my downtime watching Netflix or anime because it’s a way for me to relax without anything getting on my nerves."</p>
+                <p><strong>Q3:</strong> "I’m really interested in exploring AI creative tools, like AI image and voice generation. I want to bridge the gap between my work and personal life by creating something tangible and rewarding through these new technologies."</p>
             </div>
         </div>
 
@@ -221,26 +231,46 @@
                 <i class="fa-solid fa-bolt text-yellow-400"></i> Speed Logic: Family, Transport & Routine
             </h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="border-l-2 border-yellow-400 pl-4">
-                    <h3 class="font-bold text-yellow-400 mb-2">Family</h3>
-                    <p class="text-sm text-slate-300">
-                        👨‍🔧 Dad (Tech) + 🗺️ Mom (Adventure) = 🧬 <span class="text-white font-bold">Blend</span> <br>
-                        <span class="text-xs mt-2 block">📅 Get-together: Every 3 months</span>
-                    </p>
+                <div class="flex flex-col">
+                    <div class="border-l-2 border-yellow-400 pl-4 mb-4">
+                        <h3 class="font-bold text-yellow-400 mb-2">Topic 5: Family</h3>
+                        <p class="text-sm text-slate-300">
+                            👨‍🔧 Dad (Tech) + 🗺️ Mom (Adventure) = 🧬 <span class="text-white font-bold">Blend</span> <br>
+                            <span class="text-xs mt-2 block italic">📅 Get-together: Every 3 months</span>
+                        </p>
+                    </div>
+                    <button onclick="toggleScript(this)" class="text-left text-[10px] text-slate-500 hover:text-yellow-400 transition-colors uppercase font-bold tracking-widest">Script</button>
+                    <div class="hidden mt-2 text-xs text-slate-400 leading-relaxed">
+                        "My personality is a blend of both my parents. I inherited my technical mindset from my father, while my adventurous spirit definitely comes from my mother... we make it a point to have a get-together at least once every three months."
+                    </div>
                 </div>
-                <div class="border-l-2 border-blue-400 pl-4">
-                    <h3 class="font-bold text-blue-400 mb-2">Transport</h3>
-                    <p class="text-sm text-slate-300">
-                        🚗 Car (Focus) vs 🚇 <span class="text-white font-bold">Metro</span> (Productive) <br>
-                        <span class="text-xs mt-2 block">👴 Free for Elderly = Crowded</span>
-                    </p>
+
+                <div class="flex flex-col">
+                    <div class="border-l-2 border-blue-400 pl-4 mb-4">
+                        <h3 class="font-bold text-blue-400 mb-2">Topic 6: Transport</h3>
+                        <p class="text-sm text-slate-300">
+                            🚗 Car (Focus) vs 🚇 <span class="text-white font-bold">Metro</span> (Productive) <br>
+                            <span class="text-xs mt-2 block italic">👴 Free for Elderly = Crowded</span>
+                        </p>
+                    </div>
+                    <button onclick="toggleScript(this)" class="text-left text-[10px] text-slate-500 hover:text-blue-400 transition-colors uppercase font-bold tracking-widest">Script</button>
+                    <div class="hidden mt-2 text-xs text-slate-400 leading-relaxed">
+                        "I usually drive, but these days I've been taking the metro more often. Unlike driving, where I have to focus on the road, taking the train allows me to use my time more productively... the subway is free of charge for the elderly which means it’s often crowded."
+                    </div>
                 </div>
-                <div class="border-l-2 border-emerald-400 pl-4">
-                    <h3 class="font-bold text-emerald-400 mb-2">Routine</h3>
-                    <p class="text-sm text-slate-300">
-                        ☀️ <span class="text-white font-bold">Early Bird</span> <span class="arrow">→</span> Wake up brain <br>
-                        <span class="text-xs mt-2 block">🧘 Mental Clarity / No Distractions</span>
-                    </p>
+
+                <div class="flex flex-col">
+                    <div class="border-l-2 border-emerald-400 pl-4 mb-4">
+                        <h3 class="font-bold text-emerald-400 mb-2">Topic 8: Routine</h3>
+                        <p class="text-sm text-slate-300">
+                            ☀️ <span class="text-white font-bold">Early Bird</span> <span class="arrow">→</span> Wake up brain <br>
+                            <span class="text-xs mt-2 block italic">🧘 Mental Clarity / No Distractions</span>
+                        </p>
+                    </div>
+                    <button onclick="toggleScript(this)" class="text-left text-[10px] text-slate-500 hover:text-emerald-400 transition-colors uppercase font-bold tracking-widest">Script</button>
+                    <div class="hidden mt-2 text-xs text-slate-400 leading-relaxed">
+                        "I’m definitely an early bird, so I enjoy the early morning hours the most. That’s the time of day which allows me to slowly wake up my brain. I find it’s the best time to focus on my mental clarity... without any outside distractions."
+                    </div>
                 </div>
             </div>
         </div>
@@ -255,10 +285,10 @@
             const scriptDiv = btn.nextElementSibling;
             if (scriptDiv.classList.contains('hidden')) {
                 scriptDiv.classList.remove('hidden');
-                btn.innerText = "Hide Script";
+                btn.innerText = (btn.tagName === 'BUTTON' && btn.innerText !== 'SCRIPT') ? "Hide Full Script" : (btn.innerText === 'SCRIPT' ? 'CLOSE' : 'Hide Script');
             } else {
                 scriptDiv.classList.add('hidden');
-                btn.innerText = "Reveal Full Script";
+                btn.innerText = (btn.tagName === 'BUTTON' && btn.innerText !== 'CLOSE') ? "Reveal Full Script" : (btn.innerText === 'CLOSE' ? 'SCRIPT' : 'Reveal Full Script');
             }
         }
     </script>
