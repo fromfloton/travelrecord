@@ -26,6 +26,17 @@
             color: #4338ca;
             font-weight: 600;
         }
+        /* Custom scrollbar for revealed scripts */
+        .script-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+        .script-scroll::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        .script-scroll::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
     </style>
 </head>
 <body class="bg-slate-50 min-h-screen p-4 md:p-8 font-sans">
@@ -228,15 +239,16 @@
         <!-- Extra Topics Quick View -->
         <div class="md:col-span-2 bg-slate-900 rounded-2xl p-8 text-white">
             <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
-                <i class="fa-solid fa-bolt text-yellow-400"></i> Speed Logic: Family, Transport & Routine
+                <i class="fa-solid fa-bolt text-yellow-400"></i> Speed Logic: Family, Transport, Weather & Routine
             </h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Family -->
                 <div class="flex flex-col">
                     <div class="border-l-2 border-yellow-400 pl-4 mb-4">
                         <h3 class="font-bold text-yellow-400 mb-2">Topic 5: Family</h3>
                         <p class="text-sm text-slate-300">
                             👨‍🔧 Dad (Tech) + 🗺️ Mom (Adventure) = 🧬 <span class="text-white font-bold">Blend</span> <br>
-                            <span class="text-xs mt-2 block italic">📅 Get-together: Every 3 months</span>
+                            <span class="text-xs mt-2 block italic">📅 Every 3 months</span>
                         </p>
                     </div>
                     <button onclick="toggleScript(this)" class="text-left text-[10px] text-slate-500 hover:text-yellow-400 transition-colors uppercase font-bold tracking-widest">Script</button>
@@ -245,31 +257,48 @@
                     </div>
                 </div>
 
+                <!-- Transport -->
                 <div class="flex flex-col">
                     <div class="border-l-2 border-blue-400 pl-4 mb-4">
                         <h3 class="font-bold text-blue-400 mb-2">Topic 6: Transport</h3>
                         <p class="text-sm text-slate-300">
                             🚗 Car (Focus) vs 🚇 <span class="text-white font-bold">Metro</span> (Productive) <br>
-                            <span class="text-xs mt-2 block italic">👴 Free for Elderly = Crowded</span>
+                            <span class="text-xs mt-2 block italic">👴 Seniors = Crowded</span>
                         </p>
                     </div>
                     <button onclick="toggleScript(this)" class="text-left text-[10px] text-slate-500 hover:text-blue-400 transition-colors uppercase font-bold tracking-widest">Script</button>
                     <div class="hidden mt-2 text-xs text-slate-400 leading-relaxed">
-                        "I usually drive, but these days I've been taking the metro more often. Unlike driving, where I have to focus on the road, taking the train allows me to use my time more productively... the subway is free of charge for the elderly which means it’s often crowded."
+                        "I usually drive, but these days I've been taking the metro more often... it allows me to use my time more productively... the subway is free of charge for the elderly which means it’s often crowded."
                     </div>
                 </div>
 
+                <!-- Weather -->
+                <div class="flex flex-col">
+                    <div class="border-l-2 border-purple-400 pl-4 mb-4">
+                        <h3 class="font-bold text-purple-400 mb-2">Topic 7: Weather</h3>
+                        <p class="text-sm text-slate-300">
+                            🌍 <span class="text-white font-bold">Diverse</span> (4 Seasons) <span class="arrow">→</span> 🍂 <span class="text-white font-bold">Autumn</span> (Mild) <br>
+                            <span class="text-xs mt-2 block italic">🚲 Outdoors / Crisp</span>
+                        </p>
+                    </div>
+                    <button onclick="toggleScript(this)" class="text-left text-[10px] text-slate-500 hover:text-purple-400 transition-colors uppercase font-bold tracking-widest">Script</button>
+                    <div class="hidden mt-2 text-xs text-slate-400 leading-relaxed">
+                        "It’s quite diverse. We experience four distinct seasons. Personally, I prefer autumn because it’s mild and crisp, which is perfect for outdoor activities before the cold winter sets in."
+                    </div>
+                </div>
+
+                <!-- Routine -->
                 <div class="flex flex-col">
                     <div class="border-l-2 border-emerald-400 pl-4 mb-4">
                         <h3 class="font-bold text-emerald-400 mb-2">Topic 8: Routine</h3>
                         <p class="text-sm text-slate-300">
                             ☀️ <span class="text-white font-bold">Early Bird</span> <span class="arrow">→</span> Wake up brain <br>
-                            <span class="text-xs mt-2 block italic">🧘 Mental Clarity / No Distractions</span>
+                            <span class="text-xs mt-2 block italic">🧘 Mental Clarity / Calm</span>
                         </p>
                     </div>
                     <button onclick="toggleScript(this)" class="text-left text-[10px] text-slate-500 hover:text-emerald-400 transition-colors uppercase font-bold tracking-widest">Script</button>
                     <div class="hidden mt-2 text-xs text-slate-400 leading-relaxed">
-                        "I’m definitely an early bird, so I enjoy the early morning hours the most. That’s the time of day which allows me to slowly wake up my brain. I find it’s the best time to focus on my mental clarity... without any outside distractions."
+                        "I’m definitely an early bird... That’s the time of day which allows me to slowly wake up my brain. I find it’s the best time to focus on my mental clarity... without any outside distractions."
                     </div>
                 </div>
             </div>
@@ -277,18 +306,28 @@
     </main>
 
     <footer class="max-w-5xl mx-auto mt-12 mb-20 text-center text-slate-400 text-sm">
-        <p>Memory Tip: Close your eyes and try to "walk through" the arrows for one topic every hour.</p>
+        <p>Memory Tip: Close your eyes and visualize the <strong>Emoji Path</strong>. Don't worry about perfect words; focus on the <strong>Logic</strong>.</p>
     </footer>
 
     <script>
         function toggleScript(btn) {
             const scriptDiv = btn.nextElementSibling;
-            if (scriptDiv.classList.contains('hidden')) {
+            const isHidden = scriptDiv.classList.contains('hidden');
+            
+            if (isHidden) {
                 scriptDiv.classList.remove('hidden');
-                btn.innerText = (btn.tagName === 'BUTTON' && btn.innerText !== 'SCRIPT') ? "Hide Full Script" : (btn.innerText === 'SCRIPT' ? 'CLOSE' : 'Hide Script');
+                if(btn.classList.contains('uppercase')) {
+                    btn.innerText = "CLOSE";
+                } else {
+                    btn.innerText = "Hide Full Script";
+                }
             } else {
                 scriptDiv.classList.add('hidden');
-                btn.innerText = (btn.tagName === 'BUTTON' && btn.innerText !== 'CLOSE') ? "Reveal Full Script" : (btn.innerText === 'CLOSE' ? 'SCRIPT' : 'Reveal Full Script');
+                if(btn.classList.contains('uppercase')) {
+                    btn.innerText = "SCRIPT";
+                } else {
+                    btn.innerText = "Reveal Full Script";
+                }
             }
         }
     </script>
