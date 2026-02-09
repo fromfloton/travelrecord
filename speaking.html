@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Speaking Memory Map</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .logic-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .logic-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .arrow {
+            color: #6366f1;
+            font-weight: bold;
+            margin: 0 4px;
+        }
+        .keyword {
+            background: #eef2ff;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #4338ca;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen p-4 md:p-8 font-sans">
+
+    <header class="max-w-5xl mx-auto text-center mb-12">
+        <h1 class="text-4xl font-extrabold text-slate-900 mb-4 italic">Visual Memory Map</h1>
+        <p class="text-slate-600 text-lg">Don't memorize words. Memorize the <span class="text-indigo-600 font-bold">Logic Path</span>.</p>
+        <div class="mt-6 flex flex-wrap justify-center gap-4 text-sm">
+            <span class="flex items-center gap-2"><i class="fa-solid fa-link text-indigo-500"></i> Logical Association</span>
+            <span class="flex items-center gap-2"><i class="fa-solid fa-image text-emerald-500"></i> Visual Emojis</span>
+            <span class="flex items-center gap-2"><i class="fa-solid fa-eye text-orange-500"></i> Active Recall</span>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8" id="app">
+        <!-- Topic 1 -->
+        <div class="bg-white rounded-2xl p-6 shadow-sm logic-card border border-slate-100">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600">
+                    <i class="fa-solid fa-briefcase"></i>
+                </div>
+                <h2 class="text-xl font-bold text-slate-800">Topic 1: Work</h2>
+            </div>
+            
+            <div class="space-y-6">
+                <div>
+                    <p class="text-sm font-medium text-slate-400 mb-2">Q: Work or Student?</p>
+                    <div class="text-slate-700 leading-relaxed">
+                        💻 <span class="keyword">Software</span> + 🌾 <span class="keyword">Agri</span> <span class="arrow">→</span> 5 years <span class="arrow">→</span> Challenging but <span class="keyword">Rewarding</span>
+                    </div>
+                </div>
+
+                <div>
+                    <p class="text-sm font-medium text-slate-400 mb-2">Q: Most Interesting?</p>
+                    <div class="text-slate-700 leading-relaxed">
+                        🏆 <span class="keyword">Achievement</span> <span class="arrow">→</span> 🧠 <span class="keyword">Revenue Strategies</span> <span class="arrow">→</span> "No two days same" <span class="arrow">→</span> <span class="keyword">Engaging</span>
+                    </div>
+                </div>
+
+                <div>
+                    <p class="text-sm font-medium text-slate-400 mb-2">Q: Responsibilities?</p>
+                    <div class="text-slate-700 leading-relaxed">
+                        🎩 <span class="keyword">Many Hats</span> <span class="arrow">→</span> 👤 One-man <span class="arrow">→</span> Ground up <span class="arrow">→</span> <span class="keyword">Heavy Workload</span>
+                    </div>
+                </div>
+
+                <div>
+                    <p class="text-sm font-medium text-slate-400 mb-2">Q: Future?</p>
+                    <div class="text-slate-700 leading-relaxed">
+                        ⚖️ <span class="keyword">On the Fence</span> <span class="arrow">→</span> 🤖 <span class="keyword">AI Market</span> <span class="arrow">→</span> Trends <span class="arrow">→</span> "Don't fall behind"
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="toggleScript(this)" class="mt-6 w-full py-2 text-xs font-bold uppercase tracking-wider text-slate-400 hover:text-indigo-600 transition-colors border-t border-dashed pt-4">
+                Reveal Full Script
+            </button>
+            <div class="hidden mt-4 text-sm text-slate-600 bg-slate-50 p-4 rounded-lg italic">
+                "Currently, I run my own business which combines software and agriculture. I’ve been in this role for about five years now; I find it quite challenging, but it is highly rewarding. The best part is the sense of achievement... I'm on the fence because of the rapid growth of AI."
+            </div>
+        </div>
+
+        <!-- Topic 2 -->
+        <div class="bg-white rounded-2xl p-6 shadow-sm logic-card border border-slate-100">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600">
+                    <i class="fa-solid fa-city"></i>
+                </div>
+                <h2 class="text-xl font-bold text-slate-800">Topic 2: Hometown</h2>
+            </div>
+            
+            <div class="space-y-6">
+                <div>
+                    <p class="text-sm font-medium text-slate-400 mb-2">Q: Location?</p>
+                    <div class="text-slate-700 leading-relaxed">
+                        📍 <span class="keyword">Central-Eastern</span> <span class="arrow">→</span> 👗 <span class="keyword">Textile Hub</span> <span class="arrow">→</span> Not as bustling
+                    </div>
+                </div>
+
+                <div>
+                    <p class="text-sm font-medium text-slate-400 mb-2">Q: Tourist Highlight?</p>
+                    <div class="text-slate-700 leading-relaxed">
+                        🏘️ <span class="keyword">Old Town</span> <span class="arrow">→</span> 🏔️ <span class="keyword">Hillside Houses</span> <span class="arrow">→</span> Nostalgic/Exotic
+                    </div>
+                </div>
+
+                <div>
+                    <p class="text-sm font-medium text-slate-400 mb-2">Q: Changes?</p>
+                    <div class="text-slate-700 leading-relaxed">
+                        🏗️ <span class="keyword">Urban Dev</span> <span class="arrow">→</span> Modern Malls <span class="arrow">→</span> Miss <span class="keyword">Peaceful</span> past
+                    </div>
+                </div>
+
+                <div>
+                    <p class="text-sm font-medium text-slate-400 mb-2">Q: Dislikes?</p>
+                    <div class="text-slate-700 leading-relaxed">
+                        🚗 <span class="keyword">Traffic Congestion</span> <span class="arrow">→</span> 🛣️ <span class="keyword">Narrow Roads</span> <span class="arrow">→</span> Rush Hour
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="toggleScript(this)" class="mt-6 w-full py-2 text-xs font-bold uppercase tracking-wider text-slate-400 hover:text-emerald-600 transition-colors border-t border-dashed pt-4">
+                Reveal Full Script
+            </button>
+            <div class="hidden mt-4 text-sm text-slate-600 bg-slate-50 p-4 rounded-lg italic">
+                "I come from a city in the central-eastern part... It used to be a major industrial hub for textile. The highlight is the old town with hillside houses. It has changed dramatically with modern malls... I dislike the traffic congestion due to narrow roads."
+            </div>
+        </div>
+
+        <!-- Topic 3 -->
+        <div class="bg-white rounded-2xl p-6 shadow-sm logic-card border border-slate-100">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center text-orange-600">
+                    <i class="fa-solid fa-house"></i>
+                </div>
+                <h2 class="text-xl font-bold text-slate-800">Topic 3: Home</h2>
+            </div>
+            
+            <div class="space-y-6">
+                <div>
+                    <p class="text-sm font-medium text-slate-400 mb-2">Q: Describe it?</p>
+                    <div class="text-slate-700 leading-relaxed">
+                        🏙️ <span class="keyword">7th Floor</span> <span class="arrow">→</span> ✨ <span class="keyword">Minimalist</span> <span class="arrow">→</span> 🪟 4 Windows/Natural Light
+                    </div>
+                </div>
+
+                <div>
+                    <p class="text-sm font-medium text-slate-400 mb-2">Q: Favorite Room?</p>
+                    <div class="text-slate-700 leading-relaxed">
+                        🛋️ <span class="keyword">Living Room</span> <span class="arrow">→</span> ☕ <span class="keyword">Coffee Station</span> <span class="arrow">→</span> Unwind
+                    </div>
+                </div>
+
+                <div>
+                    <p class="text-sm font-medium text-slate-400 mb-2">Q: Neighborhood?</p>
+                    <div class="text-slate-700 leading-relaxed">
+                        ⛰️ <span class="keyword">Mountains</span> (Behind) + 🌊 <span class="keyword">Ocean</span> (5 min) <span class="arrow">→</span> <span class="keyword">Quaint</span> local stores
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="toggleScript(this)" class="mt-6 w-full py-2 text-xs font-bold uppercase tracking-wider text-slate-400 hover:text-orange-600 transition-colors border-t border-dashed pt-4">
+                Reveal Full Script
+            </button>
+            <div class="hidden mt-4 text-sm text-slate-600 bg-slate-50 p-4 rounded-lg italic">
+                "I live on the 7th floor, maintaining a minimalist lifestyle. My favorite place is the coffee station in the living room. The neighborhood is unique because of the mountains and ocean proximity."
+            </div>
+        </div>
+
+        <!-- Topic 4 -->
+        <div class="bg-white rounded-2xl p-6 shadow-sm logic-card border border-slate-100">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-10 h-10 bg-pink-100 rounded-full flex items-center justify-center text-pink-600">
+                    <i class="fa-solid fa-heart"></i>
+                </div>
+                <h2 class="text-xl font-bold text-slate-800">Topic 4: Hobbies</h2>
+            </div>
+            
+            <div class="space-y-6">
+                <div>
+                    <p class="text-sm font-medium text-slate-400 mb-2">Q: Free time?</p>
+                    <div class="text-slate-700 leading-relaxed">
+                        ✈️ <span class="keyword">Japan</span> <span class="arrow">→</span> 🎫 <span class="keyword">Cheap Flights</span> <span class="arrow">→</span> Fresh air/Shopping
+                    </div>
+                </div>
+
+                <div>
+                    <p class="text-sm font-medium text-slate-400 mb-2">Q: Past vs Now?</p>
+                    <div class="text-slate-700 leading-relaxed">
+                        🎸 <span class="keyword">Guitar/Baking</span> (Past) <span class="arrow">→</span> 📺 <span class="keyword">Netflix/Anime</span> (Now) <span class="arrow">→</span> "Don't get on nerves"
+                    </div>
+                </div>
+
+                <div>
+                    <p class="text-sm font-medium text-slate-400 mb-2">Q: Future Hobby?</p>
+                    <div class="text-slate-700 leading-relaxed">
+                        🖼️ <span class="keyword">AI Image/Voice</span> <span class="arrow">→</span> Bridge Work/Life <span class="arrow">→</span> <span class="keyword">Something Tangible</span>
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="toggleScript(this)" class="mt-6 w-full py-2 text-xs font-bold uppercase tracking-wider text-slate-400 hover:text-pink-600 transition-colors border-t border-dashed pt-4">
+                Reveal Full Script
+            </button>
+            <div class="hidden mt-4 text-sm text-slate-600 bg-slate-50 p-4 rounded-lg italic">
+                "I love traveling to Japan when I find cheap flights. I used to have active hobbies but now I watch Netflix to recharge. In the future, I want to explore AI creative tools to stay ahead of the curve."
+            </div>
+        </div>
+
+        <!-- Extra Topics Quick View -->
+        <div class="md:col-span-2 bg-slate-900 rounded-2xl p-8 text-white">
+            <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
+                <i class="fa-solid fa-bolt text-yellow-400"></i> Speed Logic: Family, Transport & Routine
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="border-l-2 border-yellow-400 pl-4">
+                    <h3 class="font-bold text-yellow-400 mb-2">Family</h3>
+                    <p class="text-sm text-slate-300">
+                        👨‍🔧 Dad (Tech) + 🗺️ Mom (Adventure) = 🧬 <span class="text-white font-bold">Blend</span> <br>
+                        <span class="text-xs mt-2 block">📅 Get-together: Every 3 months</span>
+                    </p>
+                </div>
+                <div class="border-l-2 border-blue-400 pl-4">
+                    <h3 class="font-bold text-blue-400 mb-2">Transport</h3>
+                    <p class="text-sm text-slate-300">
+                        🚗 Car (Focus) vs 🚇 <span class="text-white font-bold">Metro</span> (Productive) <br>
+                        <span class="text-xs mt-2 block">👴 Free for Elderly = Crowded</span>
+                    </p>
+                </div>
+                <div class="border-l-2 border-emerald-400 pl-4">
+                    <h3 class="font-bold text-emerald-400 mb-2">Routine</h3>
+                    <p class="text-sm text-slate-300">
+                        ☀️ <span class="text-white font-bold">Early Bird</span> <span class="arrow">→</span> Wake up brain <br>
+                        <span class="text-xs mt-2 block">🧘 Mental Clarity / No Distractions</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="max-w-5xl mx-auto mt-12 mb-20 text-center text-slate-400 text-sm">
+        <p>Memory Tip: Close your eyes and try to "walk through" the arrows for one topic every hour.</p>
+    </footer>
+
+    <script>
+        function toggleScript(btn) {
+            const scriptDiv = btn.nextElementSibling;
+            if (scriptDiv.classList.contains('hidden')) {
+                scriptDiv.classList.remove('hidden');
+                btn.innerText = "Hide Script";
+            } else {
+                scriptDiv.classList.add('hidden');
+                btn.innerText = "Reveal Full Script";
+            }
+        }
+    </script>
+</body>
+</html>
