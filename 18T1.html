@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS 18 Test 1 Complete Study Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+        .speaker {
+            color: #2563eb;
+            font-weight: 700;
+            min-width: 85px;
+            display: inline-block;
+        }
+        .script-line {
+            margin-bottom: 0.75rem;
+            padding: 0.6rem;
+            border-radius: 0.5rem;
+            transition: all 0.2s;
+        }
+        .script-line:hover {
+            background-color: #f1f5f9;
+        }
+        .view-section {
+            display: none;
+        }
+        .view-section.active {
+            display: block;
+        }
+        .part-content {
+            display: none;
+        }
+        .part-content.active {
+            display: block;
+        }
+        .reading-article {
+            display: none;
+        }
+        .reading-article.active {
+            display: block;
+        }
+        .reading-p {
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+            text-align: justify;
+        }
+        .para-label {
+            font-weight: 800;
+            color: #1e293b;
+            margin-right: 0.75rem;
+            font-size: 1.25rem;
+            background: #f1f5f9;
+            padding: 2px 10px;
+            border-radius: 4px;
+        }
+        .highlight-unfair { background-color: #fef08a; padding: 2px 4px; border-radius: 4px; font-weight: 600; }
+        .highlight-mistake { background-color: #dcfce7; padding: 2px 4px; border-radius: 4px; font-weight: 600; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased">
+
+    <div class="max-w-5xl mx-auto px-4 py-10">
+        <!-- 메인 헤더 (Main Header) -->
+        <header class="text-center mb-12">
+            <h1 class="text-4xl font-extrabold text-slate-900 mb-3 tracking-tight">IELTS 18 Test 1</h1>
+            <p class="text-slate-500 font-medium">Listening & Reading Complete Guide</p>
+            <div class="flex justify-center gap-4 mt-8">
+                <button onclick="switchMode('listening')" id="mode-listening" class="px-8 py-3 rounded-2xl font-bold transition-all shadow-lg bg-blue-600 text-white flex items-center gap-2">
+                    <span>🎧 Listening</span>
+                </button>
+                <button onclick="switchMode('reading')" id="mode-reading" class="px-8 py-3 rounded-2xl font-bold transition-all shadow-md bg-white text-slate-600 hover:bg-slate-100 flex items-center gap-2">
+                    <span>📖 Reading</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- 리스닝 섹션 (LISTENING SECTION) -->
+        <section id="listening-view" class="view-section active">
+            <nav class="flex justify-center flex-wrap gap-2 mb-8 sticky top-4 z-20 bg-slate-50/90 backdrop-blur-md py-3 rounded-full border border-slate-200 px-4">
+                <button onclick="showPart('part1')" class="part-btn px-5 py-2 rounded-full text-sm font-bold bg-blue-100 text-blue-700" id="btn-part1">Part 1</button>
+                <button onclick="showPart('part2')" class="part-btn px-5 py-2 rounded-full text-sm font-bold bg-white text-slate-500 hover:bg-slate-100 border" id="btn-part2">Part 2</button>
+                <button onclick="showPart('part3')" class="part-btn px-5 py-2 rounded-full text-sm font-bold bg-white text-slate-500 hover:bg-slate-100 border" id="btn-part3">Part 3</button>
+                <button onclick="showPart('part4')" class="part-btn px-5 py-2 rounded-full text-sm font-bold bg-white text-slate-500 hover:bg-slate-100 border" id="btn-part4">Part 4</button>
+            </nav>
+
+            <main class="bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden">
+                <!-- Part 1 -->
+                <div id="part1" class="part-content active p-8 md:p-12">
+                    <h3 class="text-xl font-bold text-blue-600 mb-6 uppercase tracking-wider">Part 1: Transport Survey</h3>
+                    <div class="space-y-1">
+                        <div class="script-line"><span class="speaker">MAN:</span> Excuse me. Would you mind if I asked you some questions? We're doing a survey on transport.</div>
+                        <div class="script-line"><span class="speaker">SADIE:</span> Yes, that's OK.</div>
+                        <div class="script-line"><span class="speaker">MAN:</span> First of all, can I take your name?</div>
+                        <div class="script-line"><span class="speaker">SADIE:</span> Yes. It's Sadie Jones.</div>
+                        <div class="script-line"><span class="speaker">MAN:</span> Thanks very much. And could I have your date of birth - just the year will do, actually. Is that all right?</div>
+                        <div class="script-line"><span class="speaker">SADIE:</span> Yes, that's fine. It's 1991.</div>
+                        <div class="script-line"><span class="speaker">MAN:</span> So next your postcode, please.</div>
+                        <div class="script-line"><span class="speaker">SADIE:</span> It's DW30 7YZ.</div>
+                        <div class="script-line"><span class="speaker">MAN:</span> Great. Thanks. Is that in Wells?</div>
+                        <div class="script-line"><span class="speaker">SADIE:</span> No it's actually in Harborne - Wells isn't far from there, though.</div>
+                        <div class="script-line"><span class="speaker">MAN:</span> Right, so now I want to ask you some questions about how you travelled here today. Did you use public transport?</div>
+                        <div class="script-line"><span class="speaker">SADIE:</span> Yes. I came by bus.</div>
+                        <div class="script-line"><span class="speaker">MAN:</span> OK. And that was today. It's the 24th of April, isn't it?</div>
+                        <div class="script-line"><span class="speaker">SADIE:</span> Isn't it the 25th? No, actually, you're right.</div>
+                        <div class="script-line"><span class="speaker">MAN:</span> And what was the reason for your trip today? I can see you've got some shopping with you.</div>
+                        <div class="script-line"><span class="speaker">SADIE:</span> Yes. I did some shopping but the main reason I came here was to go to the dentist.</div>
+                        <div class="script-line"><span class="speaker">MAN:</span> Hope it was nothing serious.</div>
+                        <div class="script-line"><span class="speaker">SADIE:</span> No, it was just a check-up. It's fine.</div>
+                        <div class="script-line"><span class="speaker">MAN:</span> Good. Do you normally travel by bus into the city centre?</div>
+                        <div class="script-line"><span class="speaker">SADIE:</span> Yes. I stopped driving in ages ago because parking was so difficult to find and it costs so much.</div>
+                        <div class="script-line"><span class="speaker">SADIE:</span> At the bus stop on Claxby Street. (C-L-A-X-B-Y)</div>
+                    </div>
+                </div>
+
+                <!-- Part 2 -->
+                <div id="part2" class="part-content p-8 md:p-12">
+                    <h3 class="text-xl font-bold text-blue-600 mb-6 uppercase tracking-wider">Part 2: ACE Voluntary Organisation</h3>
+                    <div class="prose prose-slate max-w-none text-slate-700 leading-relaxed">
+                        <p class="mb-4">Good evening, everyone. Let me start by welcoming you all to this talk and thanking you for taking the time to consider joining ACE voluntary organisation. ACE offers support to people and services in the local area and we're now looking for more volunteers to help us do this.</p>
+                        <p class="mb-4">One of the first questions we're often asked is how old you need to be to volunteer. Well, you can be as young as 16 or you can be 60 or over; it all depends on what type of voluntary work you want to do. Reliability is crucial, and age isn't related to this.</p>
+                        <p class="mb-4">Training is face-to-face and takes place before, during and after work. Often, it's run by other experienced volunteers. We don't worry about why you want to be a volunteer, but it is critical that you have enough hours in the day - if being a volunteer becomes stressful then it's best not to do it at all.</p>
+                    </div>
+                </div>
+
+                <!-- Part 3 -->
+                <div id="part3" class="part-content p-8 md:p-12">
+                    <h3 class="text-xl font-bold text-blue-600 mb-6 uppercase tracking-wider">Part 3: Jobs in Fashion Design</h3>
+                    <div class="space-y-2">
+                        <div class="script-line"><span class="speaker">HUGO:</span> Overall, she had quite a strong message, didn't she?</div>
+                        <div class="script-line"><span class="speaker">CHANTAL:</span> She did. She kept saying things like 'I know you all think this, but ...'</div>
+                        <div class="script-line"><span class="speaker">HUGO:</span> Perhaps she thinks students are a bit narrow-minded about the industry.</div>
+                        <div class="script-line"><span class="speaker">CHANTAL:</span> <span class="highlight-unfair">It was a bit harsh, though! We know it's a tough industry.</span></div>
+                        <div class="script-line"><span class="speaker">HUGO:</span> <span class="highlight-unfair">Yeah - and we're only first years, after all.</span> We've got a lot to learn.</div>
+                        <div class="script-line text-slate-300 py-4 italic text-center border-y border-slate-50 my-4">--- First Job & Mistakes Discussion ---</div>
+                        <div class="script-line"><span class="speaker">HUGO:</span> And then he was so mean, telling her she was more interested in her own appearance than his!</div>
+                        <div class="script-line"><span class="speaker">CHANTAL:</span> <span class="highlight-mistake">But - she did realise he was right about that</span>, which really made me think. I'm always considering my own clothes but now I can see you should be focusing on your client!</div>
+                        <div class="script-line"><span class="speaker">HUGO:</span> She obviously regretted losing the job.</div>
+                        <div class="script-line"><span class="speaker">CHANTAL:</span> <span class="highlight-mistake">Well, as she said, she should have hidden her negative feelings about him, but she didn't.</span></div>
+                    </div>
+                </div>
+
+                <!-- Part 4 -->
+                <div id="part4" class="part-content p-8 md:p-12">
+                    <h3 class="text-xl font-bold text-blue-600 mb-6 uppercase tracking-wider">Part 4: Elephant Translocation</h3>
+                    <div class="prose prose-slate max-w-none text-slate-700 leading-relaxed">
+                        <p class="mb-4">Today I want to tell you about how groups of elephants have been moved to new reserves, known as translocation. In Malawi's Majete National Park, the population boomed because poaching was stopped. This led to competition for food and elephants knocking down fences.</p>
+                        <p class="mb-4">Elephants were moved in family groups. Vets used darts to immobilise them. It was tricky because they had to select the right dose while elephants were running. To avoid suffocation, elephants had to be placed on their sides, not their chests.</p>
+                        <p class="mb-4">The project was a huge success. Employment improved for the community, and poaching is no longer an issue. Tourism now contributes five times more than illegal trade to GDP.</p>
+                    </div>
+                </div>
+            </main>
+        </section>
+
+        <!-- 리딩 섹션 (READING SECTION) -->
+        <section id="reading-view" class="view-section">
+            <div class="flex justify-center flex-wrap gap-3 mb-8">
+                <button onclick="showArticle('reading-1')" id="btn-reading-1" class="article-btn px-4 py-2 rounded-xl text-sm font-bold bg-emerald-100 text-emerald-700 shadow-sm transition-all">1. Urban Farming</button>
+                <button onclick="showArticle('reading-2')" id="btn-reading-2" class="article-btn px-4 py-2 rounded-xl text-sm font-bold bg-white text-slate-500 border border-slate-200 transition-all">2. Forest Management</button>
+                <button onclick="showArticle('reading-3')" id="btn-reading-3" class="article-btn px-4 py-2 rounded-xl text-sm font-bold bg-white text-slate-500 border border-slate-200 transition-all">3. Space Junk</button>
+            </div>
+
+            <main class="bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden">
+                <!-- Reading 1: Urban Farming -->
+                <div id="reading-1" class="reading-article active p-8 md:p-16">
+                    <div class="max-w-3xl mx-auto">
+                        <h2 class="text-3xl font-black text-slate-900 mb-6 border-l-8 border-emerald-500 pl-6">Urban Farming</h2>
+                        <p class="reading-p font-semibold text-slate-600 italic mb-10">In Paris, urban farmers are trying a soil-free approach to agriculture that uses less space and fewer resources.</p>
+                        <div class="text-lg text-slate-700 leading-relaxed">
+                            <p class="reading-p">On top of a striking new exhibition hall in southern Paris, the world's largest urban rooftop farm has started to bear fruit. Strawberries that are small, intensely flavoured sprout abundantly from large plastic tubes...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reading 2: Forest Management -->
+                <div id="reading-2" class="reading-article p-8 md:p-16">
+                    <div class="max-w-3xl mx-auto">
+                        <h2 class="text-3xl font-black text-slate-900 mb-2 border-l-8 border-emerald-500 pl-6">Forest management in Pennsylvania</h2>
+                        <p class="text-slate-500 mb-10 italic">How managing low-quality wood for bioenergy can encourage sustainable forest management</p>
+                        <div class="text-lg text-slate-700 space-y-8">
+                            <div><span class="para-label">A</span> A tree's 'value' depends on several factors including its species, size, and management goals...</div>
+                            <div><span class="para-label">B</span> High-grading has left a legacy of 'low-use wood' in forests, sometimes called 'junk trees'...</div>
+                            <div><span class="para-label">C</span> Wood energy markets can accept lower quality wood for heat or electricity through combustion...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reading 3: Space Junk (NEW) -->
+                <div id="reading-3" class="reading-article p-8 md:p-16">
+                    <div class="max-w-3xl mx-auto">
+                        <h2 class="text-3xl font-black text-slate-900 mb-4 border-l-8 border-emerald-600 pl-6">Conquering Earth's space junk problem</h2>
+                        <p class="text-slate-500 mb-10 font-medium">Satellites, rocket shards and collision debris are creating major traffic risks in orbit around the planet.</p>
+                        
+                        <div class="text-lg text-slate-700 space-y-10">
+                            <div>
+                                <span class="para-label">A</span>
+                                <p class="inline">Last year, more than 400 satellites were sent into orbit, over four times the yearly average. Ten years ago, a US commercial Iridium satellite smashed into an inactive Russian satellite, creating thousands of new pieces of shrapnel. Altogether, there are roughly 20,000 human-made objects in orbit.</p>
+                            </div>
+
+                            <div>
+                                <span class="para-label">B</span>
+                                <p class="inline">Concern about space junk goes back to the beginning, but numbers are rising rapidly. Researchers are developing taxonomies of space debris - measuring shape and size so operators know how much to worry. The alternative is a runaway cascade of fragments, rendering near-Earth space unusable.</p>
+                            </div>
+
+                            <div>
+                                <span class="para-label">C</span>
+                                <p class="inline">Groups like the Inter-Agency Space Debris Coordination Committee have developed guidelines. These include inactivating satellites at the end of their life and lowering them so they burn up within 25 years. But so far, only about half of all missions have abided by this goal.</p>
+                            </div>
+
+                            <div>
+                                <span class="para-label">D</span>
+                                <p class="inline">Some scientists are tackling the problem by trying to find where all the debris is with high precision. "If you knew precisely where everything was, you would almost never have a problem," says specialist Marlon Sorge.</p>
+                            </div>
+
+                            <div>
+                                <span class="para-label">E</span>
+                                <p class="inline">The field is called space traffic management. Air-traffic controllers know plane locations within one metre, but the same can't be said for space debris. Not all objects in orbit are known or tracked consistently.</p>
+                            </div>
+
+                            <div>
+                                <span class="para-label">F</span>
+                                <p class="inline">Moriba Jah illustrates this with a database showing two different orbits for the same Russian rocket body from US and Russian sources. He calls himself a space environmentalist, warning against a "tragedy of the commons" in space flight.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </section>
+
+        <!-- 푸터 (Footer) -->
+        <footer class="mt-20 text-center border-t border-slate-200 pt-10 pb-10">
+            <p class="text-slate-400 text-sm font-medium">IELTS 18 TEST 1 COMPLETE STUDY GUIDE &copy; 2026</p>
+        </footer>
+    </div>
+
+    <script>
+        function switchMode(mode) {
+            document.getElementById('listening-view').classList.remove('active');
+            document.getElementById('reading-view').classList.remove('active');
+            document.getElementById(mode + '-view').classList.add('active');
+
+            const listenBtn = document.getElementById('mode-listening');
+            const readBtn = document.getElementById('mode-reading');
+
+            if (mode === 'listening') {
+                listenBtn.className = "px-8 py-3 rounded-2xl font-bold transition-all shadow-lg bg-blue-600 text-white flex items-center gap-2";
+                readBtn.className = "px-8 py-3 rounded-2xl font-bold transition-all shadow-md bg-white text-slate-600 hover:bg-slate-100 flex items-center gap-2";
+            } else {
+                readBtn.className = "px-8 py-3 rounded-2xl font-bold transition-all shadow-lg bg-emerald-600 text-white flex items-center gap-2";
+                listenBtn.className = "px-8 py-3 rounded-2xl font-bold transition-all shadow-md bg-white text-slate-600 hover:bg-slate-100 flex items-center gap-2";
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function showPart(partId) {
+            document.querySelectorAll('.part-content').forEach(c => c.classList.remove('active'));
+            document.getElementById(partId).classList.add('active');
+            document.querySelectorAll('.part-btn').forEach(b => {
+                b.className = "part-btn px-5 py-2 rounded-full text-sm font-bold bg-white text-slate-500 hover:bg-slate-100 border border-slate-200";
+            });
+            document.getElementById('btn-' + partId).className = "part-btn px-5 py-2 rounded-full text-sm font-bold bg-blue-100 text-blue-700 shadow-sm transition-all";
+        }
+
+        function showArticle(articleId) {
+            document.querySelectorAll('.reading-article').forEach(a => a.classList.remove('active'));
+            document.getElementById(articleId).classList.add('active');
+            document.querySelectorAll('.article-btn').forEach(b => {
+                b.className = "article-btn px-4 py-2 rounded-xl text-sm font-bold bg-white text-slate-500 border border-slate-200 transition-all";
+            });
+            document.getElementById('btn-' + articleId).className = "article-btn px-4 py-2 rounded-xl text-sm font-bold bg-emerald-100 text-emerald-700 shadow-sm transition-all";
+        }
+    </script>
+</body>
+</html>
