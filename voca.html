@@ -1,483 +1,526 @@
-import React, { useState, useEffect, useMemo } from 'react';
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <!-- 모바일에서도 화면이 꽉 차고 예쁘게 보이도록 설정 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Vocabulary</title>
+  
+  <!-- Tailwind CSS (디자인) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- React, ReactDOM, Babel (React를 HTML에서 바로 실행하게 해주는 도구들) -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-// --- 단어 데이터 (제공된 마크다운을 구조화) ---
-const VOCA_DATA = [
-  {
-    category: "Theme 1: Pollution Moves",
-    words: [
-      { term: "Airborne", simple: "Carried by the air / In the wind.", tip: "Air + borne (carried). Think of a traveler 'borne' by the wind." },
-      { term: "Transboundary", simple: "Crossing country borders.", tip: "Trans (across) + Boundary (line). Like a 'transition' moves you across stages." },
-      { term: "Viruses respect no national boundaries", simple: "Pollution and germs don't stop at borders.", tip: "Viruses don't carry 'passports'; they go everywhere." },
-      { term: "Long-range origin", simple: "Coming from a place very far away.", tip: "Long-range (long distance) + Origin (starting point)." },
-      { term: "Continental storm tracks", simple: "The 'paths' or 'roads' storms follow across land.", tip: "Think of 'train tracks' in the sky for storms." },
-      { term: "Settles over", simple: "Lands on and stays on top of an area.", tip: "Like dust 'settling' on a table when you don't clean it." },
-      { term: "The contaminants end up", simple: "The pollution finally reaches this place.", tip: "After a long journey, this is the 'end' of the road." },
-      { term: "Run-off / Run-off into", simple: "Water flowing off the land into the sea.", tip: "The water 'runs off' the ground because it cannot soak in." },
-      { term: "Of mid-latitude", simple: "Coming from the middle parts of the Earth.", tip: "Mid (middle) + Latitude (lines on a map)." }
-    ]
-  },
-  {
-    category: "Theme 2: Science & Chemistry",
-    words: [
-      { term: "Combustion", simple: "Burning fuel.", tip: "Think of the 'engine' in a car burning gas." },
-      { term: "Gaseous", simple: "In the form of a gas (like air), not solid.", tip: "Gas-eous. It acts like a gas." },
-      { term: "Sulfates / Droplets of sulfuric", simple: "Acidic chemicals found in smoke and rain.", tip: "'S' for Sulfur and Smoke." },
-      { term: "Drilled from", simple: "Taken out of the ground.", tip: "You use a drill to get oil or coal out of the Earth." },
-      { term: "Bearing coal is irradiated by", simple: "Coal containing sulfur is hit by light/radiation.", tip: "Bearing (carrying) + Irradiated (hit by rays/light)." },
-      { term: "Oxidised to sulfate", simple: "Oxygen changes a chemical into a sulfate.", tip: "Oxid- comes from Oxygen." },
-      { term: "Catalysed by", simple: "Made to happen faster by a 'helper'.", tip: "A 'Catalyst' is like a coach who makes a team play faster." },
-      { term: "Fall-out from Chernobyl", simple: "Radioactive dust from a famous accident.", tip: "The dust 'falls out' of the sky after an explosion." },
-      { term: "Decomposition", simple: "Rotting or breaking down naturally.", tip: "De- (undo) + Compose (put together). 'Undoing' a structure." }
-    ]
-  },
-  {
-    category: "Theme 3: Environment & Ecology",
-    words: [
-      { term: "Algae bloom", simple: "Sudden, huge growth of green plants in water.", tip: "Flowers 'bloom' in a garden; algae 'blooms' in the ocean." },
-      { term: "In turn eaten", simple: "The next step in the food chain.", tip: "Fish eats algae, then the fish is in turn eaten by a bear." },
-      { term: "Substances that have invaded", simple: "Chemicals that entered where they don't belong.", tip: "Like an 'invader' entering a country by force." },
-      { term: "Bands of haze / Referring to this smog", simple: "Layers of dirty, smoky air.", tip: "Smog = Smoke + Fog." },
-      { term: "Small and localised", simple: "Only in one tiny, specific spot.", tip: "Local (near you) vs. Global (everywhere)." },
-      { term: "Circumpolar", simple: "Around the North or South Pole.", tip: "Circu (circle) + Polar (the poles)." }
-    ]
-  },
-  {
-    category: "Theme 4: Analysis & Context",
-    words: [
-      { term: "On a daily basis", simple: "Every single day.", tip: "Use this instead of 'every day' to sound more professional." },
-      { term: "Virtually", simple: "Almost 100%.", tip: "'Virtual Reality' is almost real life." },
-      { term: "Worrisome", simple: "Concerning or scary.", tip: "Worry + some (a little bit of worry)." },
-      { term: "Adequately", simple: "Good enough / Sufficiently.", tip: "'Adequate' means it's just enough to do the job." },
-      { term: "With respect", simple: "Regarding / About / Concerning.", tip: "Used to point to a specific topic." },
-      { term: "Reconnaissance", simple: "A mission to look for information.", tip: "Often used in the military to 'check out' an area before moving in." }
-    ]
-  },
-  {
-    category: "1. Origins & Farming",
-    words: [
-      { term: "Indigenous", simple: "Naturally from a place. 'Local' or 'Native'.", tip: "Think of 'In' (Inside) + 'Genous' (Gene). They were born in that place." },
-      { term: "Acclimatisation", simple: "Adjusting to a new environment or climate.", tip: "Focus on the word 'Climate' inside it." },
-      { term: "Governing the introduction", simple: "Controlling how something is brought in." },
-      { term: "Confined for", simple: "Kept inside a specific area for a reason." },
-      { term: "Deer stock", simple: "The group of live deer used for breeding or farming." }
-    ]
-  },
-  {
-    category: "2. Business & Trends",
-    words: [
-      { term: "Venison prices", simple: "The cost of deer meat." },
-      { term: "Saw the development", simple: "Witnessed a change or progress. 'Resulted in'." },
-      { term: "Principally", simple: "Most importantly or mainly." },
-      { term: "Appears to be showing limited signs", simple: "Seems to be starting a little bit." },
-      { term: "Influential market", simple: "A place of buying/selling that has a lot of power." },
-      { term: "Statutory levies", simple: "Money that must be paid by law (a type of tax)." },
-      { term: "Complements", simple: "Adds to something to make it better." },
-      { term: "Undertaken in", simple: "Done or carried out in a specific place." }
-    ]
-  },
-  {
-    category: "3. Feelings & Reactions",
-    words: [
-      { term: "Of concern", simple: "Something that is worrying." },
-      { term: "There is justified concern", simple: "There is a very good reason to be worried." },
-      { term: "Particularly with respect to", simple: "Especially when talking about one specific thing." }
-    ]
-  },
-  {
-    category: "4. Actions & Outcomes",
-    words: [
-      { term: "Committed for", simple: "Promised or sent for a specific purpose." },
-      { term: "Committed for processing", simple: "When a farmer officially decides to send their animals to be slaughtered." },
-      { term: "According to", simple: "Based on what someone else said or a set of rules." },
-      { term: "Accreditation / Courses", simple: "Official recognition or classes to learn a skill." },
-      { term: "Taken hold in", simple: "When a disease starts to spread and stay in a group." },
-      { term: "Culling / Slaughter", simple: "Killing animals, usually to control a disease or for food." },
-      { term: "Arose", simple: "Happened or started." }
-    ]
-  },
-  {
-    category: "5. Technical Farming Terms",
-    words: [
-      { term: "Antler", simple: "The 'horns' of a deer that fall off and grow back." },
-      { term: "Pasture", simple: "Land covered with grass for animals to eat." },
-      { term: "Carcass", simple: "The body of a dead animal." },
-      { term: "Bulletins", simple: "Short official reports or news updates." }
-    ]
-  },
-  {
-    category: "6. Disease & Biology",
-    words: [
-      { term: "Wasting disease", simple: "A sickness that makes an animal very thin and weak." },
-      { term: "Bowel wall", simple: "The inside lining of the stomach/intestines." },
-      { term: "Emaciation", simple: "Being extremely thin in an unhealthy way." },
-      { term: "Diarrhoea", simple: "Frequent, liquid bowel movements." },
-      { term: "Bottle jaw", simple: "A swelling under the jaw of an animal." },
-      { term: "Progressive", simple: "Getting worse over time." }
-    ]
-  },
-  {
-    category: "7. Problems & Pressure",
-    words: [
-      { term: "Urgency", simple: "When something is very important and needs to be done right now.", tip: "Urgent = Emergency." },
-      { term: "Posed by", simple: "Caused by / Created by.", tip: "Think of a 'Position'. The problem is put in a position to hurt you." },
-      { term: "Unresolved", simple: "Not fixed yet; no answer has been found.", tip: "Un (Not) + Solved. Like a puzzle you can't finish." },
-      { term: "Dry spells", simple: "A period of time with no rain.", tip: "A 'Spell' is a short time. Dry = No water." }
-    ]
-  },
-  {
-    category: "8. Action & Control",
-    words: [
-      { term: "Halve", simple: "To cut something into two equal pieces; to reduce by 50%.", tip: "It sounds like 'Half'." },
-      { term: "Halted", simple: "Stopped completely.", tip: "Imagine a police officer yelling 'HALT!'" },
-      { term: "Undo", simple: "To erase or reverse an action.", tip: "Like the 'Undo' button (Ctrl+Z) on your computer." },
-      { term: "Resisting", simple: "Fighting against something; saying 'No'.", tip: "Resistance. Like pushing a heavy door that someone is trying to close." },
-      { term: "Insists", simple: "To say something very strongly and refuse to change your mind.", tip: "'In-sit'. You 'sit' in your opinion and won't move." }
-    ]
-  },
-  {
-    category: "9. Nature & Geology (Skye)",
-    words: [
-      { term: "Renowned for", simple: "Famous or well-known for something.", tip: "Skye is known for its ancient rock formations." },
-      { term: "Rugged island", simple: "A rocky, rough, and uneven island." },
-      { term: "The sheer variety of life", simple: "An enormous or absolute diversity of living things." },
-      { term: "Gritty", simple: "Feeling rough and containing hard particles." },
-      { term: "Pebbly", simple: "Full of small, smooth, round stones." },
-      { term: "Eroded", simple: "Worn away over time by wind or water." },
-      { term: "Extinct volcanoes", simple: "Volcanoes that are dead and will never erupt again." },
-      { term: "Tectonic", simple: "Relating to the giant plates moving beneath the Earth's surface." },
-      { term: "Ancient mass", simple: "A very old, large, and heavy body of rock or land." },
-      { term: "Be seen forcing", simple: "Observed pushing through with great power." },
-      { term: "Jagged peaks", simple: "Sharp, pointed, and uneven mountain tops." },
-      { term: "Upland", simple: "High ground or mountainous areas." },
-      { term: "Are devoid of", simple: "Completely empty of or lacking something entirely." },
-      { term: "The striking blocks", simple: "Very noticeable, impressive solid pieces of rock." },
-      { term: "Prominently", simple: "In a way that stands out and is easily seen." },
-      { term: "Pinnacles", simple: "Tall, pointed pieces of rock pointing toward the sky." },
-      { term: "Basalt", simple: "A dark type of volcanic rock." },
-      { term: "Landslides", simple: "When a large amount of rock or dirt slides down a mountain or cliff." }
-    ]
-  },
-  {
-    category: "10. Water & Coastal Features",
-    words: [
-      { term: "Intricate coastline and headlands", simple: "A complex, highly detailed shore combined with pieces of land that stick out into the sea." },
-      { term: "Inlets and reefs", simple: "Narrow bays of water and ridges of rock or coral just below the surface." },
-      { term: "Flat islets", simple: "Small, flat islands." },
-      { term: "Seabed", simple: "The floor of the ocean." },
-      { term: "Occurrences", simple: "Things that happen or take place." }
-    ]
-  },
-  {
-    category: "11. Animals & Action Words",
-    words: [
-      { term: "Descend", simple: "To go down from a higher place to a lower one." },
-      { term: "Feasts", simple: "Eats a large meal enthusiastically." },
-      { term: "A host of predators", simple: "A large group of animals that hunt other animals for food." },
-      { term: "Benefactors", simple: "Organisms that are the first to benefit from nutrient-rich waters." },
-      { term: "Herring", simple: "A type of small, silvery fish." },
-      { term: "Exiting", simple: "Leaving a place." },
-      { term: "Spawn", simple: "To produce, create, or give birth to something new." }
-    ]
-  },
-  {
-    category: "12. Logic, Mind & Society",
-    words: [
-      { term: "Rationality", simple: "The quality of being reasonable and using facts rather than emotion." },
-      { term: "Intuition", simple: "A gut feeling or natural instinct." },
-      { term: "Devoted", simple: "Very loyal and dedicated to a cause or community." },
-      { term: "Outlines", simple: "Gives a brief summary or the main points of an idea." },
-      { term: "Comprising", simple: "Making up or consisting of." },
-      { term: "Preconceived idea", simple: "An opinion formed before you have enough evidence or experience." },
-      { term: "A like-minded set of", simple: "A group of people who share the same beliefs." },
-      { term: "Prompting responses", simple: "Encouraging or causing people to reply or react to an article." },
-      { term: "Contributions are deemed to be", simple: "The things a person adds are judged to be valuable." },
-      { term: "Award", simple: "To give points or a prize." },
-      { term: "Attentive to", simple: "Paying close and careful attention to something." },
-      { term: "Court judges", simple: "Legal officials who make decisions in a court of law." },
-      { term: "Remit", simple: "A specific task or area of responsibility." },
-      { term: "Willpower", simple: "The mental strength to control your own actions." },
-      { term: "Adjudicating a case", simple: "Acting as a judge to make a formal decision about a legal problem." },
-      { term: "Roll a die", simple: "To throw a small cube with dots on it to get a random number." },
-      { term: "A rarity", simple: "Something that is very uncommon and doesn't happen often." },
-      { term: "Subjective preferences", simple: "Personal choices based on feelings rather than facts." },
-      { term: "Correspondent for", simple: "A journalist who reports news for a specific paper or magazine." },
-      { term: "Faddish", simple: "Related to a short-lived, popular trend or craze." },
-      { term: "Think straight", simple: "To think clearly and logically." },
-      { term: "Stems from", simple: "Comes from or originates from a specific source." },
-      { term: "Commentators", simple: "People who discuss, write about, or give opinions on a topic." }
-    ]
-  },
-  {
-    category: "13. Idioms & Phrases",
-    words: [
-      { term: "Call something into question", simple: "To doubt or challenge whether something is true or right." },
-      { term: "Cast them in the opposite light", simple: "To show or describe someone in a completely different, often negative, way." },
-      { term: "Decisions rely on subjective preferences", simple: "Choices depend entirely on what someone personally likes or feels, not objective data." },
-      { term: "Large stretches of white sand", simple: "Vast, continuous areas of sandy beach." },
-      { term: "For long stretches of time", simple: "For very long, continuous periods." },
-      { term: "Stretch my skills", simple: "To push your abilities beyond their normal limits to improve." },
-      { term: "Center around", simple: "To have something as the main subject or focus." },
-      { term: "The ease with", simple: "How simple or effortless something is to do." }
-    ]
-  }
-];
+  <style>
+    /* 기본 폰트 설정 (눈이 편안한 고딕 계열) */
+    @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+    body { font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif; }
+    
+    /* 스크롤바 디자인 숨기기 (선택사항, 모바일 친화적) */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    .dark ::-webkit-scrollbar-thumb { background: #475569; }
+  </style>
+</head>
+<body class="antialiased">
+  <div id="root"></div>
 
-export default function App() {
-  const [darkMode, setDarkMode] = useState(false);
-  const [activeCategory, setActiveCategory] = useState("All");
-  const [progress, setProgress] = useState({});
+  <!-- React 애플리케이션 코드 -->
+  <script type="text/babel">
+    const { useState, useEffect, useMemo } = React;
 
-  // 로컬 스토리지에서 데이터 불러오기
-  useEffect(() => {
-    const savedProgress = localStorage.getItem('voca_progress');
-    const savedTheme = localStorage.getItem('voca_theme');
-    if (savedProgress) setProgress(JSON.parse(savedProgress));
-    if (savedTheme === 'dark') setDarkMode(true);
-  }, []);
-
-  // 다크모드 토글
-  const toggleDarkMode = () => {
-    const newMode = !darkMode;
-    setDarkMode(newMode);
-    localStorage.setItem('voca_theme', newMode ? 'dark' : 'light');
-  };
-
-  // TTS 음성 출력
-  const playAudio = (text) => {
-    if ('speechSynthesis' in window) {
-      // 기존 음성 중지
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'en-US';
-      utterance.rate = 0.9; // 약간 느리게 발음하여 듣기 편하게 설정
-      window.speechSynthesis.speak(utterance);
-    } else {
-      alert("이 브라우저에서는 음성 출력을 지원하지 않습니다.");
-    }
-  };
-
-  // 암기 상태 업데이트 (O, △, X)
-  const updateStatus = (term, status) => {
-    const newProgress = {
-      ...progress,
-      [term]: {
-        status,
-        lastStudied: Date.now()
+    // --- 단어 데이터 (제공된 마크다운을 구조화) ---
+    const VOCA_DATA = [
+      {
+        category: "Theme 1: Pollution Moves",
+        words: [
+          { term: "Airborne", simple: "Carried by the air / In the wind.", tip: "Air + borne (carried). Think of a traveler 'borne' by the wind." },
+          { term: "Transboundary", simple: "Crossing country borders.", tip: "Trans (across) + Boundary (line). Like a 'transition' moves you across stages." },
+          { term: "Viruses respect no national boundaries", simple: "Pollution and germs don't stop at borders.", tip: "Viruses don't carry 'passports'; they go everywhere." },
+          { term: "Long-range origin", simple: "Coming from a place very far away.", tip: "Long-range (long distance) + Origin (starting point)." },
+          { term: "Continental storm tracks", simple: "The 'paths' or 'roads' storms follow across land.", tip: "Think of 'train tracks' in the sky for storms." },
+          { term: "Settles over", simple: "Lands on and stays on top of an area.", tip: "Like dust 'settling' on a table when you don't clean it." },
+          { term: "The contaminants end up", simple: "The pollution finally reaches this place.", tip: "After a long journey, this is the 'end' of the road." },
+          { term: "Run-off / Run-off into", simple: "Water flowing off the land into the sea.", tip: "The water 'runs off' the ground because it cannot soak in." },
+          { term: "Of mid-latitude", simple: "Coming from the middle parts of the Earth.", tip: "Mid (middle) + Latitude (lines on a map)." }
+        ]
+      },
+      {
+        category: "Theme 2: Science & Chemistry",
+        words: [
+          { term: "Combustion", simple: "Burning fuel.", tip: "Think of the 'engine' in a car burning gas." },
+          { term: "Gaseous", simple: "In the form of a gas (like air), not solid.", tip: "Gas-eous. It acts like a gas." },
+          { term: "Sulfates / Droplets of sulfuric", simple: "Acidic chemicals found in smoke and rain.", tip: "'S' for Sulfur and Smoke." },
+          { term: "Drilled from", simple: "Taken out of the ground.", tip: "You use a drill to get oil or coal out of the Earth." },
+          { term: "Bearing coal is irradiated by", simple: "Coal containing sulfur is hit by light/radiation.", tip: "Bearing (carrying) + Irradiated (hit by rays/light)." },
+          { term: "Oxidised to sulfate", simple: "Oxygen changes a chemical into a sulfate.", tip: "Oxid- comes from Oxygen." },
+          { term: "Catalysed by", simple: "Made to happen faster by a 'helper'.", tip: "A 'Catalyst' is like a coach who makes a team play faster." },
+          { term: "Fall-out from Chernobyl", simple: "Radioactive dust from a famous accident.", tip: "The dust 'falls out' of the sky after an explosion." },
+          { term: "Decomposition", simple: "Rotting or breaking down naturally.", tip: "De- (undo) + Compose (put together). 'Undoing' a structure." }
+        ]
+      },
+      {
+        category: "Theme 3: Environment & Ecology",
+        words: [
+          { term: "Algae bloom", simple: "Sudden, huge growth of green plants in water.", tip: "Flowers 'bloom' in a garden; algae 'blooms' in the ocean." },
+          { term: "In turn eaten", simple: "The next step in the food chain.", tip: "Fish eats algae, then the fish is in turn eaten by a bear." },
+          { term: "Substances that have invaded", simple: "Chemicals that entered where they don't belong.", tip: "Like an 'invader' entering a country by force." },
+          { term: "Bands of haze / Referring to this smog", simple: "Layers of dirty, smoky air.", tip: "Smog = Smoke + Fog." },
+          { term: "Small and localised", simple: "Only in one tiny, specific spot.", tip: "Local (near you) vs. Global (everywhere)." },
+          { term: "Circumpolar", simple: "Around the North or South Pole.", tip: "Circu (circle) + Polar (the poles)." }
+        ]
+      },
+      {
+        category: "Theme 4: Analysis & Context",
+        words: [
+          { term: "On a daily basis", simple: "Every single day.", tip: "Use this instead of 'every day' to sound more professional." },
+          { term: "Virtually", simple: "Almost 100%.", tip: "'Virtual Reality' is almost real life." },
+          { term: "Worrisome", simple: "Concerning or scary.", tip: "Worry + some (a little bit of worry)." },
+          { term: "Adequately", simple: "Good enough / Sufficiently.", tip: "'Adequate' means it's just enough to do the job." },
+          { term: "With respect", simple: "Regarding / About / Concerning.", tip: "Used to point to a specific topic." },
+          { term: "Reconnaissance", simple: "A mission to look for information.", tip: "Often used in the military to 'check out' an area before moving in." }
+        ]
+      },
+      {
+        category: "1. Origins & Farming",
+        words: [
+          { term: "Indigenous", simple: "Naturally from a place. 'Local' or 'Native'.", tip: "Think of 'In' (Inside) + 'Genous' (Gene). They were born in that place." },
+          { term: "Acclimatisation", simple: "Adjusting to a new environment or climate.", tip: "Focus on the word 'Climate' inside it." },
+          { term: "Governing the introduction", simple: "Controlling how something is brought in." },
+          { term: "Confined for", simple: "Kept inside a specific area for a reason." },
+          { term: "Deer stock", simple: "The group of live deer used for breeding or farming." }
+        ]
+      },
+      {
+        category: "2. Business & Trends",
+        words: [
+          { term: "Venison prices", simple: "The cost of deer meat." },
+          { term: "Saw the development", simple: "Witnessed a change or progress. 'Resulted in'." },
+          { term: "Principally", simple: "Most importantly or mainly." },
+          { term: "Appears to be showing limited signs", simple: "Seems to be starting a little bit." },
+          { term: "Influential market", simple: "A place of buying/selling that has a lot of power." },
+          { term: "Statutory levies", simple: "Money that must be paid by law (a type of tax)." },
+          { term: "Complements", simple: "Adds to something to make it better." },
+          { term: "Undertaken in", simple: "Done or carried out in a specific place." }
+        ]
+      },
+      {
+        category: "3. Feelings & Reactions",
+        words: [
+          { term: "Of concern", simple: "Something that is worrying." },
+          { term: "There is justified concern", simple: "There is a very good reason to be worried." },
+          { term: "Particularly with respect to", simple: "Especially when talking about one specific thing." }
+        ]
+      },
+      {
+        category: "4. Actions & Outcomes",
+        words: [
+          { term: "Committed for", simple: "Promised or sent for a specific purpose." },
+          { term: "Committed for processing", simple: "When a farmer officially decides to send their animals to be slaughtered." },
+          { term: "According to", simple: "Based on what someone else said or a set of rules." },
+          { term: "Accreditation / Courses", simple: "Official recognition or classes to learn a skill." },
+          { term: "Taken hold in", simple: "When a disease starts to spread and stay in a group." },
+          { term: "Culling / Slaughter", simple: "Killing animals, usually to control a disease or for food." },
+          { term: "Arose", simple: "Happened or started." }
+        ]
+      },
+      {
+        category: "5. Technical Farming Terms",
+        words: [
+          { term: "Antler", simple: "The 'horns' of a deer that fall off and grow back." },
+          { term: "Pasture", simple: "Land covered with grass for animals to eat." },
+          { term: "Carcass", simple: "The body of a dead animal." },
+          { term: "Bulletins", simple: "Short official reports or news updates." }
+        ]
+      },
+      {
+        category: "6. Disease & Biology",
+        words: [
+          { term: "Wasting disease", simple: "A sickness that makes an animal very thin and weak." },
+          { term: "Bowel wall", simple: "The inside lining of the stomach/intestines." },
+          { term: "Emaciation", simple: "Being extremely thin in an unhealthy way." },
+          { term: "Diarrhoea", simple: "Frequent, liquid bowel movements." },
+          { term: "Bottle jaw", simple: "A swelling under the jaw of an animal." },
+          { term: "Progressive", simple: "Getting worse over time." }
+        ]
+      },
+      {
+        category: "7. Problems & Pressure",
+        words: [
+          { term: "Urgency", simple: "When something is very important and needs to be done right now.", tip: "Urgent = Emergency." },
+          { term: "Posed by", simple: "Caused by / Created by.", tip: "Think of a 'Position'. The problem is put in a position to hurt you." },
+          { term: "Unresolved", simple: "Not fixed yet; no answer has been found.", tip: "Un (Not) + Solved. Like a puzzle you can't finish." },
+          { term: "Dry spells", simple: "A period of time with no rain.", tip: "A 'Spell' is a short time. Dry = No water." }
+        ]
+      },
+      {
+        category: "8. Action & Control",
+        words: [
+          { term: "Halve", simple: "To cut something into two equal pieces; to reduce by 50%.", tip: "It sounds like 'Half'." },
+          { term: "Halted", simple: "Stopped completely.", tip: "Imagine a police officer yelling 'HALT!'" },
+          { term: "Undo", simple: "To erase or reverse an action.", tip: "Like the 'Undo' button (Ctrl+Z) on your computer." },
+          { term: "Resisting", simple: "Fighting against something; saying 'No'.", tip: "Resistance. Like pushing a heavy door that someone is trying to close." },
+          { term: "Insists", simple: "To say something very strongly and refuse to change your mind.", tip: "'In-sit'. You 'sit' in your opinion and won't move." }
+        ]
+      },
+      {
+        category: "9. Nature & Geology (Skye)",
+        words: [
+          { term: "Renowned for", simple: "Famous or well-known for something.", tip: "Skye is known for its ancient rock formations." },
+          { term: "Rugged island", simple: "A rocky, rough, and uneven island." },
+          { term: "The sheer variety of life", simple: "An enormous or absolute diversity of living things." },
+          { term: "Gritty", simple: "Feeling rough and containing hard particles." },
+          { term: "Pebbly", simple: "Full of small, smooth, round stones." },
+          { term: "Eroded", simple: "Worn away over time by wind or water." },
+          { term: "Extinct volcanoes", simple: "Volcanoes that are dead and will never erupt again." },
+          { term: "Tectonic", simple: "Relating to the giant plates moving beneath the Earth's surface." },
+          { term: "Ancient mass", simple: "A very old, large, and heavy body of rock or land." },
+          { term: "Be seen forcing", simple: "Observed pushing through with great power." },
+          { term: "Jagged peaks", simple: "Sharp, pointed, and uneven mountain tops." },
+          { term: "Upland", simple: "High ground or mountainous areas." },
+          { term: "Are devoid of", simple: "Completely empty of or lacking something entirely." },
+          { term: "The striking blocks", simple: "Very noticeable, impressive solid pieces of rock." },
+          { term: "Prominently", simple: "In a way that stands out and is easily seen." },
+          { term: "Pinnacles", simple: "Tall, pointed pieces of rock pointing toward the sky." },
+          { term: "Basalt", simple: "A dark type of volcanic rock." },
+          { term: "Landslides", simple: "When a large amount of rock or dirt slides down a mountain or cliff." }
+        ]
+      },
+      {
+        category: "10. Water & Coastal Features",
+        words: [
+          { term: "Intricate coastline and headlands", simple: "A complex, highly detailed shore combined with pieces of land that stick out into the sea." },
+          { term: "Inlets and reefs", simple: "Narrow bays of water and ridges of rock or coral just below the surface." },
+          { term: "Flat islets", simple: "Small, flat islands." },
+          { term: "Seabed", simple: "The floor of the ocean." },
+          { term: "Occurrences", simple: "Things that happen or take place." }
+        ]
+      },
+      {
+        category: "11. Animals & Action Words",
+        words: [
+          { term: "Descend", simple: "To go down from a higher place to a lower one." },
+          { term: "Feasts", simple: "Eats a large meal enthusiastically." },
+          { term: "A host of predators", simple: "A large group of animals that hunt other animals for food." },
+          { term: "Benefactors", simple: "Organisms that are the first to benefit from nutrient-rich waters." },
+          { term: "Herring", simple: "A type of small, silvery fish." },
+          { term: "Exiting", simple: "Leaving a place." },
+          { term: "Spawn", simple: "To produce, create, or give birth to something new." }
+        ]
+      },
+      {
+        category: "12. Logic, Mind & Society",
+        words: [
+          { term: "Rationality", simple: "The quality of being reasonable and using facts rather than emotion." },
+          { term: "Intuition", simple: "A gut feeling or natural instinct." },
+          { term: "Devoted", simple: "Very loyal and dedicated to a cause or community." },
+          { term: "Outlines", simple: "Gives a brief summary or the main points of an idea." },
+          { term: "Comprising", simple: "Making up or consisting of." },
+          { term: "Preconceived idea", simple: "An opinion formed before you have enough evidence or experience." },
+          { term: "A like-minded set of", simple: "A group of people who share the same beliefs." },
+          { term: "Prompting responses", simple: "Encouraging or causing people to reply or react to an article." },
+          { term: "Contributions are deemed to be", simple: "The things a person adds are judged to be valuable." },
+          { term: "Award", simple: "To give points or a prize." },
+          { term: "Attentive to", simple: "Paying close and careful attention to something." },
+          { term: "Court judges", simple: "Legal officials who make decisions in a court of law." },
+          { term: "Remit", simple: "A specific task or area of responsibility." },
+          { term: "Willpower", simple: "The mental strength to control your own actions." },
+          { term: "Adjudicating a case", simple: "Acting as a judge to make a formal decision about a legal problem." },
+          { term: "Roll a die", simple: "To throw a small cube with dots on it to get a random number." },
+          { term: "A rarity", simple: "Something that is very uncommon and doesn't happen often." },
+          { term: "Subjective preferences", simple: "Personal choices based on feelings rather than facts." },
+          { term: "Correspondent for", simple: "A journalist who reports news for a specific paper or magazine." },
+          { term: "Faddish", simple: "Related to a short-lived, popular trend or craze." },
+          { term: "Think straight", simple: "To think clearly and logically." },
+          { term: "Stems from", simple: "Comes from or originates from a specific source." },
+          { term: "Commentators", simple: "People who discuss, write about, or give opinions on a topic." }
+        ]
+      },
+      {
+        category: "13. Idioms & Phrases",
+        words: [
+          { term: "Call something into question", simple: "To doubt or challenge whether something is true or right." },
+          { term: "Cast them in the opposite light", simple: "To show or describe someone in a completely different, often negative, way." },
+          { term: "Decisions rely on subjective preferences", simple: "Choices depend entirely on what someone personally likes or feels, not objective data." },
+          { term: "Large stretches of white sand", simple: "Vast, continuous areas of sandy beach." },
+          { term: "For long stretches of time", simple: "For very long, continuous periods." },
+          { term: "Stretch my skills", simple: "To push your abilities beyond their normal limits to improve." },
+          { term: "Center around", simple: "To have something as the main subject or focus." },
+          { term: "The ease with", simple: "How simple or effortless something is to do." }
+        ]
       }
-    };
-    setProgress(newProgress);
-    localStorage.setItem('voca_progress', JSON.stringify(newProgress));
-  };
+    ];
 
-  // 에빙하우스 망각 곡선 로직 (복습 권장 여부 확인)
-  const checkNeedsReview = (term) => {
-    const wordData = progress[term];
-    if (!wordData) return false;
+    function App() {
+      const [darkMode, setDarkMode] = useState(false);
+      const [activeCategory, setActiveCategory] = useState("All");
+      const [progress, setProgress] = useState({});
 
-    const { status, lastStudied } = wordData;
-    const hoursPassed = (Date.now() - lastStudied) / (1000 * 60 * 60);
+      // 로컬 스토리지에서 데이터 불러오기
+      useEffect(() => {
+        const savedProgress = localStorage.getItem('voca_progress');
+        const savedTheme = localStorage.getItem('voca_theme');
+        if (savedProgress) setProgress(JSON.parse(savedProgress));
+        
+        if (savedTheme === 'dark') {
+          setDarkMode(true);
+          document.documentElement.classList.add('dark');
+        }
+      }, []);
 
-    // 복습 주기 설정 (에빙하우스 기반 간소화)
-    // O (완벽): 3일(72시간) 후 복습
-    // △ (가물가물): 1일(24시간) 후 복습
-    // X (모름): 12시간 후 복습
-    if (status === 'O' && hoursPassed >= 72) return true;
-    if (status === '△' && hoursPassed >= 24) return true;
-    if (status === 'X' && hoursPassed >= 12) return true;
+      // 다크모드 토글
+      const toggleDarkMode = () => {
+        const newMode = !darkMode;
+        setDarkMode(newMode);
+        localStorage.setItem('voca_theme', newMode ? 'dark' : 'light');
+        if (newMode) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      };
 
-    return false;
-  };
+      // TTS 음성 출력
+      const playAudio = (text) => {
+        if ('speechSynthesis' in window) {
+          window.speechSynthesis.cancel();
+          const utterance = new SpeechSynthesisUtterance(text);
+          utterance.lang = 'en-US';
+          utterance.rate = 0.9;
+          window.speechSynthesis.speak(utterance);
+        } else {
+          alert("이 브라우저에서는 음성 출력을 지원하지 않습니다.");
+        }
+      };
 
-  // 날짜 포맷팅 함수
-  const formatDate = (timestamp) => {
-    if (!timestamp) return "학습 기록 없음";
-    const date = new Date(timestamp);
-    return `${date.getMonth() + 1}월 ${date.getDate()}일 ${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`;
-  };
+      // 암기 상태 업데이트
+      const updateStatus = (term, status) => {
+        const newProgress = {
+          ...progress,
+          [term]: {
+            status,
+            lastStudied: Date.now()
+          }
+        };
+        setProgress(newProgress);
+        localStorage.setItem('voca_progress', JSON.stringify(newProgress));
+      };
 
-  // 렌더링할 단어 필터링
-  const displayedWords = useMemo(() => {
-    if (activeCategory === "All") {
-      return VOCA_DATA.flatMap(cat => cat.words);
-    }
-    return VOCA_DATA.find(cat => cat.category === activeCategory)?.words || [];
-  }, [activeCategory]);
+      // 에빙하우스 망각 곡선 로직
+      const checkNeedsReview = (term) => {
+        const wordData = progress[term];
+        if (!wordData) return false;
 
-  // 통계 계산
-  const stats = useMemo(() => {
-    let o = 0, tri = 0, x = 0;
-    Object.values(progress).forEach(p => {
-      if (p.status === 'O') o++;
-      if (p.status === '△') tri++;
-      if (p.status === 'X') x++;
-    });
-    return { o, tri, x, totalStudied: o + tri + x };
-  }, [progress]);
+        const { status, lastStudied } = wordData;
+        const hoursPassed = (Date.now() - lastStudied) / (1000 * 60 * 60);
 
-  // UI 렌더링
-  return (
-    <div className={`min-h-screen transition-colors duration-300 font-sans ${darkMode ? 'bg-[#262322] text-[#E8E2DA]' : 'bg-[#FDFBF7] text-[#4A433D]'}`}>
-      {/* 헤더 */}
-      <header className={`sticky top-0 z-10 shadow-sm backdrop-blur-md transition-colors duration-300 ${darkMode ? 'bg-[#262322]/80 border-b border-[#3D3835]' : 'bg-[#FDFBF7]/80 border-b border-[#EAE3DA]'}`}>
-        <div className="max-w-5xl mx-auto px-4 py-4 flex justify-between items-center">
-          <div>
-            <h1 className="text-2xl font-bold flex items-center gap-2">
-              <span className="text-2xl">🧠</span> Smart Voca
-            </h1>
-            <p className="text-sm opacity-70 mt-1">에빙하우스 기반 맞춤형 단어장</p>
-          </div>
-          <button 
-            onClick={toggleDarkMode}
-            className={`p-2 rounded-full transition-colors ${darkMode ? 'bg-[#3D3835] hover:bg-[#4E4844]' : 'bg-[#EAE3DA] hover:bg-[#DFD5C9]'}`}
-            title="다크모드 전환"
-          >
-            {darkMode ? '🌙' : '☀️'}
-          </button>
-        </div>
-      </header>
+        if (status === 'O' && hoursPassed >= 72) return true;
+        if (status === '△' && hoursPassed >= 24) return true;
+        if (status === 'X' && hoursPassed >= 12) return true;
 
-      <main className="max-w-5xl mx-auto px-4 py-8">
-        {/* 통계 패널 */}
-        <section className={`mb-8 p-4 rounded-2xl shadow-sm flex flex-wrap gap-4 justify-between items-center transition-colors ${darkMode ? 'bg-[#322E2C]' : 'bg-white'}`}>
-          <div className="flex gap-4">
-            <div className="flex flex-col items-center">
-              <span className="text-xs opacity-60">전체 학습</span>
-              <span className="font-bold text-lg">{stats.totalStudied}</span>
-            </div>
-            <div className="w-px bg-gray-300 opacity-30"></div>
-            <div className="flex flex-col items-center text-emerald-600 dark:text-emerald-400">
-              <span className="text-xs">🟢 완벽 (O)</span>
-              <span className="font-bold text-lg">{stats.o}</span>
-            </div>
-            <div className="flex flex-col items-center text-amber-500 dark:text-amber-400">
-              <span className="text-xs">🔺 가물 (△)</span>
-              <span className="font-bold text-lg">{stats.tri}</span>
-            </div>
-            <div className="flex flex-col items-center text-rose-500 dark:text-rose-400">
-              <span className="text-xs">❌ 모름 (X)</span>
-              <span className="font-bold text-lg">{stats.x}</span>
-            </div>
-          </div>
-        </section>
+        return false;
+      };
 
-        {/* 카테고리 필터 */}
-        <section className="mb-6 overflow-x-auto pb-2 -mx-4 px-4 sm:mx-0 sm:px-0">
-          <div className="flex gap-2 whitespace-nowrap">
-            <button
-              onClick={() => setActiveCategory("All")}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                activeCategory === "All" 
-                ? (darkMode ? 'bg-[#D4A373] text-[#262322]' : 'bg-[#B08968] text-white') 
-                : (darkMode ? 'bg-[#3D3835] hover:bg-[#4E4844]' : 'bg-[#EAE3DA] hover:bg-[#DFD5C9]')
-              }`}
-            >
-              🌐 전체보기
-            </button>
-            {VOCA_DATA.map((cat, idx) => (
-              <button
-                key={idx}
-                onClick={() => setActiveCategory(cat.category)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                  activeCategory === cat.category 
-                  ? (darkMode ? 'bg-[#D4A373] text-[#262322]' : 'bg-[#B08968] text-white') 
-                  : (darkMode ? 'bg-[#3D3835] hover:bg-[#4E4844]' : 'bg-[#EAE3DA] hover:bg-[#DFD5C9]')
-                }`}
+      // 날짜 포맷팅 함수
+      const formatDate = (timestamp) => {
+        if (!timestamp) return "학습 기록 없음";
+        const date = new Date(timestamp);
+        return `${date.getMonth() + 1}월 ${date.getDate()}일 ${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`;
+      };
+
+      // 렌더링할 단어 필터링
+      const displayedWords = useMemo(() => {
+        if (activeCategory === "All") {
+          return VOCA_DATA.flatMap(cat => cat.words);
+        }
+        return VOCA_DATA.find(cat => cat.category === activeCategory)?.words || [];
+      }, [activeCategory]);
+
+      // 통계 계산
+      const stats = useMemo(() => {
+        let o = 0, tri = 0, x = 0;
+        Object.values(progress).forEach(p => {
+          if (p.status === 'O') o++;
+          if (p.status === '△') tri++;
+          if (p.status === 'X') x++;
+        });
+        return { o, tri, x, totalStudied: o + tri + x };
+      }, [progress]);
+
+      return (
+        <div className={`min-h-screen transition-colors duration-300 ${darkMode ? 'bg-[#262322] text-[#E8E2DA]' : 'bg-[#FDFBF7] text-[#4A433D]'}`}>
+          {/* 헤더 */}
+          <header className={`sticky top-0 z-10 shadow-sm backdrop-blur-md transition-colors duration-300 ${darkMode ? 'bg-[#262322]/80 border-b border-[#3D3835]' : 'bg-[#FDFBF7]/80 border-b border-[#EAE3DA]'}`}>
+            <div className="max-w-5xl mx-auto px-4 py-4 flex justify-between items-center">
+              <div>
+                <h1 className="text-2xl font-bold flex items-center gap-2">
+                  <span className="text-2xl">🧠</span> Smart Voca
+                </h1>
+                <p className="text-sm opacity-70 mt-1">에빙하우스 기반 맞춤형 단어장</p>
+              </div>
+              <button 
+                onClick={toggleDarkMode}
+                className={`p-2 rounded-full transition-colors ${darkMode ? 'bg-[#3D3835] hover:bg-[#4E4844]' : 'bg-[#EAE3DA] hover:bg-[#DFD5C9]'}`}
+                title="다크모드 전환"
               >
-                {cat.category.split(':')[0]} {/* 이름 간소화 */}
+                {darkMode ? '🌙' : '☀️'}
               </button>
-            ))}
-          </div>
-        </section>
+            </div>
+          </header>
 
-        {/* 단어 리스트 그리드 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {displayedWords.map((wordObj, idx) => {
-            const wordStatus = progress[wordObj.term]?.status;
-            const needsReview = checkNeedsReview(wordObj.term);
-            const lastStudied = progress[wordObj.term]?.lastStudied;
-
-            return (
-              <div 
-                key={idx} 
-                className={`relative flex flex-col p-5 rounded-2xl shadow-sm transition-all duration-300 transform hover:-translate-y-1 ${
-                  darkMode ? 'bg-[#322E2C] border border-[#433E3B]' : 'bg-white border border-[#F2EBE1]'
-                }`}
-              >
-                {/* 복습 권장 뱃지 */}
-                {needsReview && (
-                  <div className="absolute -top-3 -right-2 bg-rose-500 text-white text-[10px] font-bold px-2 py-1 rounded-full shadow-md animate-pulse">
-                    ⏰ 복습 권장
-                  </div>
-                )}
-
-                {/* 단어 및 발음 듣기 버튼 */}
-                <div className="flex justify-between items-start mb-3">
-                  <h3 
-                    className="text-xl font-bold cursor-pointer hover:text-[#B08968] dark:hover:text-[#D4A373] transition-colors flex items-center gap-2"
-                    onClick={() => playAudio(wordObj.term)}
-                    title="클릭하여 발음 듣기"
-                  >
-                    {wordObj.term} <span className="text-lg">🔊</span>
-                  </h3>
+          <main className="max-w-5xl mx-auto px-4 py-8">
+            {/* 통계 패널 */}
+            <section className={`mb-8 p-4 rounded-2xl shadow-sm flex flex-wrap gap-4 justify-between items-center transition-colors ${darkMode ? 'bg-[#322E2C]' : 'bg-white'}`}>
+              <div className="flex gap-4">
+                <div className="flex flex-col items-center">
+                  <span className="text-xs opacity-60">전체 학습</span>
+                  <span className="font-bold text-lg">{stats.totalStudied}</span>
                 </div>
-
-                {/* 뜻 & 팁 */}
-                <div className="flex-grow mb-4">
-                  <p className="text-base font-medium mb-2">{wordObj.simple}</p>
-                  {wordObj.tip && (
-                    <p className={`text-sm p-3 rounded-lg flex gap-2 items-start ${darkMode ? 'bg-[#2A2624]' : 'bg-[#F8F5F0]'}`}>
-                      <span>💡</span>
-                      <span className="opacity-80 leading-relaxed">{wordObj.tip}</span>
-                    </p>
-                  )}
+                <div className="w-px bg-gray-300 opacity-30"></div>
+                <div className="flex flex-col items-center text-emerald-600 dark:text-emerald-400">
+                  <span className="text-xs">🟢 완벽 (O)</span>
+                  <span className="font-bold text-lg">{stats.o}</span>
                 </div>
-
-                {/* 하단 컨트롤 (상태 변경 및 학습 기록) */}
-                <div className={`mt-auto pt-4 border-t ${darkMode ? 'border-[#433E3B]' : 'border-[#F2EBE1]'}`}>
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-xs opacity-50">
-                      {lastStudied ? `마지막 학습: ${formatDate(lastStudied)}` : '학습 전'}
-                    </span>
-                  </div>
-                  
-                  <div className="grid grid-cols-3 gap-2">
-                    <button
-                      onClick={() => updateStatus(wordObj.term, 'X')}
-                      className={`py-2 rounded-xl text-sm font-semibold transition-all ${
-                        wordStatus === 'X' 
-                          ? 'bg-rose-100 text-rose-600 border-2 border-rose-500 dark:bg-rose-900/30 dark:text-rose-400 dark:border-rose-500' 
-                          : 'bg-gray-100 text-gray-400 hover:bg-gray-200 dark:bg-[#262322] dark:hover:bg-[#1A1817]'
-                      }`}
-                    >
-                      ❌ 모름
-                    </button>
-                    <button
-                      onClick={() => updateStatus(wordObj.term, '△')}
-                      className={`py-2 rounded-xl text-sm font-semibold transition-all ${
-                        wordStatus === '△' 
-                          ? 'bg-amber-100 text-amber-600 border-2 border-amber-500 dark:bg-amber-900/30 dark:text-amber-400 dark:border-amber-500' 
-                          : 'bg-gray-100 text-gray-400 hover:bg-gray-200 dark:bg-[#262322] dark:hover:bg-[#1A1817]'
-                      }`}
-                    >
-                      🔺 가물
-                    </button>
-                    <button
-                      onClick={() => updateStatus(wordObj.term, 'O')}
-                      className={`py-2 rounded-xl text-sm font-semibold transition-all ${
-                        wordStatus === 'O' 
-                          ? 'bg-emerald-100 text-emerald-600 border-2 border-emerald-500 dark:bg-emerald-900/30 dark:text-emerald-400 dark:border-emerald-500' 
-                          : 'bg-gray-100 text-gray-400 hover:bg-gray-200 dark:bg-[#262322] dark:hover:bg-[#1A1817]'
-                      }`}
-                    >
-                      🟢 완벽
-                    </button>
-                  </div>
+                <div className="flex flex-col items-center text-amber-500 dark:text-amber-400">
+                  <span className="text-xs">🔺 가물 (△)</span>
+                  <span className="font-bold text-lg">{stats.tri}</span>
+                </div>
+                <div className="flex flex-col items-center text-rose-500 dark:text-rose-400">
+                  <span className="text-xs">❌ 모름 (X)</span>
+                  <span className="font-bold text-lg">{stats.x}</span>
                 </div>
               </div>
-            );
-          })}
+            </section>
+
+            {/* 카테고리 필터 */}
+            <section className="mb-6 overflow-x-auto pb-2 -mx-4 px-4 sm:mx-0 sm:px-0">
+              <div className="flex gap-2 whitespace-nowrap">
+                <button
+                  onClick={() => setActiveCategory("All")}
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                    activeCategory === "All" 
+                    ? (darkMode ? 'bg-[#D4A373] text-[#262322]' : 'bg-[#B08968] text-white') 
+                    : (darkMode ? 'bg-[#3D3835] hover:bg-[#4E4844]' : 'bg-[#EAE3DA] hover:bg-[#DFD5C9]')
+                  }`}
+                >
+                  🌐 전체보기
+                </button>
+                {VOCA_DATA.map((cat, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setActiveCategory(cat.category)}
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                      activeCategory === cat.category 
+                      ? (darkMode ? 'bg-[#D4A373] text-[#262322]' : 'bg-[#B08968] text-white') 
+                      : (darkMode ? 'bg-[#3D3835] hover:bg-[#4E4844]' : 'bg-[#EAE3DA] hover:bg-[#DFD5C9]')
+                    }`}
+                  >
+                    {cat.category.split(':')[0]} 
+                  </button>
+                ))}
+              </div>
+            </section>
+
+            {/* 단어 리스트 그리드 */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+              {displayedWords.map((wordObj, idx) => {
+                const wordStatus = progress[wordObj.term]?.status;
+                const needsReview = checkNeedsReview(wordObj.term);
+                const lastStudied = progress[wordObj.term]?.lastStudied;
+
+                return (
+                  <div 
+                    key={idx} 
+                    className={`relative flex flex-col p-5 rounded-2xl shadow-sm transition-all duration-300 transform hover:-translate-y-1 ${
+                      darkMode ? 'bg-[#322E2C] border border-[#433E3B]' : 'bg-white border border-[#F2EBE1]'
+                    }`}
+                  >
+                    {/* 복습 권장 뱃지 */}
+                    {needsReview && (
+                      <div className="absolute -top-3 -right-2 bg-rose-500 text-white text-[10px] font-bold px-2 py-1 rounded-full shadow-md animate-pulse">
+                        ⏰ 복습 권장
+                      </div>
+                    )}
+
+                    {/* 단어 및 발음 듣기 버튼 */}
+                    <div className="flex justify-between items-start mb-3">
+                      <h3 
+                        className="text-xl font-bold cursor-pointer hover:text-[#B08968] dark:hover:text-[#D4A373] transition-colors flex items-center gap-2"
+                        onClick={() => playAudio(wordObj.term)}
+                        title="클릭하여 발음 듣기"
+                      >
+                        {wordObj.term} <span className="text-lg">🔊</span>
+                      </h3>
+                    </div>
+
+                    {/* 뜻 & 팁 */}
+                    <div className="flex-grow mb-4">
+                      <p className="text-base font-medium mb-2">{wordObj.simple}</p>
+                      {wordObj.tip && (
+                        <p className={`text-sm p-3 rounded-lg flex gap-2 items-start ${darkMode ? 'bg-[#2A2624]' : 'bg-[#F8F5F0]'}`}>
+                          <span>💡</span>
+                          <span className="opacity-80 leading-relaxed">{wordObj.tip}</span>
+                        </p>
+                      )}
+                    </div>
+
+                    {/* 하단 컨트롤 (상태 변경 및 학습 기록) */}
+                    <div className={`mt-auto pt-4 border-t ${darkMode ? 'border-[#433E3B]' : 'border-[#F2EBE1]'}`}>
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-xs opacity-50">
+                          {lastStudied ? `마지막 학습: ${formatDate(lastStudied)}` : '학습 전'}
+                        </span>
+                      </div>
+                      
+                      <div className="grid grid-cols-3 gap-2">
+                        <button
+                          onClick={() => updateStatus(wordObj.term, 'X')}
+                          className={`py-2 rounded-xl text-sm font-semibold transition-all ${
+                            wordStatus === 'X' 
+                              ? 'bg-rose-100 text-rose-600 border-2 border-rose-500 dark:bg-rose-900/30 dark:text-rose-400 dark:border-rose-500' 
+                              : 'bg-gray-100 text-gray-400 hover:bg-gray-200 dark:bg-[#262322] dark:hover:bg-[#1A1817]'
+                          }`}
+                        >
+                          ❌ 모름
+                        </button>
+                        <button
+                          onClick={() => updateStatus(wordObj.term, '△')}
+                          className={`py-2 rounded-xl text-sm font-semibold transition-all ${
+                            wordStatus === '△' 
+                              ? 'bg-amber-100 text-amber-600 border-2 border-amber-500 dark:bg-amber-900/30 dark:text-amber-400 dark:border-amber-500' 
+                              : 'bg-gray-100 text-gray-400 hover:bg-gray-200 dark:bg-[#262322] dark:hover:bg-[#1A1817]'
+                          }`}
+                        >
+                          🔺 가물
+                        </button>
+                        <button
+                          onClick={() => updateStatus(wordObj.term, 'O')}
+                          className={`py-2 rounded-xl text-sm font-semibold transition-all ${
+                            wordStatus === 'O' 
+                              ? 'bg-emerald-100 text-emerald-600 border-2 border-emerald-500 dark:bg-emerald-900/30 dark:text-emerald-400 dark:border-emerald-500' 
+                              : 'bg-gray-100 text-gray-400 hover:bg-gray-200 dark:bg-[#262322] dark:hover:bg-[#1A1817]'
+                          }`}
+                        >
+                          🟢 완벽
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </main>
         </div>
-      </main>
-    </div>
-  );
-}
+      );
+    }
+
+    // 렌더링
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
