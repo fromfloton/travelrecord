@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>이더리움(ETH) 5년 차트 기술적 분석</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Apache ECharts -->
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+</head>
+<body class="bg-gray-50 p-6 font-sans">
+  
+  <div id="loading" class="flex items-center justify-center h-screen">
+    <div class="text-xl font-bold text-gray-600 animate-pulse">
+      5년 치 데이터를 불러오고 분석하는 중입니다...
+    </div>
+  </div>
+
+  <div id="app-content" class="max-w-7xl mx-auto space-y-8 hidden">
+    
+    <header class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+      <h1 class="text-3xl font-bold text-gray-800 mb-2">이더리움(ETH) 5년 차트 기술적 분석</h1>
+      <p id="data-source" class="font-semibold text-blue-600">데이터 소스: 로딩중...</p>
+      
+      <div id="fallback-warning" class="bg-red-50 border-l-4 border-red-500 p-4 mt-3 rounded hidden">
+        <p class="text-sm text-red-700 font-bold">API 호출 제한 안내</p>
+        <p class="text-sm text-red-600 mt-1">
+          현재 브라우저 환경에서 거래소 API(CoinGecko) 호출이 제한되어, 실제 데이터를 불러오지 못했습니다. 대신 최근 가격($2146)을 기준으로 역산한 가상의 시뮬레이션 차트가 표시되고 있습니다.
+        </p>
+      </div>
+      <p class="text-sm text-gray-400 mt-3">※ 방대한 데이터(약 1,825일)를 표현하므로, 선을 얇게 처리하여 가독성을 높였습니다.</p>
+    </header>
+
+    <!-- 그래프 1 -->
+    <section class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+      <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+        <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm mr-3">그래프 1</span>
+        이더리움 가격 & MA60 (60일 이동평균선)
+      </h2>
+      <div id="chart1" class="w-full h-[400px]"></div>
+    </section>
+
+    <!-- 그래프 2 -->
+    <section class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+      <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+        <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm mr-3">그래프 2</span>
+        이더리움 가격 & 볼린저 밴드 (Period: 20, Bandwidth: 1.7)
+      </h2>
+      <div id="chart2" class="w-full h-[400px]"></div>
+    </section>
+
+    <!-- 그래프 3 -->
+    <section class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+      <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+        <span class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm mr-3">그래프 3</span>
+        통합 차트 (그래프 1 + 그래프 2 Overlapping)
+      </h2>
+      <div id="chart3" class="w-full h-[500px]"></div>
+    </section>
+
+    <!-- 그래프 4 -->
+    <section class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+      <div class="flex justify-between items-start mb-4">
+        <h2 class="text-xl font-bold text-gray-800 flex items-center">
+          <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm mr-3">그래프 4</span>
+          매매 시그널 분석 (상승진입 / 하락진입 돌파)
+        </h2>
+      </div>
+      <div class="mb-4 p-4 bg-gray-50 rounded-lg text-sm text-gray-700">
+        <p class="font-semibold mb-1">조건 설명 (돌파 시그널):</p>
+        <ul class="list-disc pl-5 space-y-1">
+          <li><span class="text-red-500 font-bold">▲ 상승진입:</span> 가격이 60일 선과 볼린저 밴드 상단을 <b>동시에 상승 돌파(Cross-over)</b>하는 지점</li>
+          <li><span class="text-blue-500 font-bold">◆ 하락진입:</span> 가격이 60일 선과 볼린저 밴드 하단을 <b>동시에 하락 돌파(Cross-under)</b>하는 지점</li>
+        </ul>
+      </div>
+      <div id="chart4" class="w-full h-[500px]"></div>
+    </section>
+
+    <!-- 그래프 5 -->
+    <section class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+      <div class="flex justify-between items-start mb-4">
+        <h2 class="text-xl font-bold text-gray-800 flex items-center">
+          <span class="bg-pink-100 text-pink-800 px-3 py-1 rounded-full text-sm mr-3">그래프 5</span>
+          매매 시그널 분석 (상태 유지 / 위에 머무는 상태)
+        </h2>
+      </div>
+      <div class="mb-4 p-4 bg-gray-50 rounded-lg text-sm text-gray-700">
+        <p class="font-semibold mb-1">조건 설명 (상태 유지 구간):</p>
+        <ul class="list-disc pl-5 space-y-1">
+          <li><span class="text-red-500 font-bold">▲ 상승상태:</span> 당일 가격이 60일 선 <b>위에 머물고 있고</b>, 볼린저 밴드 <b>상단을 넘어선</b> 상태</li>
+          <li><span class="text-blue-500 font-bold">◆ 하락상태:</span> 당일 가격이 60일 선 <b>아래에 머물고 있고</b>, 볼린저 밴드 <b>하단을 내려간</b> 상태</li>
+        </ul>
+      </div>
+      <div id="chart5" class="w-full h-[500px]"></div>
+    </section>
+
+  </div>
+
+  <script>
+    // 상태 및 데이터 변수
+    let chartData = {
+      dates: [],
+      close: [],
+      ma60: [],
+      sma20: [],
+      upper: [],
+      lower: [],
+      bullishSignal: [],
+      bearishSignal: [],
+      stateBullishSignal: [],
+      stateBearishSignal: []
+    };
+
+    // 데이터 처리 및 계산 로직
+    const processChartData = (priceArray) => {
+      const dates = [], close = [], ma60 = [], sma20 = [], upper = [], lower = [];
+      const bullishSignal = [], bearishSignal = [], stateBullishSignal = [], stateBearishSignal = [];
+      
+      const rawData = [];
+
+      for (let i = 0; i < priceArray.length; i++) {
+        const timestamp = priceArray[i][0];
+        const closePrice = priceArray[i][1];
+        const dateStr = new Date(timestamp).toISOString().split('T')[0];
+        
+        let currentMa60 = null, currentSma20 = null, currentUpper = null, currentLower = null;
+
+        // MA60 계산
+        if (i >= 59) {
+          let sum60 = 0;
+          for (let j = i - 59; j <= i; j++) sum60 += priceArray[j][1];
+          currentMa60 = sum60 / 60;
+        }
+
+        // 볼린저 밴드 계산
+        if (i >= 19) {
+          let sum20 = 0;
+          for (let j = i - 19; j <= i; j++) sum20 += priceArray[j][1];
+          currentSma20 = sum20 / 20;
+
+          let varianceSum = 0;
+          for (let j = i - 19; j <= i; j++) {
+            varianceSum += Math.pow(priceArray[j][1] - currentSma20, 2);
+          }
+          const stdDev = Math.sqrt(varianceSum / 20);
+          currentUpper = currentSma20 + (stdDev * 1.7);
+          currentLower = currentSma20 - (stdDev * 1.7);
+        }
+
+        rawData.push({ close: closePrice, ma60: currentMa60, upper: currentUpper, lower: currentLower });
+
+        // 돌파 시그널 (그래프 4)
+        let curBullish = null, curBearish = null;
+        if (i > 0) {
+          const prev = rawData[i - 1];
+          if (currentMa60 && currentUpper && currentLower && prev.ma60 && prev.upper && prev.lower) {
+            const isCrossAboveMA60 = prev.close <= prev.ma60 && closePrice > currentMa60;
+            const isCrossAboveUpper = prev.close <= prev.upper && closePrice > currentUpper;
+            const isCrossBelowMA60 = prev.close >= prev.ma60 && closePrice < currentMa60;
+            const isCrossBelowLower = prev.close >= prev.lower && closePrice < currentLower;
+
+            if (isCrossAboveMA60 && isCrossAboveUpper) curBullish = closePrice;
+            else if (isCrossBelowMA60 && isCrossBelowLower) curBearish = closePrice;
+          }
+        }
+
+        // 상태 시그널 (그래프 5)
+        let curStateBullish = null, curStateBearish = null;
+        if (currentMa60 && currentUpper && currentLower) {
+          const isAboveMA60 = closePrice > currentMa60;
+          const isBelowMA60 = closePrice < currentMa60;
+          const isAboveBBUpper = closePrice > currentUpper;
+          const isBelowBBLower = closePrice < currentLower;
+
+          if (isAboveMA60 && isAboveBBUpper) curStateBullish = closePrice;
+          else if (isBelowMA60 && isBelowBBLower) curStateBearish = closePrice;
+        }
+
+        dates.push(dateStr);
+        close.push(Number(closePrice.toFixed(2)));
+        ma60.push(currentMa60 ? Number(currentMa60.toFixed(2)) : null);
+        sma20.push(currentSma20 ? Number(currentSma20.toFixed(2)) : null);
+        upper.push(currentUpper ? Number(currentUpper.toFixed(2)) : null);
+        lower.push(currentLower ? Number(currentLower.toFixed(2)) : null);
+        bullishSignal.push(curBullish ? Number(curBullish.toFixed(2)) : null);
+        bearishSignal.push(curBearish ? Number(curBearish.toFixed(2)) : null);
+        stateBullishSignal.push(curStateBullish ? Number(curStateBullish.toFixed(2)) : null);
+        stateBearishSignal.push(curStateBearish ? Number(curStateBearish.toFixed(2)) : null);
+      }
+
+      chartData = { dates, close, ma60, sma20, upper, lower, bullishSignal, bearishSignal, stateBullishSignal, stateBearishSignal };
+    };
+
+    // 시뮬레이션 데이터 생성
+    const generateFallbackData = (days) => {
+      const data = [];
+      let currentPrice = 2146;
+      const now = new Date().getTime();
+      
+      for (let i = 0; i <= days; i++) {
+        const timestamp = now - (i * 24 * 60 * 60 * 1000);
+        data.unshift([timestamp, currentPrice]); 
+        const volatility = 0.04; 
+        const change = currentPrice * volatility * (Math.random() - 0.505); 
+        currentPrice = Math.max(100, currentPrice + change); 
+      }
+      return data;
+    };
+
+    // 공통 툴팁 포맷
+    const tooltipFormatter = function (params) {
+      let html = `<div class="font-bold mb-1">${params[0].axisValue}</div>`;
+      params.forEach(param => {
+        if(param.value !== null && param.value !== undefined) {
+          const marker = param.marker;
+          const seriesName = param.seriesName;
+          const val = param.value.toLocaleString();
+          html += `<div class="text-sm">${marker} ${seriesName}: <b>$${val}</b></div>`;
+        }
+      });
+      return html;
+    };
+
+    // 차트 렌더링 함수
+    const renderCharts = () => {
+      // ECharts 인스턴스 생성
+      const chart1 = echarts.init(document.getElementById('chart1'));
+      const chart2 = echarts.init(document.getElementById('chart2'));
+      const chart3 = echarts.init(document.getElementById('chart3'));
+      const chart4 = echarts.init(document.getElementById('chart4'));
+      const chart5 = echarts.init(document.getElementById('chart5'));
+
+      const commonGrid = { top: 40, right: 30, bottom: 40, left: 60 };
+      const commonXAxis = { type: 'category', data: chartData.dates, axisLabel: { color: '#6b7280' } };
+      const commonYAxis = { type: 'value', min: 'dataMin', axisLabel: { formatter: '${value}', color: '#6b7280' }, splitLine: { lineStyle: { type: 'dashed', color: '#f3f4f6' } } };
+      
+      const zoomConfig = [
+        { type: 'inside', start: 0, end: 100 },
+        { type: 'slider', show: true, bottom: 0, height: 25, borderColor: '#d1d5db', handleIcon: 'path://M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z' }
+      ];
+
+      // 1. Chart 1
+      chart1.setOption({
+        tooltip: { trigger: 'axis', formatter: tooltipFormatter },
+        legend: { top: 0 },
+        grid: commonGrid,
+        xAxis: commonXAxis,
+        yAxis: commonYAxis,
+        series: [
+          { name: '이더리움 가격', type: 'line', data: chartData.close, showSymbol: false, itemStyle: { color: '#9ca3af' }, lineStyle: { width: 1.5 } },
+          { name: 'MA60', type: 'line', data: chartData.ma60, showSymbol: false, itemStyle: { color: '#f97316' }, lineStyle: { width: 2 } }
+        ]
+      });
+
+      // 2. Chart 2
+      chart2.setOption({
+        tooltip: { trigger: 'axis', formatter: tooltipFormatter },
+        legend: { top: 0 },
+        grid: commonGrid,
+        xAxis: commonXAxis,
+        yAxis: commonYAxis,
+        series: [
+          { name: '이더리움 가격', type: 'line', data: chartData.close, showSymbol: false, itemStyle: { color: '#9ca3af' }, lineStyle: { width: 1.5 } },
+          { name: 'BB 상단', type: 'line', data: chartData.upper, showSymbol: false, itemStyle: { color: '#ef4444' }, lineStyle: { width: 1.5, type: 'dashed' } },
+          { name: 'SMA20', type: 'line', data: chartData.sma20, showSymbol: false, itemStyle: { color: '#22c55e' }, lineStyle: { width: 2 } },
+          { name: 'BB 하단', type: 'line', data: chartData.lower, showSymbol: false, itemStyle: { color: '#3b82f6' }, lineStyle: { width: 1.5, type: 'dashed' } }
+        ]
+      });
+
+      // 3. Chart 3 (Overlapping + Zoom)
+      chart3.setOption({
+        tooltip: { trigger: 'axis', formatter: tooltipFormatter },
+        legend: { top: 0 },
+        grid: { ...commonGrid, bottom: 60 },
+        dataZoom: zoomConfig,
+        xAxis: commonXAxis,
+        yAxis: commonYAxis,
+        series: [
+          { name: '이더리움 가격', type: 'line', data: chartData.close, showSymbol: false, itemStyle: { color: '#111827' }, lineStyle: { width: 2 } },
+          { name: 'MA60', type: 'line', data: chartData.ma60, showSymbol: false, itemStyle: { color: '#f97316' }, lineStyle: { width: 2 } },
+          { name: 'BB 상단', type: 'line', data: chartData.upper, showSymbol: false, itemStyle: { color: '#ef4444' }, lineStyle: { width: 1.5, type: 'dashed' } },
+          { name: 'SMA20', type: 'line', data: chartData.sma20, showSymbol: false, itemStyle: { color: '#22c55e' }, lineStyle: { width: 2 } },
+          { name: 'BB 하단', type: 'line', data: chartData.lower, showSymbol: false, itemStyle: { color: '#3b82f6' }, lineStyle: { width: 1.5, type: 'dashed' } }
+        ]
+      });
+
+      // 4. Chart 4 (Crossover Signals)
+      chart4.setOption({
+        tooltip: { trigger: 'axis', formatter: tooltipFormatter },
+        legend: { top: 0 },
+        grid: { ...commonGrid, bottom: 60 },
+        dataZoom: zoomConfig,
+        xAxis: commonXAxis,
+        yAxis: commonYAxis,
+        series: [
+          { name: '이더리움 가격', type: 'line', data: chartData.close, showSymbol: false, itemStyle: { color: '#9ca3af' }, lineStyle: { width: 1.5 } },
+          { name: 'MA60', type: 'line', data: chartData.ma60, showSymbol: false, itemStyle: { color: '#f97316' }, lineStyle: { width: 1 } },
+          { name: 'BB 상단', type: 'line', data: chartData.upper, showSymbol: false, itemStyle: { color: '#ef4444' }, lineStyle: { width: 1, type: 'dashed' } },
+          { name: 'BB 하단', type: 'line', data: chartData.lower, showSymbol: false, itemStyle: { color: '#3b82f6' }, lineStyle: { width: 1, type: 'dashed' } },
+          { name: '상승진입', type: 'scatter', data: chartData.bullishSignal, symbolSize: 12, symbol: 'triangle', itemStyle: { color: '#ef4444' } },
+          { name: '하락진입', type: 'scatter', data: chartData.bearishSignal, symbolSize: 12, symbol: 'diamond', itemStyle: { color: '#3b82f6' } }
+        ]
+      });
+
+      // 5. Chart 5 (State Signals)
+      chart5.setOption({
+        tooltip: { trigger: 'axis', formatter: tooltipFormatter },
+        legend: { top: 0 },
+        grid: { ...commonGrid, bottom: 60 },
+        dataZoom: zoomConfig,
+        xAxis: commonXAxis,
+        yAxis: commonYAxis,
+        series: [
+          { name: '이더리움 가격', type: 'line', data: chartData.close, showSymbol: false, itemStyle: { color: '#9ca3af' }, lineStyle: { width: 1.5 } },
+          { name: 'MA60', type: 'line', data: chartData.ma60, showSymbol: false, itemStyle: { color: '#f97316' }, lineStyle: { width: 1 } },
+          { name: 'BB 상단', type: 'line', data: chartData.upper, showSymbol: false, itemStyle: { color: '#ef4444' }, lineStyle: { width: 1, type: 'dashed' } },
+          { name: 'BB 하단', type: 'line', data: chartData.lower, showSymbol: false, itemStyle: { color: '#3b82f6' }, lineStyle: { width: 1, type: 'dashed' } },
+          { name: '상승상태', type: 'scatter', data: chartData.stateBullishSignal, symbolSize: 8, symbol: 'triangle', itemStyle: { color: '#ef4444' } },
+          { name: '하락상태', type: 'scatter', data: chartData.stateBearishSignal, symbolSize: 8, symbol: 'diamond', itemStyle: { color: '#3b82f6' } }
+        ]
+      });
+
+      // 반응형 처리
+      window.addEventListener('resize', () => {
+        chart1.resize(); chart2.resize(); chart3.resize(); chart4.resize(); chart5.resize();
+      });
+    };
+
+    // 데이터 패치 및 초기화
+    const initApp = async () => {
+      try {
+        const response = await fetch('https://api.coingecko.com/api/v3/coins/ethereum/market_chart?vs_currency=usd&days=1825&interval=daily');
+        if (!response.ok) throw new Error('API Rate Limit or Network Error');
+        const result = await response.json();
+        processChartData(result.prices);
+        
+        document.getElementById('data-source').innerText = '데이터 소스: CoinGecko API (실제 데이터)';
+        document.getElementById('data-source').className = 'font-semibold text-blue-600';
+      } catch (err) {
+        console.warn('API 호출 실패. 예비 시뮬레이션 데이터를 사용합니다.', err);
+        const fallbackData = generateFallbackData(1825);
+        processChartData(fallbackData);
+        
+        document.getElementById('data-source').innerText = '데이터 소스: 시뮬레이션 데이터 (API 한도 초과)';
+        document.getElementById('data-source').className = 'font-semibold text-red-500';
+        document.getElementById('fallback-warning').classList.remove('hidden');
+      } finally {
+        document.getElementById('loading').classList.add('hidden');
+        document.getElementById('app-content').classList.remove('hidden');
+        renderCharts();
+      }
+    };
+
+    // 앱 실행
+    initApp();
+  </script>
+</body>
+</html>
