@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <!-- 모바일에서도 화면이 꽉 차고 예쁘게 보이도록 설정 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Vocabulary</title>
+  
+  <!-- Tailwind CSS (디자인) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- React, ReactDOM, Babel (React를 HTML에서 바로 실행하게 해주는 도구들) -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <style>
+    /* 기본 폰트 설정 (눈이 편안한 고딕 계열) */
+    @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+    body { font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif; }
+    
+    /* 스크롤바 디자인 숨기기 (선택사항, 모바일 친화적) */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    .dark ::-webkit-scrollbar-thumb { background: #475569; }
+  </style>
+</head>
+<body class="antialiased">
+  <div id="root"></div>
+
+  <!-- React 애플리케이션 코드 -->
+  <script type="text/babel">
+    const { useState, useEffect, useMemo } = React;
+
+    // --- 단어 데이터 (제공된 마크다운을 구조화) ---
+    const VOCA_DATA = [
+      {
+        category: "1. Creative & Psychology",
+        words: [
+          { term: "Inventiveness", simple: "The ability to think of original and new ideas.", tip: "Inventiveness = Inventor." },
+          { term: "Its struggle for recognition", simple: "Working hard to be noticed or accepted as important.", tip: "Recognition = Getting your name on the Record." },
+          { term: "Overly", simple: "To an excessive or 'too much' degree.", tip: "Overly = Over the limit." },
+          { term: "Constrained by", simple: "Restricted or limited by something.", tip: "Constrained = Chains." },
+          { term: "Narcissistic", simple: "Being too focused on yourself and wanting admiration.", tip: "Narcissistic = Looking in a Mirror." },
+          { term: "Extrinsically motivated", simple: "Doing something for outside rewards like fame, rather than internal joy.", tip: "Extrinsic = External (outside)." },
+          { term: "Admiration", simple: "A feeling of respect and approval from others.", tip: "Admire a movie star." },
+          { term: "To strike", simple: "To happen suddenly or hit like a bolt of lightning.", tip: "Strike = Lightning strike." },
+          { term: "Unearthed", simple: "Discovered or 'dug up' something hidden or new.", tip: "Un-earthed = Pulled out of the Earth." },
+          { term: "Lengthy processes", simple: "Tasks that take a very long time to finish.", tip: "Lengthy = Long." },
+          { term: "Echoes", simple: "To repeat or be very similar to an idea that came before.", tip: "Echo = Repeat in a cave." },
+          { term: "Polymaths", simple: "People who are experts in many different subjects.", tip: "Poly (many) + Math (learning) = Many learnings." },
+          { term: "Preceded by / Preceding", simple: "Coming before something else in time.", tip: "Pre = Before." },
+          { term: "Paralleled by", simple: "Being very similar or happening in the same way.", tip: "Parallel = Side-by-side lines." },
+          { term: "Forcing the muse's hand", simple: "Trying to make creativity happen by force rather than waiting.", tip: "Muse = Magic; Force = Push." },
+          { term: "Conscious thought", simple: "Thinking that you are actively aware of.", tip: "Conscious = Awake." },
+          { term: "Issue at hand", simple: "The specific topic or problem you are dealing with right now.", tip: "At hand = In your hand right now." },
+          { term: "Abstention", simple: "Choosing not to do something.", tip: "Abstention = Being absent from an activity." },
+          { term: "Cerebral cortex in control", simple: "When the part of the brain for logic and language is leading.", tip: "Cerebral = Smart brain layer." },
+          { term: "The limbic system", simple: "The part of the brain responsible for emotions and 'fight or flight'.", tip: "Limbic = Low/Deep feelings." },
+          { term: "Cognition", simple: "The mental process of gaining knowledge and understanding.", tip: "Cognition = Recognition." },
+          { term: "Latter", simple: "The second of two things mentioned.", tip: "Latter = Later/Last." },
+          { term: "Strategies range from", simple: "A variety of options that go from one type to another.", tip: "Range = A Mountain Range (from start to finish)." },
+          { term: "Geniuses", simple: "People with exceptionally high intelligence or creative power.", tip: "Genius = A Genie in a bottle." },
+          { term: "Debilitating", simple: "Making someone very weak or unable to function.", tip: "Debilitating = Disabling." },
+          { term: "Resorted to / Resorted to opium", simple: "Doing something difficult or bad because there is no other choice.", tip: "Resort = Last Resort." },
+          { term: "The perpetual 'unfinished' status", simple: "Never ending or never changing; permanent.", tip: "Perpetual = Permanent." },
+          { term: "A four-month bout", simple: "A short period of intense activity or illness.", tip: "Bout = A Boxing Bout (one round)." },
+          { term: "While attending university", simple: "During the time someone is a student at a college.", tip: "Attending = At the building." },
+          { term: "Alcohol and soap operas", simple: "Drinking and watching dramatic TV shows.", tip: "Soap operas = Drama." }
+        ]
+      },
+      {
+        category: "2. Botanical & Culinary",
+        words: [
+          { term: "Versatile", simple: "Able to be used in many different ways.", tip: "Versatile = Variety." },
+          { term: "Deep red hues", simple: "Strong, dark shades of a color.", tip: "Hue = Color." },
+          { term: "A distinct strand", simple: "A specific type or unique version of something.", tip: "Strand = A Strand of hair." },
+          { term: "Preparation", simple: "The process of getting something ready.", tip: "Prep = Prepare." },
+          { term: "Be so entwined with", simple: "Closely connected or twisted together.", tip: "Entwined = Twine (rope)." },
+          { term: "Together with that of its", simple: "Happening at the same time or in addition to.", tip: "Together = Group." },
+          { term: "Witnessed", simple: "Having seen an event happen personally.", tip: "Witness = Eyes." },
+          { term: "Is native to", simple: "Originally from a specific place.", tip: "Native = Nature (born there)." },
+          { term: "The alimentary value", simple: "The importance of something as food or nutrition.", tip: "Alimentary = Element of eating." },
+          { term: "Intermittent", simple: "Stopping and starting; not continuous.", tip: "Intermittent = Intervals." },
+          { term: "Fiery", simple: "Very hot or spicy, like fire.", tip: "Fiery = Fire." },
+          { term: "Flavoursome", simple: "Having a lot of good flavor.", tip: "Flavoursome = Full of flavor." },
+          { term: "Threaded onto", simple: "Put through a string or wire.", tip: "Thread = Needle and thread." },
+          { term: "Beehive oven / Domed hut", simple: "A rounded structure shaped like a dome or beehive.", tip: "Dome = Round roof." },
+          { term: "Pepper pods", simple: "The hollow cases that hold seeds.", tip: "Pod = Pea pod." },
+          { term: "Pestle and mortar", simple: "Tools used for crushing ingredients into powder.", tip: "Pestle = The Stick; Mortar = The Bowl." },
+          { term: "Stalks", simple: "The main stems of a plant.", tip: "Stalk = Stick." },
+          { term: "Breakthrough", simple: "An important discovery or development.", tip: "Breakthrough = Breaking a record." },
+          { term: "Alleviate", simple: "To make a pain or problem less severe.", tip: "Alleviate = Relieve." },
+          { term: "Due in part to", simple: "Partly because of.", tip: "Due = Because." },
+          { term: "Nonetheless", simple: "In spite of what was just said; however.", tip: "Nonetheless = Never-the-less." },
+          { term: "In this capacity", simple: "In this specific role or position.", tip: "Capacity = Capability." }
+        ]
+      },
+      {
+        category: "3. Society, History & Power",
+        words: [
+          { term: "Sat a vassal state", simple: "A country controlled by a more powerful one.", tip: "Vassal = Servant." },
+          { term: "Frontier", simple: "The border or edge of a country.", tip: "Frontier = Front line." },
+          { term: "Prized by aristocracy", simple: "Highly valued by the highest social class.", tip: "Prized = Awarded." },
+          { term: "Shepherds", simple: "People who look after sheep.", tip: "Sheep-herd." },
+          { term: "Peasants", simple: "Poor farmers or people of low social status.", tip: "Peasants = People of the land." },
+          { term: "Compete for", simple: "To try to be better than others to win something.", tip: "Compete = Competition." },
+          { term: "Monopoly", simple: "Complete control of a product by one group.", tip: "Monopoly = The Board Game." },
+          { term: "Famed for", simple: "Famous for a specific reason.", tip: "Famed = Fame." },
+          { term: "Prevailing", simple: "Most common or standard at the moment.", tip: "Prevail = Winner." },
+          { term: "Nobility", simple: "People of the highest social rank.", tip: "Nobility = Noble." },
+          { term: "Possible ways", simple: "Different methods that could work.", tip: "Possible = Can do." },
+          { term: "It is of comfort to learn", simple: "It is nice or reassuring to find out.", tip: "Comfort = Comfy chair." }
+        ]
+      }
+    ];
+
+    function App() {
+      const [darkMode, setDarkMode] = useState(false);
+      const [activeCategory, setActiveCategory] = useState("All");
+      const [progress, setProgress] = useState({});
+
+      // 로컬 스토리지에서 데이터 불러오기
+      useEffect(() => {
+        const savedProgress = localStorage.getItem('voca_progress');
+        const savedTheme = localStorage.getItem('voca_theme');
+        if (savedProgress) setProgress(JSON.parse(savedProgress));
+        
+        if (savedTheme === 'dark') {
+          setDarkMode(true);
+          document.documentElement.classList.add('dark');
+        }
+      }, []);
+
+      // 다크모드 토글
+      const toggleDarkMode = () => {
+        const newMode = !darkMode;
+        setDarkMode(newMode);
+        localStorage.setItem('voca_theme', newMode ? 'dark' : 'light');
+        if (newMode) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      };
+
+      // TTS 음성 출력
+      const playAudio = (text) => {
+        if ('speechSynthesis' in window) {
+          window.speechSynthesis.cancel();
+          const utterance = new SpeechSynthesisUtterance(text);
+          utterance.lang = 'en-US';
+          utterance.rate = 0.9;
+          window.speechSynthesis.speak(utterance);
+        } else {
+          alert("이 브라우저에서는 음성 출력을 지원하지 않습니다.");
+        }
+      };
+
+      // 암기 상태 업데이트
+      const updateStatus = (term, status) => {
+        const newProgress = {
+          ...progress,
+          [term]: {
+            status,
+            lastStudied: Date.now()
+          }
+        };
+        setProgress(newProgress);
+        localStorage.setItem('voca_progress', JSON.stringify(newProgress));
+      };
+
+      // 에빙하우스 망각 곡선 로직
+      const checkNeedsReview = (term) => {
+        const wordData = progress[term];
+        if (!wordData) return false;
+
+        const { status, lastStudied } = wordData;
+        const hoursPassed = (Date.now() - lastStudied) / (1000 * 60 * 60);
+
+        if (status === 'O' && hoursPassed >= 72) return true;
+        if (status === '△' && hoursPassed >= 24) return true;
+        if (status === 'X' && hoursPassed >= 12) return true;
+
+        return false;
+      };
+
+      // 날짜 포맷팅 함수
+      const formatDate = (timestamp) => {
+        if (!timestamp) return "학습 기록 없음";
+        const date = new Date(timestamp);
+        return `${date.getMonth() + 1}월 ${date.getDate()}일 ${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`;
+      };
+
+      // 렌더링할 단어 필터링
+      const displayedWords = useMemo(() => {
+        if (activeCategory === "All") {
+          return VOCA_DATA.flatMap(cat => cat.words);
+        }
+        return VOCA_DATA.find(cat => cat.category === activeCategory)?.words || [];
+      }, [activeCategory]);
+
+      // 통계 계산
+      const stats = useMemo(() => {
+        let o = 0, tri = 0, x = 0;
+        Object.values(progress).forEach(p => {
+          if (p.status === 'O') o++;
+          if (p.status === '△') tri++;
+          if (p.status === 'X') x++;
+        });
+        return { o, tri, x, totalStudied: o + tri + x };
+      }, [progress]);
+
+      return (
+        <div className={`min-h-screen transition-colors duration-300 ${darkMode ? 'bg-[#262322] text-[#E8E2DA]' : 'bg-[#FDFBF7] text-[#4A433D]'}`}>
+          {/* 헤더 */}
+          <header className={`sticky top-0 z-10 shadow-sm backdrop-blur-md transition-colors duration-300 ${darkMode ? 'bg-[#262322]/80 border-b border-[#3D3835]' : 'bg-[#FDFBF7]/80 border-b border-[#EAE3DA]'}`}>
+            <div className="max-w-5xl mx-auto px-4 py-4 flex justify-between items-center">
+              <div>
+                <h1 className="text-2xl font-bold flex items-center gap-2">
+                  <span className="text-2xl">🧠</span> Smart Voca
+                </h1>
+                <p className="text-sm opacity-70 mt-1">에빙하우스 기반 맞춤형 단어장</p>
+              </div>
+              <button 
+                onClick={toggleDarkMode}
+                className={`p-2 rounded-full transition-colors ${darkMode ? 'bg-[#3D3835] hover:bg-[#4E4844]' : 'bg-[#EAE3DA] hover:bg-[#DFD5C9]'}`}
+                title="다크모드 전환"
+              >
+                {darkMode ? '🌙' : '☀️'}
+              </button>
+            </div>
+          </header>
+
+          <main className="max-w-5xl mx-auto px-4 py-8">
+            {/* 통계 패널 */}
+            <section className={`mb-8 p-4 rounded-2xl shadow-sm flex flex-wrap gap-4 justify-between items-center transition-colors ${darkMode ? 'bg-[#322E2C]' : 'bg-white'}`}>
+              <div className="flex gap-4">
+                <div className="flex flex-col items-center">
+                  <span className="text-xs opacity-60">전체 학습</span>
+                  <span className="font-bold text-lg">{stats.totalStudied}</span>
+                </div>
+                <div className="w-px bg-gray-300 opacity-30"></div>
+                <div className="flex flex-col items-center text-emerald-600 dark:text-emerald-400">
+                  <span className="text-xs">🟢 완벽 (O)</span>
+                  <span className="font-bold text-lg">{stats.o}</span>
+                </div>
+                <div className="flex flex-col items-center text-amber-500 dark:text-amber-400">
+                  <span className="text-xs">🔺 가물 (△)</span>
+                  <span className="font-bold text-lg">{stats.tri}</span>
+                </div>
+                <div className="flex flex-col items-center text-rose-500 dark:text-rose-400">
+                  <span className="text-xs">❌ 모름 (X)</span>
+                  <span className="font-bold text-lg">{stats.x}</span>
+                </div>
+              </div>
+            </section>
+
+            {/* 카테고리 필터 */}
+            <section className="mb-6 overflow-x-auto pb-2 -mx-4 px-4 sm:mx-0 sm:px-0">
+              <div className="flex gap-2 whitespace-nowrap">
+                <button
+                  onClick={() => setActiveCategory("All")}
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                    activeCategory === "All" 
+                    ? (darkMode ? 'bg-[#D4A373] text-[#262322]' : 'bg-[#B08968] text-white') 
+                    : (darkMode ? 'bg-[#3D3835] hover:bg-[#4E4844]' : 'bg-[#EAE3DA] hover:bg-[#DFD5C9]')
+                  }`}
+                >
+                  🌐 전체보기
+                </button>
+                {VOCA_DATA.map((cat, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setActiveCategory(cat.category)}
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                      activeCategory === cat.category 
+                      ? (darkMode ? 'bg-[#D4A373] text-[#262322]' : 'bg-[#B08968] text-white') 
+                      : (darkMode ? 'bg-[#3D3835] hover:bg-[#4E4844]' : 'bg-[#EAE3DA] hover:bg-[#DFD5C9]')
+                    }`}
+                  >
+                    {cat.category.split(':')[0]} 
+                  </button>
+                ))}
+              </div>
+            </section>
+
+            {/* 단어 리스트 그리드 */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+              {displayedWords.map((wordObj, idx) => {
+                const wordStatus = progress[wordObj.term]?.status;
+                const needsReview = checkNeedsReview(wordObj.term);
+                const lastStudied = progress[wordObj.term]?.lastStudied;
+
+                return (
+                  <div 
+                    key={idx} 
+                    className={`relative flex flex-col p-5 rounded-2xl shadow-sm transition-all duration-300 transform hover:-translate-y-1 ${
+                      darkMode ? 'bg-[#322E2C] border border-[#433E3B]' : 'bg-white border border-[#F2EBE1]'
+                    }`}
+                  >
+                    {/* 복습 권장 뱃지 */}
+                    {needsReview && (
+                      <div className="absolute -top-3 -right-2 bg-rose-500 text-white text-[10px] font-bold px-2 py-1 rounded-full shadow-md animate-pulse">
+                        ⏰ 복습 권장
+                      </div>
+                    )}
+
+                    {/* 단어 및 발음 듣기 버튼 */}
+                    <div className="flex justify-between items-start mb-3">
+                      <h3 
+                        className="text-xl font-bold cursor-pointer hover:text-[#B08968] dark:hover:text-[#D4A373] transition-colors flex items-center gap-2"
+                        onClick={() => playAudio(wordObj.term)}
+                        title="클릭하여 발음 듣기"
+                      >
+                        {wordObj.term} <span className="text-lg">🔊</span>
+                      </h3>
+                    </div>
+
+                    {/* 뜻 & 팁 */}
+                    <div className="flex-grow mb-4">
+                      <p className="text-base font-medium mb-2">{wordObj.simple}</p>
+                      {wordObj.tip && (
+                        <p className={`text-sm p-3 rounded-lg flex gap-2 items-start ${darkMode ? 'bg-[#2A2624]' : 'bg-[#F8F5F0]'}`}>
+                          <span>💡</span>
+                          <span className="opacity-80 leading-relaxed">{wordObj.tip}</span>
+                        </p>
+                      )}
+                    </div>
+
+                    {/* 하단 컨트롤 (상태 변경 및 학습 기록) */}
+                    <div className={`mt-auto pt-4 border-t ${darkMode ? 'border-[#433E3B]' : 'border-[#F2EBE1]'}`}>
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-xs opacity-50">
+                          {lastStudied ? `마지막 학습: ${formatDate(lastStudied)}` : '학습 전'}
+                        </span>
+                      </div>
+                      
+                      <div className="grid grid-cols-3 gap-2">
+                        <button
+                          onClick={() => updateStatus(wordObj.term, 'X')}
+                          className={`py-2 rounded-xl text-sm font-semibold transition-all ${
+                            wordStatus === 'X' 
+                              ? 'bg-rose-100 text-rose-600 border-2 border-rose-500 dark:bg-rose-900/30 dark:text-rose-400 dark:border-rose-500' 
+                              : 'bg-gray-100 text-gray-400 hover:bg-gray-200 dark:bg-[#262322] dark:hover:bg-[#1A1817]'
+                          }`}
+                        >
+                          ❌ 모름
+                        </button>
+                        <button
+                          onClick={() => updateStatus(wordObj.term, '△')}
+                          className={`py-2 rounded-xl text-sm font-semibold transition-all ${
+                            wordStatus === '△' 
+                              ? 'bg-amber-100 text-amber-600 border-2 border-amber-500 dark:bg-amber-900/30 dark:text-amber-400 dark:border-amber-500' 
+                              : 'bg-gray-100 text-gray-400 hover:bg-gray-200 dark:bg-[#262322] dark:hover:bg-[#1A1817]'
+                          }`}
+                        >
+                          🔺 가물
+                        </button>
+                        <button
+                          onClick={() => updateStatus(wordObj.term, 'O')}
+                          className={`py-2 rounded-xl text-sm font-semibold transition-all ${
+                            wordStatus === 'O' 
+                              ? 'bg-emerald-100 text-emerald-600 border-2 border-emerald-500 dark:bg-emerald-900/30 dark:text-emerald-400 dark:border-emerald-500' 
+                              : 'bg-gray-100 text-gray-400 hover:bg-gray-200 dark:bg-[#262322] dark:hover:bg-[#1A1817]'
+                          }`}
+                        >
+                          🟢 완벽
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </main>
+        </div>
+      );
+    }
+
+    // 렌더링
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
