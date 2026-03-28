@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Vocabulary</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <style>
+    @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+    body { font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif; }
+    
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    .dark ::-webkit-scrollbar-thumb { background: #475569; }
+  </style>
+</head>
+<body class="antialiased">
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useMemo } = React;
+
+    // --- 새롭게 구성된 단어 데이터 ---
+    const VOCA_DATA = [
+      {
+        category: "1. Science & Geography",
+        words: [
+          { term: "Planetary", simple: "Relating to planets.", tip: "Planet + ary = Things about a planet." },
+          { term: "Celestial", simple: "Relating to the sky or outer space.", tip: "Celestial bodies = Heavenly bodies in the sky." },
+          { term: "Gravitational", simple: "Relating to gravity.", tip: "Gravity pulling you down." },
+          { term: "Comet", simple: "A celestial object consisting of a nucleus of ice and dust.", tip: "Comet = Ice ball zooming in space." },
+          { term: "Uninhabitable", simple: "Cannot be lived in.", tip: "Un (not) + inhabit (live)." },
+          { term: "Inhabitant", simple: "A person or animal that lives in a place.", tip: "In-habit = Someone who lives in the habitat." },
+          { term: "The high-altitude", simple: "Elevated, high above sea level.", tip: "Altitude = High up in the mountains." },
+          { term: "The expanding frontier", simple: "The moving border of settled land.", tip: "Frontier = The front edge of a country." },
+          { term: "Settlers", simple: "People who move to a newly discovered area.", tip: "Settle = Settling down in a new home." }
+        ]
+      },
+      {
+        category: "2. History, Culture & Religion",
+        words: [
+          { term: "Spiritual", simple: "Relating to religion or deep feelings of the soul.", tip: "Spirit = Soul." },
+          { term: "Monastery", simple: "A building occupied by a community of monks.", tip: "Monk + astery = Where monks live." },
+          { term: "Murals", simple: "Paintings applied directly to a wall.", tip: "Mural = Mural/Wall painting." },
+          { term: "Philosophy", simple: "The study of fundamental nature of knowledge and reality.", tip: "Philosopher thinking deeply." },
+          { term: "Laypeople", simple: "Ordinary people, not clergy or professionals.", tip: "Layman = Regular person without special religious status." },
+          { term: "Devotion", simple: "Great love or loyalty (often used with 'to').", tip: "Devote = Dedicating all your time to a belief." },
+          { term: "Compassion", simple: "Sympathetic pity and concern for others.", tip: "Passion = Feeling strongly with others." },
+          { term: "Ornate", simple: "Highly and elaborately decorated.", tip: "Ornament = Decorated like a Christmas tree." },
+          { term: "Pagodas", simple: "A Hindu or Buddhist temple or sacred building.", tip: "Pagoda = Stacked Asian temple." },
+          { term: "Intricate", simple: "Very complicated or detailed.", tip: "In-trick = A tricky, detailed puzzle." },
+          { term: "In a state of ruins", simple: "Destroyed or decayed.", tip: "Ruined completely over time." },
+          { term: "Sunken", simple: "Having sunk or been submerged below ground/water level.", tip: "Sunk like a ship." },
+          { term: "Protruding from", simple: "Sticking out from a surface.", tip: "Protrude = Pushing outward." },
+          { term: "Rituals", simple: "Religious or solemn ceremonies.", tip: "Ritual = A routine spiritual ceremony." },
+          { term: "Pilgrims", simple: "People who journey to a sacred place.", tip: "Pilgrim = Traveling for religion." },
+          { term: "In religious", simple: "Relating to religion or faith.", tip: "Religious = Pertaining to beliefs." }
+        ]
+      },
+      {
+        category: "3. Business, Trust & Society",
+        words: [
+          { term: "Undermine", simple: "To lessen the effectiveness or power of something.", tip: "Under-mine = Digging under a wall to make it fall." },
+          { term: "Advertise", simple: "To promote a product or service.", tip: "Ad = Advertisement." },
+          { term: "Skeptical of", simple: "Having doubts or reservations about something.", tip: "Skeptic = Not easily convinced." },
+          { term: "Mislead", simple: "To give the wrong idea or impression.", tip: "Mis-lead = Leading someone in the wrong direction." },
+          { term: "Scrutiny", simple: "Critical observation or thorough examination.", tip: "Scrutinize = Scanning closely for errors." },
+          { term: "Established companies", simple: "Businesses that have been running for a long time.", tip: "Establish = Already firmly rooted in the market." },
+          { term: "Authentic", simple: "Genuine, real, and not fake.", tip: "Author = The original and real creator." },
+          { term: "Credibility", simple: "The quality of being trusted and believed in.", tip: "Credit = Earning people's trust." },
+          { term: "Carbon neutrality", simple: "Balancing carbon emissions with removal.", tip: "Neutral = Zero balance in the environment." },
+          { term: "Face criticism", simple: "To receive negative comments or blame.", tip: "Face the heat of angry people." },
+          { term: "Caught exaggerating", simple: "Found to be making things seem better than they are.", tip: "Caught lying about the actual size/efforts." },
+          { term: "To its practices", simple: "Relating to its usual methods or actions.", tip: "Practice = How a company usually does things." },
+          { term: "Esteemed for", simple: "Highly respected for a specific reason.", tip: "Esteem = High self-esteem, well-respected by others." }
+        ]
+      },
+      {
+        category: "4. Psychology & Group Dynamics",
+        words: [
+          { term: "Facilitation", simple: "The act of making a process or task easier.", tip: "Facility = Making things run smoothly." },
+          { term: "Can shift", simple: "Can change direction or focus.", tip: "Shift = Shifting gears in a car." },
+          { term: "The presence of others", simple: "The state of being around other people.", tip: "Present = They are here watching." },
+          { term: "Hinder", simple: "To create difficulties or delay progress.", tip: "Hinder = Hide your progress." },
+          { term: "Well-practiced", simple: "Done many times, highly skilled.", tip: "Practice makes perfect." },
+          { term: "Suffer (worsen)", simple: "To become worse in quality or condition.", tip: "Suffering from a bad outcome." },
+          { term: "Context", simple: "The circumstances forming a background.", tip: "Text surrounding the main idea." },
+          { term: "Feel compelled to align with", simple: "Feeling forced to match or agree with a group.", tip: "Compel = Forced to line up." },
+          { term: "Suppress", simple: "To forcibly put an end to or hold back opinions.", tip: "Super-press = Pressing down hard to hide it." },
+          { term: "Dynamics", simple: "The forces that stimulate change within a system.", tip: "Dynamite = Energetic moving forces in a group." },
+          { term: "Reflect on", simple: "To think deeply about something.", tip: "Reflect = Looking at your reflection and pondering." },
+          { term: "Irrelevant", simple: "Not connected or applicable to the matter.", tip: "Ir-relevant = Doesn't relate to the topic." },
+          { term: "Out of principle", simple: "Doing something because of strong moral rules.", tip: "Principle = The main rule you follow." }
+        ]
+      },
+      {
+        category: "5. Actions, Progress & Phrases",
+        words: [
+          { term: "Lay the foundation for", simple: "To establish the basis or starting point for something.", tip: "Laying the bricks for a strong foundation." },
+          { term: "Evolve into", simple: "To develop gradually into something else.", tip: "Evolve = Evolving into a stronger form." },
+          { term: "Deepen", simple: "To make or become deeper or more profound.", tip: "Deep-en = Make it deep." },
+          { term: "Function as", simple: "To serve a specific purpose or role.", tip: "Function = Doing its assigned job." },
+          { term: "Enduring", simple: "Lasting over a long period of time.", tip: "Endure = Surviving to the very end." },
+          { term: "Newcomers", simple: "People who have recently arrived.", tip: "New-come = Newly came to the place." },
+          { term: "Occurrence of", simple: "The fact of an event happening.", tip: "Occur = It happens." },
+          { term: "Taking steps", simple: "Taking action to achieve a goal.", tip: "Taking it step by step." },
+          { term: "Jot down", simple: "To write something quickly.", tip: "Jot = Quickly dot it down on paper." },
+          { term: "Stay in the loop", simple: "To be kept informed of news.", tip: "Loop = Kept inside the circle of information." },
+          { term: "Explore", simple: "To travel to discover or investigate.", tip: "Explorer = Searching for new things." },
+          { term: "In a little over a week", simple: "Just slightly more than 7 days.", tip: "A little over 7 days." },
+          { term: "At record times", simple: "At the fastest speed ever achieved.", tip: "Breaking the world record for speed." },
+          { term: "Uniting", simple: "Bringing together to form a whole.", tip: "Unit = Making into one." },
+          { term: "Strengthened ties", simple: "Made connections or relationships stronger.", tip: "Tie a strong knot." },
+          { term: "A tense period", simple: "A time of stress or anxiety.", tip: "Tense = Tight muscles during hard times." },
+          { term: "Required in linking communities", simple: "Needed to connect different groups.", tip: "Link = Like a chain link connecting parts." },
+          { term: "Once presumed to be", simple: "Previously thought or assumed to be.", tip: "Presume = Assume before knowing." },
+          { term: "Spanning", simple: "Extending across a period of time or space.", tip: "Span = Spanning across a long bridge." },
+          { term: "At its peak", simple: "At the highest or greatest point of success.", tip: "Peak = Reaching the top of the mountain." },
+          { term: "Looting", simple: "Stealing goods during a chaotic event.", tip: "Loot = Stealing treasure." },
+          { term: "Narrate", simple: "To tell a story or give an account of events.", tip: "Narrator tells the story." },
+          { term: "Do you hike much", simple: "Asking about hiking frequency.", tip: "Hike = Walking up mountains." },
+          { term: "Get reacquainted with", simple: "To become familiar with something again.", tip: "Re-acquaint = Meet an acquaintance once more." }
+        ]
+      }
+    ];
+
+    function App() {
+      const [darkMode, setDarkMode] = useState(false);
+      const [activeCategory, setActiveCategory] = useState("All");
+      const [progress, setProgress] = useState({});
+
+      useEffect(() => {
+        const savedProgress = localStorage.getItem('voca_progress');
+        const savedTheme = localStorage.getItem('voca_theme');
+        if (savedProgress) setProgress(JSON.parse(savedProgress));
+        
+        if (savedTheme === 'dark') {
+          setDarkMode(true);
+          document.documentElement.classList.add('dark');
+        }
+      }, []);
+
+      const toggleDarkMode = () => {
+        const newMode = !darkMode;
+        setDarkMode(newMode);
+        localStorage.setItem('voca_theme', newMode ? 'dark' : 'light');
+        if (newMode) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      };
+
+      const playAudio = (text) => {
+        if ('speechSynthesis' in window) {
+          window.speechSynthesis.cancel();
+          const utterance = new SpeechSynthesisUtterance(text);
+          utterance.lang = 'en-US';
+          utterance.rate = 0.9;
+          window.speechSynthesis.speak(utterance);
+        } else {
+          alert("이 브라우저에서는 음성 출력을 지원하지 않습니다.");
+        }
+      };
+
+      const updateStatus = (term, status) => {
+        const newProgress = {
+          ...progress,
+          [term]: {
+            status,
+            lastStudied: Date.now()
+          }
+        };
+        setProgress(newProgress);
+        localStorage.setItem('voca_progress', JSON.stringify(newProgress));
+      };
+
+      const checkNeedsReview = (term) => {
+        const wordData = progress[term];
+        if (!wordData) return false;
+
+        const { status, lastStudied } = wordData;
+        const hoursPassed = (Date.now() - lastStudied) / (1000 * 60 * 60);
+
+        if (status === 'O' && hoursPassed >= 72) return true;
+        if (status === '△' && hoursPassed >= 24) return true;
+        if (status === 'X' && hoursPassed >= 12) return true;
+
+        return false;
+      };
+
+      const formatDate = (timestamp) => {
+        if (!timestamp) return "학습 기록 없음";
+        const date = new Date(timestamp);
+        return `${date.getMonth() + 1}월 ${date.getDate()}일 ${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`;
+      };
+
+      const displayedWords = useMemo(() => {
+        if (activeCategory === "All") {
+          return VOCA_DATA.flatMap(cat => cat.words);
+        }
+        return VOCA_DATA.find(cat => cat.category === activeCategory)?.words || [];
+      }, [activeCategory]);
+
+      const stats = useMemo(() => {
+        let o = 0, tri = 0, x = 0;
+        Object.values(progress).forEach(p => {
+          if (p.status === 'O') o++;
+          if (p.status === '△') tri++;
+          if (p.status === 'X') x++;
+        });
+        return { o, tri, x, totalStudied: o + tri + x };
+      }, [progress]);
+
+      return (
+        <div className={`min-h-screen transition-colors duration-300 ${darkMode ? 'bg-[#262322] text-[#E8E2DA]' : 'bg-[#FDFBF7] text-[#4A433D]'}`}>
+          <header className={`sticky top-0 z-10 shadow-sm backdrop-blur-md transition-colors duration-300 ${darkMode ? 'bg-[#262322]/80 border-b border-[#3D3835]' : 'bg-[#FDFBF7]/80 border-b border-[#EAE3DA]'}`}>
+            <div className="max-w-5xl mx-auto px-4 py-4 flex justify-between items-center">
+              <div>
+                <h1 className="text-2xl font-bold flex items-center gap-2">
+                  <span className="text-2xl">🧠</span> Smart Voca
+                </h1>
+                <p className="text-sm opacity-70 mt-1">에빙하우스 기반 맞춤형 단어장</p>
+              </div>
+              <button 
+                onClick={toggleDarkMode}
+                className={`p-2 rounded-full transition-colors ${darkMode ? 'bg-[#3D3835] hover:bg-[#4E4844]' : 'bg-[#EAE3DA] hover:bg-[#DFD5C9]'}`}
+                title="다크모드 전환"
+              >
+                {darkMode ? '🌙' : '☀️'}
+              </button>
+            </div>
+          </header>
+
+          <main className="max-w-5xl mx-auto px-4 py-8">
+            <section className={`mb-8 p-4 rounded-2xl shadow-sm flex flex-wrap gap-4 justify-between items-center transition-colors ${darkMode ? 'bg-[#322E2C]' : 'bg-white'}`}>
+              <div className="flex gap-4">
+                <div className="flex flex-col items-center">
+                  <span className="text-xs opacity-60">전체 학습</span>
+                  <span className="font-bold text-lg">{stats.totalStudied}</span>
+                </div>
+                <div className="w-px bg-gray-300 opacity-30"></div>
+                <div className="flex flex-col items-center text-emerald-600 dark:text-emerald-400">
+                  <span className="text-xs">🟢 완벽 (O)</span>
+                  <span className="font-bold text-lg">{stats.o}</span>
+                </div>
+                <div className="flex flex-col items-center text-amber-500 dark:text-amber-400">
+                  <span className="text-xs">🔺 가물 (△)</span>
+                  <span className="font-bold text-lg">{stats.tri}</span>
+                </div>
+                <div className="flex flex-col items-center text-rose-500 dark:text-rose-400">
+                  <span className="text-xs">❌ 모름 (X)</span>
+                  <span className="font-bold text-lg">{stats.x}</span>
+                </div>
+              </div>
+            </section>
+
+            <section className="mb-6 overflow-x-auto pb-2 -mx-4 px-4 sm:mx-0 sm:px-0">
+              <div className="flex gap-2 whitespace-nowrap">
+                <button
+                  onClick={() => setActiveCategory("All")}
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                    activeCategory === "All" 
+                    ? (darkMode ? 'bg-[#D4A373] text-[#262322]' : 'bg-[#B08968] text-white') 
+                    : (darkMode ? 'bg-[#3D3835] hover:bg-[#4E4844]' : 'bg-[#EAE3DA] hover:bg-[#DFD5C9]')
+                  }`}
+                >
+                  🌐 전체보기
+                </button>
+                {VOCA_DATA.map((cat, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setActiveCategory(cat.category)}
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                      activeCategory === cat.category 
+                      ? (darkMode ? 'bg-[#D4A373] text-[#262322]' : 'bg-[#B08968] text-white') 
+                      : (darkMode ? 'bg-[#3D3835] hover:bg-[#4E4844]' : 'bg-[#EAE3DA] hover:bg-[#DFD5C9]')
+                    }`}
+                  >
+                    {cat.category.split(':')[0]} 
+                  </button>
+                ))}
+              </div>
+            </section>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+              {displayedWords.map((wordObj, idx) => {
+                const wordStatus = progress[wordObj.term]?.status;
+                const needsReview = checkNeedsReview(wordObj.term);
+                const lastStudied = progress[wordObj.term]?.lastStudied;
+
+                return (
+                  <div 
+                    key={idx} 
+                    className={`relative flex flex-col p-5 rounded-2xl shadow-sm transition-all duration-300 transform hover:-translate-y-1 ${
+                      darkMode ? 'bg-[#322E2C] border border-[#433E3B]' : 'bg-white border border-[#F2EBE1]'
+                    }`}
+                  >
+                    {needsReview && (
+                      <div className="absolute -top-3 -right-2 bg-rose-500 text-white text-[10px] font-bold px-2 py-1 rounded-full shadow-md animate-pulse">
+                        ⏰ 복습 권장
+                      </div>
+                    )}
+
+                    <div className="flex justify-between items-start mb-3">
+                      <h3 
+                        className="text-xl font-bold cursor-pointer hover:text-[#B08968] dark:hover:text-[#D4A373] transition-colors flex items-center gap-2"
+                        onClick={() => playAudio(wordObj.term)}
+                        title="클릭하여 발음 듣기"
+                      >
+                        {wordObj.term} <span className="text-lg">🔊</span>
+                      </h3>
+                    </div>
+
+                    <div className="flex-grow mb-4">
+                      <p className="text-base font-medium mb-2">{wordObj.simple}</p>
+                      {wordObj.tip && (
+                        <p className={`text-sm p-3 rounded-lg flex gap-2 items-start ${darkMode ? 'bg-[#2A2624]' : 'bg-[#F8F5F0]'}`}>
+                          <span>💡</span>
+                          <span className="opacity-80 leading-relaxed">{wordObj.tip}</span>
+                        </p>
+                      )}
+                    </div>
+
+                    <div className={`mt-auto pt-4 border-t ${darkMode ? 'border-[#433E3B]' : 'border-[#F2EBE1]'}`}>
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-xs opacity-50">
+                          {lastStudied ? `마지막 학습: ${formatDate(lastStudied)}` : '학습 전'}
+                        </span>
+                      </div>
+                      
+                      <div className="grid grid-cols-3 gap-2">
+                        <button
+                          onClick={() => updateStatus(wordObj.term, 'X')}
+                          className={`py-2 rounded-xl text-sm font-semibold transition-all ${
+                            wordStatus === 'X' 
+                              ? 'bg-rose-100 text-rose-600 border-2 border-rose-500 dark:bg-rose-900/30 dark:text-rose-400 dark:border-rose-500' 
+                              : 'bg-gray-100 text-gray-400 hover:bg-gray-200 dark:bg-[#262322] dark:hover:bg-[#1A1817]'
+                          }`}
+                        >
+                          ❌ 모름
+                        </button>
+                        <button
+                          onClick={() => updateStatus(wordObj.term, '△')}
+                          className={`py-2 rounded-xl text-sm font-semibold transition-all ${
+                            wordStatus === '△' 
+                              ? 'bg-amber-100 text-amber-600 border-2 border-amber-500 dark:bg-amber-900/30 dark:text-amber-400 dark:border-amber-500' 
+                              : 'bg-gray-100 text-gray-400 hover:bg-gray-200 dark:bg-[#262322] dark:hover:bg-[#1A1817]'
+                          }`}
+                        >
+                          🔺 가물
+                        </button>
+                        <button
+                          onClick={() => updateStatus(wordObj.term, 'O')}
+                          className={`py-2 rounded-xl text-sm font-semibold transition-all ${
+                            wordStatus === 'O' 
+                              ? 'bg-emerald-100 text-emerald-600 border-2 border-emerald-500 dark:bg-emerald-900/30 dark:text-emerald-400 dark:border-emerald-500' 
+                              : 'bg-gray-100 text-gray-400 hover:bg-gray-200 dark:bg-[#262322] dark:hover:bg-[#1A1817]'
+                          }`}
+                        >
+                          🟢 완벽
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </main>
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
