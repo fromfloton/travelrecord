@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Vocabulary</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <style>
+    @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+    body { font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif; }
+    
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    .dark ::-webkit-scrollbar-thumb { background: #475569; }
+  </style>
+</head>
+<body class="antialiased">
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useMemo } = React;
+
+    // --- 첨부 지문 기반 완벽 맞춤형 단어 데이터 ---
+    const VOCA_DATA = [
+      {
+        category: "1. Media, Arts & Expressions (미디어와 표현)",
+        words: [
+          { term: "Convey", simple: "느낌이나 사상을 완벽하게 전달하다.", tip: "Conveyor belt. 컨베이어 벨트가 물건을 나에게 '전달'해주는 모습을 상상하세요." },
+          { term: "You name it", simple: "그 밖에도 무엇이든 (말만 해, 다 있어).", tip: "네가 이름만 대면(Name it) 다 있어! (온갖 상을 다 휩쓸었다는 문맥에서 쓰임)" },
+          { term: "Had its fair share of critics", simple: "상당한 비판(비평가)도 받았다.", tip: "Fair share = 파이의 공평하고 꽤 큰 몫. 비판의 몫을 톡톡히 받았다는 뜻." },
+          { term: "Took exception to", simple: "~에 강하게 이의를 제기하다, 반대하다.", tip: "Exception(예외). 상대의 주장을 예외로 치부하며 받아들이지 않음 = 이의 제기." },
+          { term: "Repercussions", simple: "(사건이 초래한) 부정적 영향, 반향.", tip: "Re(다시) + percussion(타악기). 타악기를 치면 잔향이 계속 울리듯 이어지는 사건의 여파." },
+          { term: "Comprehensive look", simple: "포괄적인 시각, 종합적인 고찰.", tip: "Comprehend(이해하다) + sive. 전체를 완전히 아우르고 이해하는 시각." },
+          { term: "On that note", simple: "말이 나온 김에, 그 점에 관련하여.", tip: "Note(음표/메모). 그 메모장(주제)을 펴놓은 김에 연달아 이야기하자면." },
+          { term: "The way it has shaped", simple: "그것이 형태를 갖추거나 문화를 형성한 방식.", tip: "Shape(모양을 만들다). 찰흙을 빚어 우리 문화의 '형태를 만들어 낸' 모습." },
+          { term: "Reliance on traditional ST", simple: "전통적인 스토리텔링(Storytelling)에 대한 지나친 의존.", tip: "Rely(의지하다) + ST(스토리텔링). 옛날 이야기에 너무 기대는 것." },
+          { term: "Prowess", simple: "(엔지니어링 등의) 뛰어난 기량, 솜씨.", tip: "Proud(자랑스러운) + ess. 자랑스러울 정도로 대단히 뛰어난 기술적 솜씨." }
+        ]
+      },
+      {
+        category: "2. Science, Nature & Biology (과학과 자연)",
+        words: [
+          { term: "Neutrinos", simple: "중성미자 (거의 상호작용하지 않는 아주 작은 입자).", tip: "Neutral(중성) + inos(작은 입자). 작고 눈에 안 보이는 중립 입자." },
+          { term: "Interact with", simple: "~와 상호작용하다, 영향을 미치다.", tip: "Inter(서로) + act(행동하다). 입자들이 서로 주거니 받거니 영향을 미침." },
+          { term: "Mounds", simple: "(흰개미가 지은) 거대한 흙더미, 언덕.", tip: "Mountain(산)의 미니 버전. 벌레들이 높게 쌓아 올린 작은 산(Mound)." },
+          { term: "Termites", simple: "흰개미 (환기 시스템이 있는 흙더미를 짓는 곤충).", tip: "Mite(진드기/작은 벌레). 나무와 흙을 이용해 집을 짓는 작은 곤충." },
+          { term: "Trap light", simple: "빛을 가두다, 포집하다 (나비 날개 원리).", tip: "Trap(덫). 나비의 날개가 빛이 도망가지 못하게 덫으로 꽉 '가두는' 원리." },
+          { term: "Clung to", simple: "~에 끈적하게 매달렸다, 들러붙었다.", tip: "Cling(들러붙다)의 과거형. 식물 씨앗이 개의 털에 끈적하게 찰싹 달라붙은 모습." },
+          { term: "Chlorophyll", simple: "엽록소 (식물이 광합성을 할 때 필요한 물질).", tip: "Chloro(녹색) + phyll(잎). 잎을 녹색으로 꽉 채우는 생물학적 물질." },
+          { term: "Evaporation", simple: "증발 (수분이 공기 중으로 날아가는 현상).", tip: "E(밖으로) + vapor(수증기). 사막 식물의 수분이 수증기가 되어 밖으로 날아감(증발)." }
+        ]
+      },
+      {
+        category: "3. Health, Tech & Society (건강, 기술과 사회)",
+        words: [
+          { term: "Life expectancy", simple: "기대 수명 (사람이 살 것으로 예상되는 평균 기간).", tip: "Life(수명) + expect(기대하다). 의료 발달로 사람이 살 것으로 '기대되는' 수명." },
+          { term: "Diagnostic", simple: "진단의, 병을 판별하는 (MRI, CT 등).", tip: "Diagnose(진단하다). 의사가 환자의 병을 정확하게 찾아내는(진단) 기술." },
+          { term: "How intuitive", simple: "(새 프로그램이) 얼마나 직관적이고 쓰기 쉬운지.", tip: "Intuition(직관). 안(in)에서부터 굳이 가르쳐주지 않아도(tuit) 사용법을 자연스럽게 아는 것." },
+          { term: "Submission", simple: "출품작, 제출물 (사진전 등에 내는 작품).", tip: "Sub(아래로) + mission(보내다). 완성된 작품을 심사위원 아래로 쓱 밀어 '제출하다'." },
+          { term: "Unprecedented", simple: "전례 없는, 유례없는 (과거에 한 번도 없었던).", tip: "Un(없음) + precedent(선례). 이전에 먼저(pre) 간(cede) 적이 없어 완전히 새로운 것." },
+          { term: "Consolidation", simple: "통합, 강화 (하나로 뭉치는 것).", tip: "Con(함께) + solid(단단한). 여러 개를 하나로 합쳐서 단단하게 '통합'함." }
+        ]
+      },
+      {
+        category: "4. Emotion, Logic & Action (감정, 논리와 행동)",
+        words: [
+          { term: "Proves", simple: "진실임을 입증하다, 증명하다.", tip: "Proof(증거)에서 파생. 확실한 증거를 통해 사실임을 '입증하다'." },
+          { term: "Excessive", simple: "지나친, 과도한.", tip: "Excess(초과) + ive. 정상적인 한도를 넘어서 지나침." },
+          { term: "Irate", simple: "몹시 화가 난, 격노한.", tip: "I-rate. 너무 화가 나서 심장 박동수(rate)가 미친 듯이(I) 치솟은 상태." },
+          { term: "Predispositions", simple: "성향, 경향 (어떻게 행동하기 쉬운 기질).", tip: "Pre(미리) + dispose(배치하다). 사건이 일어나기 전부터 내 마음이 미리 배치된 '성향'." },
+          { term: "Challenge", simple: "어려운 과제, 문제를 제기하며 심사숙고하게 하다.", tip: "Challenge(산/난관). 기업에게 난관을 주어 스스로 관행을 돌아보게(reflect) 만듦." },
+          { term: "Collide", simple: "정면으로 충돌하다.", tip: "Col(함께) + slide(미끄러지다). 두 개체가 같이 미끄러져 와서 쾅 '충돌하다'." }
+        ]
+      }
+    ];
+
+    function App() {
+      const [darkMode, setDarkMode] = useState(false);
+      const [activeCategory, setActiveCategory] = useState("All");
+      const [progress, setProgress] = useState({});
+
+      useEffect(() => {
+        const savedProgress = localStorage.getItem('voca_progress');
+        const savedTheme = localStorage.getItem('voca_theme');
+        if (savedProgress) setProgress(JSON.parse(savedProgress));
+        
+        if (savedTheme === 'dark') {
+          setDarkMode(true);
+          document.documentElement.classList.add('dark');
+        }
+      }, []);
+
+      const toggleDarkMode = () => {
+        const newMode = !darkMode;
+        setDarkMode(newMode);
+        localStorage.setItem('voca_theme', newMode ? 'dark' : 'light');
+        if (newMode) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      };
+
+      const playAudio = (text) => {
+        if ('speechSynthesis' in window) {
+          window.speechSynthesis.cancel();
+          const utterance = new SpeechSynthesisUtterance(text);
+          utterance.lang = 'en-US';
+          utterance.rate = 0.9;
+          window.speechSynthesis.speak(utterance);
+        } else {
+          alert("이 브라우저에서는 음성 출력을 지원하지 않습니다.");
+        }
+      };
+
+      const updateStatus = (term, status) => {
+        const newProgress = {
+          ...progress,
+          [term]: {
+            status,
+            lastStudied: Date.now()
+          }
+        };
+        setProgress(newProgress);
+        localStorage.setItem('voca_progress', JSON.stringify(newProgress));
+      };
+
+      const checkNeedsReview = (term) => {
+        const wordData = progress[term];
+        if (!wordData) return false;
+
+        const { status, lastStudied } = wordData;
+        const hoursPassed = (Date.now() - lastStudied) / (1000 * 60 * 60);
+
+        if (status === 'O' && hoursPassed >= 72) return true;
+        if (status === '△' && hoursPassed >= 24) return true;
+        if (status === 'X' && hoursPassed >= 12) return true;
+
+        return false;
+      };
+
+      const formatDate = (timestamp) => {
+        if (!timestamp) return "학습 기록 없음";
+        const date = new Date(timestamp);
+        return `${date.getMonth() + 1}월 ${date.getDate()}일 ${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`;
+      };
+
+      const displayedWords = useMemo(() => {
+        if (activeCategory === "All") {
+          return VOCA_DATA.flatMap(cat => cat.words);
+        }
+        return VOCA_DATA.find(cat => cat.category === activeCategory)?.words || [];
+      }, [activeCategory]);
+
+      const stats = useMemo(() => {
+        let o = 0, tri = 0, x = 0;
+        Object.values(progress).forEach(p => {
+          if (p.status === 'O') o++;
+          if (p.status === '△') tri++;
+          if (p.status === 'X') x++;
+        });
+        return { o, tri, x, totalStudied: o + tri + x };
+      }, [progress]);
+
+      return (
+        <div className={`min-h-screen transition-colors duration-300 ${darkMode ? 'bg-[#262322] text-[#E8E2DA]' : 'bg-[#FDFBF7] text-[#4A433D]'}`}>
+          <header className={`sticky top-0 z-10 shadow-sm backdrop-blur-md transition-colors duration-300 ${darkMode ? 'bg-[#262322]/80 border-b border-[#3D3835]' : 'bg-[#FDFBF7]/80 border-b border-[#EAE3DA]'}`}>
+            <div className="max-w-5xl mx-auto px-4 py-4 flex justify-between items-center">
+              <div>
+                <h1 className="text-2xl font-bold flex items-center gap-2">
+                  <span className="text-2xl">🧠</span> Smart Voca
+                </h1>
+                <p className="text-sm opacity-70 mt-1">에빙하우스 기반 맞춤형 단어장</p>
+              </div>
+              <button 
+                onClick={toggleDarkMode}
+                className={`p-2 rounded-full transition-colors ${darkMode ? 'bg-[#3D3835] hover:bg-[#4E4844]' : 'bg-[#EAE3DA] hover:bg-[#DFD5C9]'}`}
+                title="다크모드 전환"
+              >
+                {darkMode ? '🌙' : '☀️'}
+              </button>
+            </div>
+          </header>
+
+          <main className="max-w-5xl mx-auto px-4 py-8">
+            <section className={`mb-8 p-4 rounded-2xl shadow-sm flex flex-wrap gap-4 justify-between items-center transition-colors ${darkMode ? 'bg-[#322E2C]' : 'bg-white'}`}>
+              <div className="flex gap-4">
+                <div className="flex flex-col items-center">
+                  <span className="text-xs opacity-60">전체 학습</span>
+                  <span className="font-bold text-lg">{stats.totalStudied}</span>
+                </div>
+                <div className="w-px bg-gray-300 opacity-30"></div>
+                <div className="flex flex-col items-center text-emerald-600 dark:text-emerald-400">
+                  <span className="text-xs">🟢 완벽 (O)</span>
+                  <span className="font-bold text-lg">{stats.o}</span>
+                </div>
+                <div className="flex flex-col items-center text-amber-500 dark:text-amber-400">
+                  <span className="text-xs">🔺 가물 (△)</span>
+                  <span className="font-bold text-lg">{stats.tri}</span>
+                </div>
+                <div className="flex flex-col items-center text-rose-500 dark:text-rose-400">
+                  <span className="text-xs">❌ 모름 (X)</span>
+                  <span className="font-bold text-lg">{stats.x}</span>
+                </div>
+              </div>
+            </section>
+
+            <section className="mb-6 overflow-x-auto pb-2 -mx-4 px-4 sm:mx-0 sm:px-0">
+              <div className="flex gap-2 whitespace-nowrap">
+                <button
+                  onClick={() => setActiveCategory("All")}
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                    activeCategory === "All" 
+                    ? (darkMode ? 'bg-[#D4A373] text-[#262322]' : 'bg-[#B08968] text-white') 
+                    : (darkMode ? 'bg-[#3D3835] hover:bg-[#4E4844]' : 'bg-[#EAE3DA] hover:bg-[#DFD5C9]')
+                  }`}
+                >
+                  🌐 전체보기
+                </button>
+                {VOCA_DATA.map((cat, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setActiveCategory(cat.category)}
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                      activeCategory === cat.category 
+                      ? (darkMode ? 'bg-[#D4A373] text-[#262322]' : 'bg-[#B08968] text-white') 
+                      : (darkMode ? 'bg-[#3D3835] hover:bg-[#4E4844]' : 'bg-[#EAE3DA] hover:bg-[#DFD5C9]')
+                    }`}
+                  >
+                    {cat.category.split(':')[0]} 
+                  </button>
+                ))}
+              </div>
+            </section>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+              {displayedWords.map((wordObj, idx) => {
+                const wordStatus = progress[wordObj.term]?.status;
+                const needsReview = checkNeedsReview(wordObj.term);
+                const lastStudied = progress[wordObj.term]?.lastStudied;
+
+                return (
+                  <div 
+                    key={idx} 
+                    className={`relative flex flex-col p-5 rounded-2xl shadow-sm transition-all duration-300 transform hover:-translate-y-1 ${
+                      darkMode ? 'bg-[#322E2C] border border-[#433E3B]' : 'bg-white border border-[#F2EBE1]'
+                    }`}
+                  >
+                    {needsReview && (
+                      <div className="absolute -top-3 -right-2 bg-rose-500 text-white text-[10px] font-bold px-2 py-1 rounded-full shadow-md animate-pulse">
+                        ⏰ 복습 권장
+                      </div>
+                    )}
+
+                    <div className="flex justify-between items-start mb-3">
+                      <h3 
+                        className="text-xl font-bold cursor-pointer hover:text-[#B08968] dark:hover:text-[#D4A373] transition-colors flex items-center gap-2"
+                        onClick={() => playAudio(wordObj.term)}
+                        title="클릭하여 발음 듣기"
+                      >
+                        {wordObj.term} <span className="text-lg">🔊</span>
+                      </h3>
+                    </div>
+
+                    <div className="flex-grow mb-4">
+                      <p className="text-base font-medium mb-2">{wordObj.simple}</p>
+                      {wordObj.tip && (
+                        <p className={`text-sm p-3 rounded-lg flex gap-2 items-start ${darkMode ? 'bg-[#2A2624]' : 'bg-[#F8F5F0]'}`}>
+                          <span>💡</span>
+                          <span className="opacity-80 leading-relaxed">{wordObj.tip}</span>
+                        </p>
+                      )}
+                    </div>
+
+                    <div className={`mt-auto pt-4 border-t ${darkMode ? 'border-[#433E3B]' : 'border-[#F2EBE1]'}`}>
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-xs opacity-50">
+                          {lastStudied ? `마지막 학습: ${formatDate(lastStudied)}` : '학습 전'}
+                        </span>
+                      </div>
+                      
+                      <div className="grid grid-cols-3 gap-2">
+                        <button
+                          onClick={() => updateStatus(wordObj.term, 'X')}
+                          className={`py-2 rounded-xl text-sm font-semibold transition-all ${
+                            wordStatus === 'X' 
+                              ? 'bg-rose-100 text-rose-600 border-2 border-rose-500 dark:bg-rose-900/30 dark:text-rose-400 dark:border-rose-500' 
+                              : 'bg-gray-100 text-gray-400 hover:bg-gray-200 dark:bg-[#262322] dark:hover:bg-[#1A1817]'
+                          }`}
+                        >
+                          ❌ 모름
+                        </button>
+                        <button
+                          onClick={() => updateStatus(wordObj.term, '△')}
+                          className={`py-2 rounded-xl text-sm font-semibold transition-all ${
+                            wordStatus === '△' 
+                              ? 'bg-amber-100 text-amber-600 border-2 border-amber-500 dark:bg-amber-900/30 dark:text-amber-400 dark:border-amber-500' 
+                              : 'bg-gray-100 text-gray-400 hover:bg-gray-200 dark:bg-[#262322] dark:hover:bg-[#1A1817]'
+                          }`}
+                        >
+                          🔺 가물
+                        </button>
+                        <button
+                          onClick={() => updateStatus(wordObj.term, 'O')}
+                          className={`py-2 rounded-xl text-sm font-semibold transition-all ${
+                            wordStatus === 'O' 
+                              ? 'bg-emerald-100 text-emerald-600 border-2 border-emerald-500 dark:bg-emerald-900/30 dark:text-emerald-400 dark:border-emerald-500' 
+                              : 'bg-gray-100 text-gray-400 hover:bg-gray-200 dark:bg-[#262322] dark:hover:bg-[#1A1817]'
+                          }`}
+                        >
+                          🟢 완벽
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </main>
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
