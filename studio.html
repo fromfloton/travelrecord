@@ -1,266 +1,326 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Seedling ASRS Diagnosis System - Interactive Concept</title>
+    <title>ASRS | 육묘 생리 지능형 진단 시스템</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r160/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <style>
-        body { margin: 0; background-color: #000; color: #fff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; overflow: hidden; }
-        canvas { display: block; }
-
-        /* UI Overlay */
-        #ui-layer {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 20px;
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        body {
+            margin: 0; font-family: 'Inter', sans-serif;
+            background-color: #ffffff; color: #1d1d1f;
+            overflow-x: hidden;
         }
-
-        .caption {
-            font-size: 1.2rem;
-            font-weight: 300;
-            letter-spacing: 2px;
-            color: #00ffaa;
-            text-transform: uppercase;
-            opacity: 0;
-            transition: opacity 0.5s ease;
-            max-width: 600px;
-            text-shadow: 0 0 10px rgba(0,255,170,0.5);
+        #webgl-container {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100vh; z-index: 1;
+            background: radial-gradient(circle at center, #fbfbfb 0%, #ececec 100%);
         }
-
-        .main-title {
-            position: absolute;
-            top: 10%;
-            font-size: 0.8rem;
-            letter-spacing: 4px;
-            color: #666;
+        .content-section {
+            position: relative; z-index: 2;
+            height: 100vh; pointer-events: none;
+            display: flex; align-items: center; padding: 0 8%;
         }
-
-        /* Controls */
-        #controls {
-            position: absolute;
-            bottom: 30px;
-            width: 80%;
-            left: 10%;
-            pointer-events: all;
-            text-align: center;
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 24px;
+            padding: 2.5rem;
+            pointer-events: auto;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.05);
         }
-
-        input[type=range] {
-            width: 100%;
-            cursor: pointer;
-            accent-color: #00ffaa;
+        .btn-interact {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
-
-        .label-container {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.7rem;
-            color: #444;
-            margin-top: 10px;
+        .btn-interact:hover:not(:disabled) {
+            transform: scale(1.02); background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
         }
-
-        /* Result Panel */
-        #result-panel {
-            position: absolute;
-            right: 50px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(0, 20, 10, 0.8);
-            border-left: 2px solid #00ffaa;
-            padding: 20px;
-            font-family: monospace;
-            display: none;
+        .progress-bar-fill { transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1); }
+        .active-dot {
+            box-shadow: 0 0 15px #10b981;
+            background-color: #10b981 !important;
         }
-        
-        .value { color: #00ffaa; font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <div id="ui-layer">
-        <div class="main-title">ASRS: ACTIVE STIMULUS RESPONSE SPEED ANALYSIS</div>
-        <div id="cap1" class="caption">Precise targeting. The sliding device approaches the seedling.</div>
-        <div id="cap2" class="caption">Asking the plant: Light, moisture, and physical vibration stimuli applied.</div>
-        <div id="cap3" class="caption">Analyzing ASRS. Quantifying physiological recovery speed.</div>
-        <div id="cap4" class="caption">Diagnosis Complete. Reliability-based growth environment optimized.</div>
-    </div>
+    <div id="webgl-container"></div>
 
-    <div id="result-panel">
-        <div>[SYSTEM STATUS: OK]</div>
-        <br>
-        <div>NITRATE LEVEL: <span class="value">1,240 ppm</span></div>
-        <div>TRANSPLANT READY: <span class="value">98.2%</span></div>
-        <div>OPTIMAL TIMING: <span class="value">D-2</span></div>
-        <br>
-        <div>SAFETY CONTROL: <span class="value" style="color:cyan">ACTIVE</span></div>
-    </div>
-
-    <div id="controls">
-        <input type="range" id="scrollProgress" min="0" max="100" value="0">
-        <div class="label-container">
-            <span>START</span>
-            <span>TARGETING</span>
-            <span>STIMULUS</span>
-            <span>ANALYSIS</span>
-            <span>CONTROL</span>
+    <!-- Hero Section -->
+    <section class="content-section" id="hero">
+        <div class="max-w-3xl">
+            <span class="inline-flex items-center px-4 py-1 rounded-full bg-green-50 text-green-600 text-xs font-bold mb-6 border border-green-100 uppercase tracking-widest">
+                <i class="ph ph-sparkle mr-2"></i> Next-Gen Agriculture
+            </span>
+            <h1 class="text-6xl font-bold tracking-tighter leading-[1.1] mb-6">
+                식물의 숨은 데이터를 <br><span class="text-green-600">스토리텔링</span>하다.
+            </h1>
+            <p class="text-xl text-gray-500 font-light max-w-xl leading-relaxed">
+                ASRS(능동 자극 반응 속도) 분석을 통해 육묘의 생리 상태를 비파괴적으로 진단하고 최적의 생육 환경을 제안합니다.
+            </p>
         </div>
+    </section>
+
+    <!-- Scene 1: Targeting -->
+    <section class="content-section" id="scene1">
+        <div class="glass-panel max-w-md opacity-0 translate-x-[-50px]">
+            <h2 class="text-2xl font-bold mb-4 flex items-center">
+                <i class="ph ph-crosshair text-green-600 mr-3"></i> 정밀 타겟팅
+            </h2>
+            <p class="text-gray-500 leading-relaxed mb-6">
+                장치가 이동 레일을 따라 육묘에 접근합니다. 고성능 촬영부가 잎의 위치를 파악하고 미세 자극을 위한 최적의 각도를 설정합니다.
+            </p>
+            <div class="text-sm font-mono text-gray-400">Position Lock: 99.8% Optimized</div>
+        </div>
+    </section>
+
+    <!-- Scene 2: Stimulus Interaction -->
+    <section class="content-section justify-end" id="scene2">
+        <div class="glass-panel max-w-lg opacity-0 translate-x-[50px]">
+            <h2 class="text-2xl font-bold mb-2">다중 자극 시뮬레이션</h2>
+            <p class="text-gray-500 mb-8">세 가지 핵심 자극을 인가하여 식물의 즉각적인 반응을 수집합니다.</p>
+            
+            <div class="space-y-4">
+                <button id="btn-light" class="btn-interact w-full bg-white/50 border border-white/40 rounded-2xl p-4 flex items-center text-left group">
+                    <div class="w-12 h-12 rounded-xl bg-yellow-400 text-white flex items-center justify-center text-2xl mr-4 shadow-lg shadow-yellow-200">
+                        <i class="ph ph-sun-dim"></i>
+                    </div>
+                    <div>
+                        <div class="font-bold text-gray-800">광 자극 (Light)</div>
+                        <div class="text-xs text-gray-400">PRI 광화학반사지수 회복 속도 산출</div>
+                    </div>
+                </button>
+
+                <button id="btn-water" class="btn-interact w-full bg-white/50 border border-white/40 rounded-2xl p-4 flex items-center text-left group">
+                    <div class="w-12 h-12 rounded-xl bg-blue-500 text-white flex items-center justify-center text-2xl mr-4 shadow-lg shadow-blue-200">
+                        <i class="ph ph-drop"></i>
+                    </div>
+                    <div>
+                        <div class="font-bold text-gray-800">수분 자극 (Moisture)</div>
+                        <div class="text-xs text-gray-400">편광 효과 및 열 반응 회복 측정</div>
+                    </div>
+                </button>
+
+                <button id="btn-physics" class="btn-interact w-full bg-white/50 border border-white/40 rounded-2xl p-4 flex items-center text-left group">
+                    <div class="w-12 h-12 rounded-xl bg-purple-500 text-white flex items-center justify-center text-2xl mr-4 shadow-lg shadow-purple-200">
+                        <i class="ph ph-waves"></i>
+                    </div>
+                    <div>
+                        <div class="font-bold text-gray-800">물리 자극 (Physical)</div>
+                        <div class="text-xs text-gray-400">잎 미세 움직임 감쇠 속도 정량화</div>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scene 3: Analysis Pipeline -->
+    <section class="content-section" id="scene3">
+        <div class="glass-panel w-full max-w-4xl opacity-0 translate-y-[50px]">
+            <h2 class="text-3xl font-bold mb-10 text-center">지능형 분석 파이프라인</h2>
+            
+            <div class="grid grid-cols-3 gap-10 relative">
+                <div class="absolute top-1/2 left-[10%] right-[10%] h-[1px] bg-gray-200 -z-10"></div>
+                
+                <!-- Analysis -->
+                <div class="text-center">
+                    <div id="dot-200" class="w-4 h-4 rounded-full bg-gray-300 mx-auto mb-6 transition-all duration-500"></div>
+                    <div class="text-sm font-bold mb-2">분석 모듈 (200)</div>
+                    <div class="bg-white/40 rounded-xl p-4 border border-white/60">
+                        <div class="text-[10px] text-gray-400 uppercase mb-2">ASRS Recovery</div>
+                        <div id="stat-val" class="text-xl font-mono font-bold text-green-600">0.00 /s</div>
+                        <div class="w-full bg-gray-200 h-1 rounded-full mt-3 overflow-hidden">
+                            <div id="stat-bar" class="bg-green-500 h-full progress-bar-fill" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Prediction -->
+                <div class="text-center">
+                    <div id="dot-300" class="w-4 h-4 rounded-full bg-gray-300 mx-auto mb-6 transition-all duration-500"></div>
+                    <div class="text-sm font-bold mb-2">예측 모듈 (300)</div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div class="bg-white/40 rounded-xl p-3 border border-white/60">
+                            <div class="text-[9px] text-gray-400 mb-1">질산염</div>
+                            <div id="pred-nitrate" class="text-sm font-bold">-- ppm</div>
+                        </div>
+                        <div class="bg-white/40 rounded-xl p-3 border border-white/60">
+                            <div class="text-[9px] text-gray-400 mb-1">이식 적정</div>
+                            <div id="pred-transplant" class="text-sm font-bold">-- %</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Control -->
+                <div class="text-center">
+                    <div id="dot-400" class="w-4 h-4 rounded-full bg-gray-300 mx-auto mb-6 transition-all duration-500"></div>
+                    <div class="text-sm font-bold mb-2">안전 제어 (400)</div>
+                    <div id="score-card" class="bg-gray-900 rounded-xl p-4 text-white">
+                        <div class="text-[10px] text-gray-400 mb-1">신뢰 점수</div>
+                        <div id="score-val" class="text-xl font-mono text-green-400 tracking-tighter">-- / 100</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final Scene -->
+    <section class="content-section justify-center text-center" id="scene4">
+        <div class="max-w-3xl opacity-0">
+            <h2 class="text-5xl font-bold mb-8 tracking-tight">데이터로 완성되는 <br>생육의 미래</h2>
+            <p class="text-gray-500 text-xl font-light mb-12 lead-relaxed">
+                정밀 진단을 넘어, 실시간 피드백 루프를 통해 <br>모든 육묘가 최고의 잠재력을 발휘할 수 있도록 관리합니다.
+            </p>
+            <button class="bg-gray-900 text-white px-10 py-4 rounded-full font-semibold hover:bg-black transition-all">
+                상세 기술 문의하기
+            </button>
+        </div>
+    </section>
+
+    <div class="fixed bottom-10 left-1/2 -translate-x-1/2 z-50 text-[10px] tracking-[4px] text-gray-400 font-bold uppercase pointer-events-none">
+        Scroll to Explore
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script>
-        // Setup Scene
+    <script type="module">
+        // --- 1. Three.js Scene Setup (Apple-style polish) ---
         const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
-        document.body.appendChild(renderer.domElement);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        document.getElementById('webgl-container').appendChild(renderer.domElement);
 
-        // Lights
-        const ambientLight = new THREE.AmbientLight(0x404040, 2);
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
         scene.add(ambientLight);
-        const pointLight = new THREE.PointLight(0x00ffaa, 2, 50);
-        pointLight.position.set(5, 5, 5);
-        scene.add(pointLight);
+        const spotlight = new THREE.SpotLight(0xffffff, 1.5);
+        spotlight.position.set(10, 20, 10);
+        spotlight.castShadow = true;
+        scene.add(spotlight);
 
-        // Central Leaf (Represented by a complex green shape)
-        const leafGroup = new THREE.Group();
-        const leafGeo = new THREE.IcosahedronGeometry(1.5, 2);
-        const leafMat = new THREE.MeshPhongMaterial({ 
-            color: 0x008844, 
-            wireframe: true, 
-            transparent: true, 
-            opacity: 0.8 
+        // Materials
+        const matPlastic = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.1, metalness: 0.1 });
+        const matMetal = new THREE.MeshStandardMaterial({ color: 0xe5e5e7, roughness: 0.3, metalness: 0.8 });
+        const matPlantLeaf = new THREE.MeshStandardMaterial({ color: 0x22c55e, roughness: 0.8 });
+
+        // Objects
+        const plantGroup = new THREE.Group();
+        const leafGeo = new THREE.SphereGeometry(1.5, 32, 32);
+        leafGeo.scale(1, 0.1, 2.5);
+        const leaf = new THREE.Mesh(leafGeo, matPlantLeaf);
+        leaf.position.y = 1;
+        plantGroup.add(leaf);
+        scene.add(plantGroup);
+
+        const apparatus = new THREE.Group();
+        const head = new THREE.Mesh(new THREE.BoxGeometry(2, 1, 2), matPlastic);
+        head.position.y = 8;
+        apparatus.add(head);
+        
+        // Nozzle & Lights (Conceptual)
+        const nozzle = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.2, 0.5), matMetal);
+        nozzle.position.set(0.8, -0.7, 0);
+        head.add(nozzle);
+        
+        scene.add(apparatus);
+
+        camera.position.set(0, 5, 12);
+        camera.lookAt(0, 2, 0);
+
+        // 4.1 Light Beam (자극 효과)
+        const beamGeo = new THREE.ConeGeometry(2, 6, 32);
+        const beamMat = new THREE.MeshBasicMaterial({ color: 0xfacc15, transparent: true, opacity: 0 });
+        const beam = new THREE.Mesh(beamGeo, beamMat);
+        beam.position.y = -3.5;
+        head.add(beam);
+
+        // --- 2. GSAP & ScrollTrigger (Narrative Flow) ---
+        gsap.registerPlugin(ScrollTrigger);
+        
+        const mainTl = gsap.timeline({
+            scrollTrigger: {
+                trigger: "body", start: "top top", end: "bottom bottom", scrub: 1
+            }
         });
-        const leaf = new THREE.Mesh(leafGeo, leafMat);
-        leafGroup.add(leaf);
 
-        // Core of the leaf (Vitality)
-        const coreGeo = new THREE.SphereGeometry(0.8, 32, 32);
-        const coreMat = new THREE.MeshBasicMaterial({ color: 0x00ffaa, transparent: true, opacity: 0.3 });
-        const core = new THREE.Mesh(coreGeo, coreMat);
-        leafGroup.add(core);
-        scene.add(leafGroup);
+        mainTl
+            .to(camera.position, { z: 10, y: 4, duration: 1 })
+            .to("#hero", { opacity: 0, y: -50, duration: 0.5 }, 0.2)
+            .to("#scene1", { opacity: 1, x: 0, duration: 0.5 }, 0.5)
+            .to(apparatus.position, { y: -3, duration: 1 }, 0.5)
+            .to("#scene1", { opacity: 0, x: -50, duration: 0.5 }, 1.2)
+            .to("#scene2", { opacity: 1, x: 0, duration: 0.5 }, 1.5)
+            .to(camera.position, { x: -5, z: 8, duration: 1 }, 1.5)
+            .to("#scene2", { opacity: 0, x: 50, duration: 0.5 }, 2.5)
+            .to("#scene3", { opacity: 1, y: 0, duration: 0.5 }, 2.8)
+            .to(camera.position, { x: 0, y: 8, z: 5, duration: 1 }, 2.8)
+            .to("#scene3", { opacity: 0, y: -50, duration: 0.5 }, 3.5)
+            .to("#scene4", { opacity: 1, duration: 0.5 }, 3.8);
 
-        // Sliding Device Frame
-        const frameGeo = new THREE.BoxGeometry(6, 6, 0.5);
-        const frameEdges = new THREE.EdgesGeometry(frameGeo);
-        const frameMat = new THREE.LineBasicMaterial({ color: 0x444444 });
-        const deviceFrame = new THREE.LineSegments(frameEdges, frameMat);
-        deviceFrame.position.z = 10; // Start far away
-        scene.add(deviceFrame);
+        // --- 3. Interaction Logic (Simulator) ---
+        let isSimulating = false;
 
-        // Laser Scanner (Light Stimulus)
-        const laserGeo = new THREE.PlaneGeometry(6, 0.1);
-        const laserMat = new THREE.MeshBasicMaterial({ color: 0x00ffff, transparent: true, opacity: 0, side: THREE.DoubleSide });
-        const laser = new THREE.Mesh(laserGeo, laserMat);
-        deviceFrame.add(laser);
+        function runStimulus(type) {
+            if(isSimulating) return;
+            isSimulating = true;
+            
+            // UI Reset
+            document.querySelectorAll('[id^="dot-"]').forEach(d => d.className = "w-4 h-4 rounded-full bg-gray-300 mx-auto mb-6");
+            
+            // Step 1: Physical Stimulus
+            if(type === 'light') gsap.to(beamMat, { opacity: 0.3, yoyo: true, repeat: 5, duration: 0.1, onComplete: () => beamMat.opacity = 0 });
+            if(type === 'physics') gsap.to(apparatus.position, { y: "-=0.2", yoyo: true, repeat: 10, duration: 0.05 });
 
-        // Particles (Moisture Stimulus)
-        const partCount = 100;
-        const partGeo = new THREE.BufferGeometry();
-        const positions = new Float32Array(partCount * 3);
-        for(let i=0; i<partCount*3; i++) positions[i] = (Math.random() - 0.5) * 5;
-        partGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-        const partMat = new THREE.PointsMaterial({ color: 0x00ffff, size: 0.05, transparent: true, opacity: 0 });
-        const particles = new THREE.Points(partGeo, partMat);
-        deviceFrame.add(particles);
+            // Step 2: Module 200 (ASRS Calculation)
+            setTimeout(() => {
+                document.getElementById('dot-200').classList.add('active-dot');
+                const val = (Math.random() * 0.5 + 0.4).toFixed(2);
+                document.getElementById('stat-val').innerText = val + " /s";
+                document.getElementById('stat-bar').style.width = (parseFloat(val) * 100) + "%";
+            }, 1000);
 
-        camera.position.z = 8;
+            // Step 3: Module 300 (Prediction)
+            setTimeout(() => {
+                document.getElementById('dot-300').classList.add('active-dot');
+                document.getElementById('pred-nitrate').innerText = Math.floor(Math.random() * 300 + 1000) + " ppm";
+                document.getElementById('pred-transplant').innerText = (Math.random() * 20 + 75).toFixed(1) + " %";
+            }, 2000);
 
-        // Interaction Logic
-        const progressSlider = document.getElementById('scrollProgress');
-        const captions = [
-            document.getElementById('cap1'),
-            document.getElementById('cap2'),
-            document.getElementById('cap3'),
-            document.getElementById('cap4')
-        ];
-        const resultPanel = document.getElementById('result-panel');
-
-        function updateScene(p) {
-            // p is 0 to 100
-            const t = p / 100;
-
-            // 1. Device Movement (0 - 25%)
-            if (t <= 0.25) {
-                const moveT = t / 0.25;
-                deviceFrame.position.z = THREE.MathUtils.lerp(10, 0, moveT);
-                leafGroup.scale.set(1, 1, 1);
-                showCaption(0);
-            }
-
-            // 2. Stimulus (25 - 50%)
-            if (t > 0.25 && t <= 0.50) {
-                const stimT = (t - 0.25) / 0.25;
-                laser.material.opacity = Math.sin(stimT * Math.PI) * 1; // Pulse laser
-                laser.position.y = Math.sin(stimT * 10) * 2;
-                
-                particles.material.opacity = stimT;
-                leafGroup.rotation.y += 0.05; // Leaf reacts
-                showCaption(1);
-            } else {
-                laser.material.opacity = 0;
-                particles.material.opacity = 0;
-            }
-
-            // 3. Analysis (50 - 75%)
-            if (t > 0.50 && t <= 0.75) {
-                const analT = (t - 0.50) / 0.25;
-                leafMat.wireframe = false;
-                leafMat.opacity = 0.4 + (Math.sin(analT * 20) * 0.2); // Glowing effect
-                core.scale.set(1 + analT, 1 + analT, 1 + analT);
-                coreMat.opacity = analT * 0.8;
-                showCaption(2);
-                resultPanel.style.display = 'none';
-            }
-
-            // 4. Results (75 - 100%)
-            if (t > 0.75) {
-                showCaption(3);
-                resultPanel.style.display = 'block';
-                resultPanel.style.opacity = (t - 0.75) / 0.25;
-                leafGroup.rotation.y += 0.01;
-            } else {
-                resultPanel.style.display = 'none';
-            }
+            // Step 4: Module 400 (Control)
+            setTimeout(() => {
+                document.getElementById('dot-400').classList.add('active-dot');
+                document.getElementById('score-val').innerText = Math.floor(Math.random() * 15 + 85) + " / 100";
+                isSimulating = false;
+            }, 3000);
         }
 
-        function showCaption(index) {
-            captions.forEach((c, i) => {
-                c.style.opacity = (i === index) ? "1" : "0";
-                c.style.display = (i === index) ? "block" : "none";
-            });
-        }
-
-        progressSlider.addEventListener('input', (e) => {
-            updateScene(e.target.value);
-        });
+        document.getElementById('btn-light').onclick = () => runStimulus('light');
+        document.getElementById('btn-water').onclick = () => runStimulus('water');
+        document.getElementById('btn-physics').onclick = () => runStimulus('physics');
 
         // Animation Loop
         function animate() {
             requestAnimationFrame(animate);
-            
-            // Subtle idle floating
-            leafGroup.position.y = Math.sin(Date.now() * 0.001) * 0.1;
-            deviceFrame.rotation.z = Math.sin(Date.now() * 0.0005) * 0.02;
-
+            plantGroup.rotation.y += 0.002;
             renderer.render(scene, camera);
         }
+        animate();
 
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
-
-        updateScene(0);
-        animate();
     </script>
 </body>
 </html>
