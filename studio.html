@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seedling ASRS Diagnosis System - Interactive Concept</title>
+    <style>
+        body { margin: 0; background-color: #000; color: #fff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; overflow: hidden; }
+        canvas { display: block; }
+
+        /* UI Overlay */
+        #ui-layer {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .caption {
+            font-size: 1.2rem;
+            font-weight: 300;
+            letter-spacing: 2px;
+            color: #00ffaa;
+            text-transform: uppercase;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            max-width: 600px;
+            text-shadow: 0 0 10px rgba(0,255,170,0.5);
+        }
+
+        .main-title {
+            position: absolute;
+            top: 10%;
+            font-size: 0.8rem;
+            letter-spacing: 4px;
+            color: #666;
+        }
+
+        /* Controls */
+        #controls {
+            position: absolute;
+            bottom: 30px;
+            width: 80%;
+            left: 10%;
+            pointer-events: all;
+            text-align: center;
+        }
+
+        input[type=range] {
+            width: 100%;
+            cursor: pointer;
+            accent-color: #00ffaa;
+        }
+
+        .label-container {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.7rem;
+            color: #444;
+            margin-top: 10px;
+        }
+
+        /* Result Panel */
+        #result-panel {
+            position: absolute;
+            right: 50px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 20, 10, 0.8);
+            border-left: 2px solid #00ffaa;
+            padding: 20px;
+            font-family: monospace;
+            display: none;
+        }
+        
+        .value { color: #00ffaa; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div id="ui-layer">
+        <div class="main-title">ASRS: ACTIVE STIMULUS RESPONSE SPEED ANALYSIS</div>
+        <div id="cap1" class="caption">Precise targeting. The sliding device approaches the seedling.</div>
+        <div id="cap2" class="caption">Asking the plant: Light, moisture, and physical vibration stimuli applied.</div>
+        <div id="cap3" class="caption">Analyzing ASRS. Quantifying physiological recovery speed.</div>
+        <div id="cap4" class="caption">Diagnosis Complete. Reliability-based growth environment optimized.</div>
+    </div>
+
+    <div id="result-panel">
+        <div>[SYSTEM STATUS: OK]</div>
+        <br>
+        <div>NITRATE LEVEL: <span class="value">1,240 ppm</span></div>
+        <div>TRANSPLANT READY: <span class="value">98.2%</span></div>
+        <div>OPTIMAL TIMING: <span class="value">D-2</span></div>
+        <br>
+        <div>SAFETY CONTROL: <span class="value" style="color:cyan">ACTIVE</span></div>
+    </div>
+
+    <div id="controls">
+        <input type="range" id="scrollProgress" min="0" max="100" value="0">
+        <div class="label-container">
+            <span>START</span>
+            <span>TARGETING</span>
+            <span>STIMULUS</span>
+            <span>ANALYSIS</span>
+            <span>CONTROL</span>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // Setup Scene
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Lights
+        const ambientLight = new THREE.AmbientLight(0x404040, 2);
+        scene.add(ambientLight);
+        const pointLight = new THREE.PointLight(0x00ffaa, 2, 50);
+        pointLight.position.set(5, 5, 5);
+        scene.add(pointLight);
+
+        // Central Leaf (Represented by a complex green shape)
+        const leafGroup = new THREE.Group();
+        const leafGeo = new THREE.IcosahedronGeometry(1.5, 2);
+        const leafMat = new THREE.MeshPhongMaterial({ 
+            color: 0x008844, 
+            wireframe: true, 
+            transparent: true, 
+            opacity: 0.8 
+        });
+        const leaf = new THREE.Mesh(leafGeo, leafMat);
+        leafGroup.add(leaf);
+
+        // Core of the leaf (Vitality)
+        const coreGeo = new THREE.SphereGeometry(0.8, 32, 32);
+        const coreMat = new THREE.MeshBasicMaterial({ color: 0x00ffaa, transparent: true, opacity: 0.3 });
+        const core = new THREE.Mesh(coreGeo, coreMat);
+        leafGroup.add(core);
+        scene.add(leafGroup);
+
+        // Sliding Device Frame
+        const frameGeo = new THREE.BoxGeometry(6, 6, 0.5);
+        const frameEdges = new THREE.EdgesGeometry(frameGeo);
+        const frameMat = new THREE.LineBasicMaterial({ color: 0x444444 });
+        const deviceFrame = new THREE.LineSegments(frameEdges, frameMat);
+        deviceFrame.position.z = 10; // Start far away
+        scene.add(deviceFrame);
+
+        // Laser Scanner (Light Stimulus)
+        const laserGeo = new THREE.PlaneGeometry(6, 0.1);
+        const laserMat = new THREE.MeshBasicMaterial({ color: 0x00ffff, transparent: true, opacity: 0, side: THREE.DoubleSide });
+        const laser = new THREE.Mesh(laserGeo, laserMat);
+        deviceFrame.add(laser);
+
+        // Particles (Moisture Stimulus)
+        const partCount = 100;
+        const partGeo = new THREE.BufferGeometry();
+        const positions = new Float32Array(partCount * 3);
+        for(let i=0; i<partCount*3; i++) positions[i] = (Math.random() - 0.5) * 5;
+        partGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        const partMat = new THREE.PointsMaterial({ color: 0x00ffff, size: 0.05, transparent: true, opacity: 0 });
+        const particles = new THREE.Points(partGeo, partMat);
+        deviceFrame.add(particles);
+
+        camera.position.z = 8;
+
+        // Interaction Logic
+        const progressSlider = document.getElementById('scrollProgress');
+        const captions = [
+            document.getElementById('cap1'),
+            document.getElementById('cap2'),
+            document.getElementById('cap3'),
+            document.getElementById('cap4')
+        ];
+        const resultPanel = document.getElementById('result-panel');
+
+        function updateScene(p) {
+            // p is 0 to 100
+            const t = p / 100;
+
+            // 1. Device Movement (0 - 25%)
+            if (t <= 0.25) {
+                const moveT = t / 0.25;
+                deviceFrame.position.z = THREE.MathUtils.lerp(10, 0, moveT);
+                leafGroup.scale.set(1, 1, 1);
+                showCaption(0);
+            }
+
+            // 2. Stimulus (25 - 50%)
+            if (t > 0.25 && t <= 0.50) {
+                const stimT = (t - 0.25) / 0.25;
+                laser.material.opacity = Math.sin(stimT * Math.PI) * 1; // Pulse laser
+                laser.position.y = Math.sin(stimT * 10) * 2;
+                
+                particles.material.opacity = stimT;
+                leafGroup.rotation.y += 0.05; // Leaf reacts
+                showCaption(1);
+            } else {
+                laser.material.opacity = 0;
+                particles.material.opacity = 0;
+            }
+
+            // 3. Analysis (50 - 75%)
+            if (t > 0.50 && t <= 0.75) {
+                const analT = (t - 0.50) / 0.25;
+                leafMat.wireframe = false;
+                leafMat.opacity = 0.4 + (Math.sin(analT * 20) * 0.2); // Glowing effect
+                core.scale.set(1 + analT, 1 + analT, 1 + analT);
+                coreMat.opacity = analT * 0.8;
+                showCaption(2);
+                resultPanel.style.display = 'none';
+            }
+
+            // 4. Results (75 - 100%)
+            if (t > 0.75) {
+                showCaption(3);
+                resultPanel.style.display = 'block';
+                resultPanel.style.opacity = (t - 0.75) / 0.25;
+                leafGroup.rotation.y += 0.01;
+            } else {
+                resultPanel.style.display = 'none';
+            }
+        }
+
+        function showCaption(index) {
+            captions.forEach((c, i) => {
+                c.style.opacity = (i === index) ? "1" : "0";
+                c.style.display = (i === index) ? "block" : "none";
+            });
+        }
+
+        progressSlider.addEventListener('input', (e) => {
+            updateScene(e.target.value);
+        });
+
+        // Animation Loop
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            // Subtle idle floating
+            leafGroup.position.y = Math.sin(Date.now() * 0.001) * 0.1;
+            deviceFrame.rotation.z = Math.sin(Date.now() * 0.0005) * 0.02;
+
+            renderer.render(scene, camera);
+        }
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        updateScene(0);
+        animate();
+    </script>
+</body>
+</html>
