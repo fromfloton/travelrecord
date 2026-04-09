@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASRS : 스마트 생육 제어 시스템</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- GSAP & ScrollTrigger -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #050505;
+            color: white;
+            font-family: 'Noto Sans KR', sans-serif;
+            overflow-x: hidden;
+            overscroll-behavior: none;
+        }
+        
+        /* 스크롤바 숨기기 (깔끔한 UI 유지) */
+        ::-webkit-scrollbar { width: 0px; background: transparent; }
+
+        .glass-panel {
+            background: rgba(20, 20, 20, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .neon-text {
+            text-shadow: 0 0 10px rgba(57, 255, 20, 0.5);
+        }
+
+        /* 3D 캔버스는 항상 뒤에 고정 */
+        #webgl-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .grid-bg {
+            background-size: 50px 50px;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+        }
+
+        .toggle-checkbox:checked { right: 0; border-color: #39FF14; }
+        .toggle-checkbox:checked + .toggle-label { background-color: #39FF14; }
+        .toggle-checkbox:checked + .toggle-label:after { transform: translateX(100%); }
+        
+        /* 텍스트 섹션 스타일 */
+        .story-text {
+            opacity: 0;
+            transform: translateY(30px);
+            will-change: transform, opacity;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-green-500 selection:text-black">
+
+    <!-- 3D Canvas -->
+    <canvas id="webgl-canvas"></canvas>
+
+    <!-- UI Overlay: Scroll Indicator -->
+    <div id="scroll-indicator" class="fixed bottom-10 left-1/2 transform -translate-x-1/2 z-50 flex flex-col items-center opacity-70 transition-opacity duration-500">
+        <span class="text-xs tracking-widest uppercase mb-2 font-light text-gray-400">Scroll to Explore</span>
+        <i class="ph ph-mouse text-2xl animate-bounce text-gray-400"></i>
+    </div>
+
+    <!-- Section 1: Hero -->
+    <section class="relative h-screen w-full flex flex-col items-center justify-center z-10 pointer-events-none">
+        <div class="text-center mt-32">
+            <h1 class="text-4xl md:text-6xl font-light tracking-tight mb-6 leading-tight">
+                식물의 미세한 숨결까지<br>
+                <span class="font-bold bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-green-300">데이터로 읽어내다.</span>
+            </h1>
+            <p class="text-gray-400 text-lg md:text-xl font-light tracking-wide">경험을 넘어선 완벽한 스마트 생육 제어의 시작</p>
+        </div>
+    </section>
+
+    <!-- Section 2: Tech Story (Scroll Container) -->
+    <div id="story-container" class="relative w-full z-10" style="height: 600vh;">
+        <!-- Pinned Texts Layer -->
+        <div class="sticky top-0 h-screen w-full flex items-center justify-start pointer-events-none px-6 md:px-24">
+            <div class="relative w-full max-w-lg">
+                <!-- Scene 1 Text -->
+                <div id="text-scene1" class="story-text absolute top-1/2 -translate-y-1/2 left-0 w-full glass-panel p-8 rounded-2xl">
+                    <div class="text-emerald-400 text-sm font-bold tracking-widest mb-2">STEP 01</div>
+                    <h2 class="text-2xl md:text-3xl font-light mb-4">정밀한 타겟팅.</h2>
+                    <p class="text-gray-300 leading-relaxed font-light">육묘에 다가가는 슬라이딩 장치.<br>정확한 위치 제어를 통해 개별 잎에 근접하여 표준화된 환경을 구성합니다.</p>
+                </div>
+                
+                <!-- Scene 2 Text -->
+                <div id="text-scene2" class="story-text absolute top-1/2 -translate-y-1/2 left-0 w-full glass-panel p-8 rounded-2xl">
+                    <div class="text-emerald-400 text-sm font-bold tracking-widest mb-2">STEP 02</div>
+                    <h2 class="text-2xl md:text-3xl font-light mb-4">세 가지 미세한 질문.</h2>
+                    <p class="text-gray-300 leading-relaxed font-light">빛, 수분, 진동.<br>식물에게 제어된 복합 자극을 인가하여 숨겨진 생리적 반응을 유도해냅니다.</p>
+                </div>
+
+                <!-- Scene 3 Text -->
+                <div id="text-scene3" class="story-text absolute top-1/2 -translate-y-1/2 left-0 w-full glass-panel p-8 rounded-2xl">
+                    <div class="text-emerald-400 text-sm font-bold tracking-widest mb-2">STEP 03</div>
+                    <h2 class="text-2xl md:text-3xl font-light mb-4">ASRS 기반 상태 분석.</h2>
+                    <p class="text-gray-300 leading-relaxed font-light">자극 후 정상 상태로 회복되는 능동 자극-반응 속도(ASRS)를 시계열 데이터로 분석하여 식물의 진짜 활력을 정량화합니다.</p>
+                </div>
+
+                <!-- Scene 4 Text -->
+                <div id="text-scene4" class="story-text absolute top-1/2 -translate-y-1/2 left-0 w-full glass-panel p-8 rounded-2xl">
+                    <div class="text-emerald-400 text-sm font-bold tracking-widest mb-2">STEP 04</div>
+                    <h2 class="text-2xl md:text-3xl font-light mb-4">신뢰도 기반 안전 제어.</h2>
+                    <p class="text-gray-300 leading-relaxed font-light">통합 예측 모델이 질산염 수준과 이식 적기를 판단하고, 신뢰도 점수를 기반으로 오차 없이 완벽한 생육 제어를 수행합니다.</p>
+                </div>
+            </div>
+
+            <!-- Hologram UI (Appears in Scene 4) -->
+            <div id="hologram-ui" class="absolute right-6 md:right-24 top-1/2 -translate-y-1/2 opacity-0 flex flex-col gap-4">
+                <div class="border border-emerald-500/30 bg-emerald-900/20 backdrop-blur-md p-4 rounded-xl w-64 transform translate-x-10 shadow-[0_0_15px_rgba(16,185,129,0.2)]">
+                    <div class="text-xs text-emerald-400 mb-1 flex items-center gap-2"><i class="ph-fill ph-check-circle"></i> 질산염 예측 수준</div>
+                    <div class="text-2xl font-bold text-white tracking-widest">OPTIMAL</div>
+                    <div class="w-full bg-gray-800 h-1 mt-2 rounded overflow-hidden">
+                        <div class="bg-emerald-400 h-full w-4/5 shadow-[0_0_10px_#34d399]"></div>
+                    </div>
+                </div>
+                <div class="border border-blue-500/30 bg-blue-900/20 backdrop-blur-md p-4 rounded-xl w-64 transform translate-x-10 shadow-[0_0_15px_rgba(59,130,246,0.2)]">
+                    <div class="text-xs text-blue-400 mb-1 flex items-center gap-2"><i class="ph-fill ph-plant"></i> 이식 적정 시점</div>
+                    <div class="text-2xl font-bold text-white tracking-widest">D - 2 Days</div>
+                </div>
+                <div class="border border-purple-500/30 bg-purple-900/20 backdrop-blur-md p-4 rounded-xl w-64 transform translate-x-10 shadow-[0_0_15px_rgba(168,85,247,0.2)] text-center">
+                    <div class="text-sm text-purple-400 flex items-center justify-center gap-2 font-bold uppercase tracking-widest">
+                        <i class="ph-fill ph-shield-check"></i> Safety Control Active
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 3: Impact (Interactive Comparison) -->
+    <section id="impact-section" class="relative z-20 w-full min-h-screen bg-[#050505] grid-bg flex flex-col items-center justify-center py-24 transition-colors duration-700">
+        
+        <div class="text-center mb-16 px-6">
+            <h2 class="text-3xl md:text-5xl font-light mb-4">불확실성을 통제하고,<br><span class="font-bold text-white">생산성의 한계를 돌파하다.</span></h2>
+            <p class="text-gray-400 font-light">ASRS 시스템 도입 전후의 극적인 차이를 확인해보세요.</p>
+        </div>
+
+        <!-- Toggle Button -->
+        <div class="flex items-center justify-center mb-12 gap-6 glass-panel px-6 py-3 rounded-full">
+            <span id="label-past" class="text-gray-400 font-medium transition-colors">기존 관찰자 주관 판단</span>
+            
+            <div class="relative inline-block w-16 h-8 align-middle select-none">
+                <input type="checkbox" name="toggle" id="mode-toggle" class="toggle-checkbox absolute block w-8 h-8 rounded-full bg-white border-4 appearance-none cursor-pointer z-10 transition-transform duration-300 ease-in-out"/>
+                <label for="mode-toggle" class="toggle-label block overflow-hidden h-8 rounded-full bg-gray-700 cursor-pointer transition-colors duration-300 ease-in-out"></label>
+            </div>
+            
+            <span id="label-future" class="text-white font-bold transition-colors neon-text text-emerald-400">ASRS 정밀 제어 시스템</span>
+        </div>
+
+        <!-- Dashboard UI Mockup -->
+        <div id="dashboard-mockup" class="w-full max-w-5xl px-6 transition-all duration-500">
+            <div class="glass-panel rounded-3xl p-8 border-t border-gray-700 shadow-2xl relative overflow-hidden">
+                <!-- Data Vis Area -->
+                <div class="flex flex-col md:flex-row gap-8">
+                    <!-- Plant Cards -->
+                    <div class="flex-1 grid grid-cols-2 md:grid-cols-4 gap-4" id="plant-grid">
+                        <!-- Rendered via JS -->
+                    </div>
+                    
+                    <!-- Stats Area -->
+                    <div class="w-full md:w-1/3 flex flex-col gap-4">
+                        <div id="stat-panel-1" class="p-6 rounded-2xl bg-gray-800/50 border border-gray-700 transition-all duration-300">
+                            <h3 class="text-sm text-gray-400 mb-2 font-bold uppercase tracking-widest">생장 균일도</h3>
+                            <div class="text-4xl font-light" id="val-uniformity">98.5%</div>
+                            <div class="text-xs mt-2 text-emerald-400" id="desc-uniformity">+ 완벽한 균일성 확보</div>
+                        </div>
+                        <div id="stat-panel-2" class="p-6 rounded-2xl bg-gray-800/50 border border-gray-700 transition-all duration-300">
+                            <h3 class="text-sm text-gray-400 mb-2 font-bold uppercase tracking-widest">안전 제어 신뢰도</h3>
+                            <div class="text-4xl font-light" id="val-safety">99.9%</div>
+                            <div class="text-xs mt-2 text-emerald-400" id="desc-safety">오류 제어 차단 완료</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </section>
+
+    <!-- Footer -->
+    <footer class="w-full py-8 border-t border-white/10 text-center text-gray-600 text-sm bg-black relative z-20">
+        <p>&copy; 2026 ASRS System Concept. Patent-based Visualization.</p>
+    </footer>
+
+    <script>
+        // --- 1. Three.js Scene Setup ---
+        const canvas = document.getElementById('webgl-canvas');
+        const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        
+        const scene = new THREE.Scene();
+        // 안개 효과로 깊이감 부여
+        scene.fog = new THREE.FogExp2('#050505', 0.05);
+
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+        camera.position.set(0, 0, 15);
+
+        // --- Lights ---
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+        scene.add(ambientLight);
+
+        const mainLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        mainLight.position.set(5, 10, 5);
+        scene.add(mainLight);
+
+        const fillLight = new THREE.DirectionalLight(0x39ff14, 0.2); // Greenish fill
+        fillLight.position.set(-5, -2, -5);
+        scene.add(fillLight);
+
+        // --- Objects Creation ---
+        const sceneGroup = new THREE.Group();
+        scene.add(sceneGroup);
+
+        // 1. Leaf (육묘 잎사귀) - Procedural Generation
+        const leafShape = new THREE.Shape();
+        leafShape.moveTo(0, -2);
+        leafShape.quadraticCurveTo(2, 0, 0, 3);
+        leafShape.quadraticCurveTo(-2, 0, 0, -2);
+        
+        const extrudeSettings = { depth: 0.1, bevelEnabled: true, bevelSegments: 2, steps: 1, bevelSize: 0.05, bevelThickness: 0.05 };
+        const leafGeo = new THREE.ExtrudeGeometry(leafShape, extrudeSettings);
+        leafGeo.center();
+        
+        const leafMat = new THREE.MeshStandardMaterial({ 
+            color: 0x0a2e0a, 
+            roughness: 0.3, 
+            metalness: 0.2,
+            emissive: 0x031203 
+        });
+        const leaf = new THREE.Mesh(leafGeo, leafMat);
+        // 중앙에 비스듬히 배치
+        leaf.rotation.set(-Math.PI / 6, Math.PI / 8, Math.PI / 12);
+        sceneGroup.add(leaf);
+
+        // 2. Machine Arm (자극 생성 및 측정 장치부 슬라이더)
+        const armGroup = new THREE.Group();
+        
+        // 메인 레일 기둥
+        const pillarGeo = new THREE.CylinderGeometry(0.2, 0.2, 8, 16);
+        const techMat = new THREE.MeshStandardMaterial({ color: 0x1a1a1a, metalness: 0.8, roughness: 0.2 });
+        const pillar = new THREE.Mesh(pillarGeo, techMat);
+        pillar.position.set(0, 4, 0);
+        
+        // 헤드 (광, 수분, 진동 모듈)
+        const headGeo = new THREE.BoxGeometry(2, 1.5, 2);
+        const head = new THREE.Mesh(headGeo, techMat);
+        head.position.set(0, 0, 1);
+        
+        // 카메라 렌즈
+        const lensGeo = new THREE.CylinderGeometry(0.4, 0.4, 0.2, 32);
+        const lensMat = new THREE.MeshStandardMaterial({ color: 0x000000, metalness: 0.9, roughness: 0.1, emissive: 0x000022 });
+        const lens = new THREE.Mesh(lensGeo, lensMat);
+        lens.rotation.x = Math.PI / 2;
+        lens.position.set(0, 0, 2.1);
+        
+        armGroup.add(pillar);
+        armGroup.add(head);
+        armGroup.add(lens);
+        
+        // 초기에는 화면 밖 위쪽에 대기
+        armGroup.position.set(2, 10, 0);
+        armGroup.rotation.set(0, -Math.PI / 6, 0);
+        sceneGroup.add(armGroup);
+
+        // 3. Particles (수분 및 데이터 파티클)
+        const particleCount = 200;
+        const waterGeo = new THREE.BufferGeometry();
+        const waterPos = new Float32Array(particleCount * 3);
+        for(let i=0; i<particleCount*3; i++) {
+            waterPos[i] = (Math.random() - 0.5) * 4;
+        }
+        waterGeo.setAttribute('position', new THREE.BufferAttribute(waterPos, 3));
+        const waterMat = new THREE.PointsMaterial({ color: 0x00aaff, size: 0.05, transparent: true, opacity: 0 });
+        const waterParticles = new THREE.Points(waterGeo, waterMat);
+        waterParticles.position.set(0, 2, 2);
+        sceneGroup.add(waterParticles);
+
+        const dataGeo = new THREE.BufferGeometry();
+        const dataPos = new Float32Array(particleCount * 3);
+        for(let i=0; i<particleCount*3; i++) {
+            dataPos[i] = (Math.random() - 0.5) * 3;
+        }
+        dataGeo.setAttribute('position', new THREE.BufferAttribute(dataPos, 3));
+        const dataMat = new THREE.PointsMaterial({ color: 0x39ff14, size: 0.06, transparent: true, opacity: 0 });
+        const dataParticles = new THREE.Points(dataGeo, dataMat);
+        dataParticles.position.set(0, 0, 1);
+        sceneGroup.add(dataParticles);
+
+        // 4. Integrated Feature Vector (통합 예측 구체)
+        const sphereGeo = new THREE.SphereGeometry(1.5, 32, 32);
+        const sphereMat = new THREE.MeshBasicMaterial({ 
+            color: 0x39ff14, 
+            wireframe: true, 
+            transparent: true, 
+            opacity: 0 
+        });
+        const dataSphere = new THREE.Mesh(sphereGeo, sphereMat);
+        dataSphere.position.set(0, 0, 1);
+        dataSphere.scale.set(0.1, 0.1, 0.1);
+        sceneGroup.add(dataSphere);
+
+        // 5. Light Beams
+        const spotLight = new THREE.SpotLight(0x00aaff, 0);
+        spotLight.position.set(2, 3, 3);
+        spotLight.target = leaf;
+        spotLight.angle = Math.PI / 6;
+        spotLight.penumbra = 0.5;
+        scene.add(spotLight);
+
+
+        // --- GSAP Animations & ScrollTrigger ---
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Hide scroll indicator on first scroll
+        window.addEventListener('scroll', () => {
+            if(window.scrollY > 50) {
+                document.getElementById('scroll-indicator').style.opacity = '0';
+            }
+        });
+
+        // Main Timeline
+        const tl = gsap.timeline({
+            scrollTrigger: {
+                trigger: "#story-container",
+                start: "top top",
+                end: "bottom bottom",
+                scrub: 1.5, // 부드러운 스크러빙
+            }
+        });
+
+        // Helper function for text animation
+        const animateText = (id, startTime, duration) => {
+            // 등장
+            tl.to(id, { opacity: 1, y: 0, duration: duration*0.3, ease: "power2.out" }, startTime);
+            // 퇴장
+            tl.to(id, { opacity: 0, y: -30, duration: duration*0.3, ease: "power2.in" }, startTime + duration*0.7);
+        };
+
+        const durationPerScene = 1;
+
+        // [Hero -> Scene 1] : 슬라이딩 장치 접근
+        tl.to(camera.position, { x: 3, y: 1, z: 12, duration: durationPerScene }, 0);
+        tl.to(armGroup.position, { y: 2, duration: durationPerScene, ease: "power2.inOut" }, 0);
+        tl.to(lensMat, { emissiveIntensity: 2, duration: 0.5 }, durationPerScene * 0.8);
+        animateText("#text-scene1", 0, durationPerScene);
+
+        // [Scene 1 -> Scene 2] : 3가지 미세 자극 인가 (광, 수분, 진동)
+        const t2 = durationPerScene;
+        tl.to(spotLight, { intensity: 50, duration: 0.3 }, t2); // 광 자극
+        tl.to(waterMat, { opacity: 0.8, duration: 0.3 }, t2); // 수분 파티클 보임
+        tl.to(waterParticles.position, { y: -1, duration: durationPerScene }, t2); // 수분 떨어짐
+        // 진동 자극 (잎의 흔들림)
+        tl.to(leaf.rotation, { 
+            x: leaf.rotation.x + 0.1, 
+            y: leaf.rotation.y - 0.1, 
+            z: leaf.rotation.z + 0.1, 
+            duration: 0.1, 
+            yoyo: true, 
+            repeat: 10 
+        }, t2 + 0.2);
+        // 데이터 파티클 튀어오름
+        tl.to(dataMat, { opacity: 1, duration: 0.5 }, t2 + 0.3);
+        tl.to(dataParticles.position, { y: 3, duration: durationPerScene }, t2 + 0.3);
+        animateText("#text-scene2", t2, durationPerScene);
+
+        // [Scene 2 -> Scene 3] : ASRS 기반 데이터 통합
+        const t3 = durationPerScene * 2;
+        tl.to(spotLight, { intensity: 0, duration: 0.5 }, t3); // 조명 끔
+        tl.to(waterMat, { opacity: 0, duration: 0.5 }, t3); // 수분 사라짐
+        tl.to(armGroup.position, { y: 10, duration: durationPerScene }, t3); // 기계 퇴장
+        tl.to(dataMat, { opacity: 0, duration: 0.5 }, t3 + 0.5); // 흩어진 파티클 사라짐
+        // 구체(특징 벡터) 생성 및 회전
+        tl.to(dataSphere.material, { opacity: 0.8, duration: 0.5 }, t3 + 0.3);
+        tl.to(dataSphere.scale, { x: 1, y: 1, z: 1, duration: durationPerScene }, t3);
+        tl.to(dataSphere.rotation, { y: Math.PI * 4, x: Math.PI * 2, duration: durationPerScene }, t3);
+        tl.to(camera.position, { x: -4, y: 0, z: 10, duration: durationPerScene }, t3);
+        animateText("#text-scene3", t3, durationPerScene);
+
+        // [Scene 3 -> Scene 4] : 신뢰도 기반 안전 제어 (Hologram UI)
+        const t4 = durationPerScene * 3;
+        tl.to(dataSphere.position, { x: 4, duration: durationPerScene, ease: "power3.inOut" }, t4);
+        tl.to(dataSphere.scale, { x: 0.3, y: 0.3, z: 0.3, duration: durationPerScene }, t4);
+        // 홀로그램 UI 등장
+        tl.to("#hologram-ui", { opacity: 1, x: 0, stagger: 0.2, duration: 0.5 }, t4 + 0.5);
+        // 잎사귀 강조 (안전 제어 성공)
+        tl.to(leafMat, { emissive: new THREE.Color(0x0f380f), duration: durationPerScene }, t4);
+        animateText("#text-scene4", t4, durationPerScene);
+
+
+        // --- Mouse Parallax Effect ---
+        let mouseX = 0;
+        let mouseY = 0;
+        let targetX = 0;
+        let targetY = 0;
+        const windowHalfX = window.innerWidth / 2;
+        const windowHalfY = window.innerHeight / 2;
+
+        document.addEventListener('mousemove', (event) => {
+            mouseX = (event.clientX - windowHalfX) * 0.001;
+            mouseY = (event.clientY - windowHalfY) * 0.001;
+        });
+
+        // --- Render Loop ---
+        const clock = new THREE.Clock();
+
+        function animate() {
+            requestAnimationFrame(animate);
+            const time = clock.getElapsedTime();
+
+            // Parallax interpolation
+            targetX = mouseX * 0.5;
+            targetY = mouseY * 0.5;
+            sceneGroup.rotation.y += 0.05 * (targetX - sceneGroup.rotation.y);
+            sceneGroup.rotation.x += 0.05 * (targetY - sceneGroup.rotation.x);
+
+            // Idle floating animation for leaf
+            if(leaf) {
+                leaf.position.y = Math.sin(time) * 0.2;
+            }
+
+            // Animate data sphere wireframe
+            if(dataSphere.material.opacity > 0) {
+                dataSphere.rotation.y += 0.01;
+                dataSphere.rotation.z += 0.005;
+            }
+
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // --- Resize Handler ---
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+
+        // --- Section 3: Impact Interactive UI Logic ---
+        const toggle = document.getElementById('mode-toggle');
+        const impactSection = document.getElementById('impact-section');
+        const plantGrid = document.getElementById('plant-grid');
+        
+        const labelPast = document.getElementById('label-past');
+        const labelFuture = document.getElementById('label-future');
+        
+        const valUniformity = document.getElementById('val-uniformity');
+        const valSafety = document.getElementById('val-safety');
+        const descUniformity = document.getElementById('desc-uniformity');
+        const descSafety = document.getElementById('desc-safety');
+        
+        const statPanel1 = document.getElementById('stat-panel-1');
+        const statPanel2 = document.getElementById('stat-panel-2');
+
+        // 식물 아이콘 생성 헬퍼
+        const renderPlants = (isFuture) => {
+            plantGrid.innerHTML = '';
+            for(let i=0; i<8; i++) {
+                const plantDiv = document.createElement('div');
+                
+                if(!isFuture) {
+                    // 과거: 불균일, 시들음, 붉은색 경고
+                    const randHeight = Math.random() * 50 + 30; // 30~80%
+                    const isWarning = Math.random() > 0.6;
+                    
+                    plantDiv.className = `h-32 rounded-xl flex items-end justify-center pb-4 relative transition-all duration-500 bg-gray-800/30 border ${isWarning ? 'border-red-500/50' : 'border-gray-700'}`;
+                    plantDiv.innerHTML = `
+                        ${isWarning ? '<i class="ph-fill ph-warning absolute top-2 right-2 text-red-500 animate-pulse"></i>' : ''}
+                        <i class="ph-fill ph-plant text-5xl ${isWarning ? 'text-red-400 opacity-50' : 'text-green-600 opacity-70'}" style="transform: scaleY(${randHeight/100})"></i>
+                    `;
+                } else {
+                    // 미래(ASRS): 완벽히 균일, 건강한 초록빛
+                    plantDiv.className = `h-32 rounded-xl flex items-end justify-center pb-4 relative transition-all duration-500 bg-emerald-900/20 border border-emerald-500/30 shadow-[inset_0_0_15px_rgba(16,185,129,0.1)]`;
+                    plantDiv.innerHTML = `
+                        <i class="ph-fill ph-check-circle absolute top-2 right-2 text-emerald-400"></i>
+                        <i class="ph-fill ph-plant text-5xl text-emerald-400" style="transform: scaleY(1)"></i>
+                    `;
+                }
+                plantGrid.appendChild(plantDiv);
+            }
+        };
+
+        // 초기 렌더링 (Toggle On 상태 - ASRS 모드로 시작하게 셋팅됨)
+        toggle.checked = true;
+        renderPlants(true);
+
+        toggle.addEventListener('change', (e) => {
+            const isFuture = e.target.checked;
+            
+            if(isFuture) {
+                // ASRS 시스템 (미래)
+                labelPast.classList.remove('text-white', 'font-bold');
+                labelPast.classList.add('text-gray-400');
+                labelFuture.classList.add('text-white', 'font-bold', 'neon-text', 'text-emerald-400');
+                labelFuture.classList.remove('text-gray-400');
+                
+                impactSection.classList.remove('bg-red-950/20');
+                statPanel1.classList.remove('border-red-500/30');
+                statPanel2.classList.remove('border-red-500/30');
+                
+                valUniformity.innerText = '98.5%';
+                valUniformity.classList.replace('text-red-400', 'text-white');
+                descUniformity.innerText = '+ 완벽한 균일성 확보';
+                descUniformity.classList.replace('text-red-500', 'text-emerald-400');
+                
+                valSafety.innerText = '99.9%';
+                valSafety.classList.replace('text-red-400', 'text-white');
+                descSafety.innerText = '오류 제어 차단 완료';
+                descSafety.classList.replace('text-red-500', 'text-emerald-400');
+                
+                renderPlants(true);
+            } else {
+                // 과거 관찰자 판단
+                labelFuture.classList.remove('text-white', 'font-bold', 'neon-text', 'text-emerald-400');
+                labelFuture.classList.add('text-gray-400');
+                labelPast.classList.add('text-white', 'font-bold');
+                labelPast.classList.remove('text-gray-400');
+                
+                impactSection.classList.add('bg-red-950/20');
+                statPanel1.classList.add('border-red-500/30');
+                statPanel2.classList.add('border-red-500/30');
+                
+                valUniformity.innerText = '42.1%';
+                valUniformity.classList.add('text-red-400');
+                descUniformity.innerText = '- 생장 편차 발생';
+                descUniformity.classList.replace('text-emerald-400', 'text-red-500');
+                
+                valSafety.innerText = '65.0%';
+                valSafety.classList.add('text-red-400');
+                descSafety.innerText = '과도한 제어 신호 경고';
+                descSafety.classList.replace('text-emerald-400', 'text-red-500');
+                
+                renderPlants(false);
+            }
+        });
+
+    </script>
+</body>
+</html>
