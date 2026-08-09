@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>지식산업센터 관리단 홈페이지 제작 — 레퍼런스 조사 & 사이트 구성 제안서</title>
+<style>
+  :root{
+    --primary:#1F4E79;
+    --accent:#2E75B6;
+    --text:#222;
+    --muted:#5b6570;
+    --line:#e3e8ee;
+    --shade:#eaf1f8;
+    --bg:#ffffff;
+    --page-bg:#f4f6f8;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:"Pretendard","Malgun Gothic","맑은 고딕",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",sans-serif;
+    background:var(--page-bg);
+    color:var(--text);
+    line-height:1.72;
+    -webkit-font-smoothing:antialiased;
+  }
+  .sheet{
+    max-width:820px;
+    margin:40px auto 96px;
+    background:var(--bg);
+    padding:64px 72px 80px;
+    box-shadow:0 1px 3px rgba(20,30,40,.08), 0 12px 32px rgba(20,30,40,.06);
+    border-radius:4px;
+  }
+  header.titleblock{
+    text-align:center;
+    padding-bottom:36px;
+    margin-bottom:40px;
+    border-bottom:1px solid var(--line);
+  }
+  header.titleblock .eyebrow{
+    font-size:13px;
+    letter-spacing:.14em;
+    color:var(--accent);
+    font-weight:700;
+    text-transform:uppercase;
+    margin-bottom:14px;
+  }
+  header.titleblock h1{
+    font-size:30px;
+    font-weight:800;
+    color:var(--primary);
+    margin:0 0 10px;
+    letter-spacing:-0.01em;
+  }
+  header.titleblock .subtitle{
+    font-size:17px;
+    font-weight:600;
+    color:var(--accent);
+    margin:0 0 18px;
+  }
+  header.titleblock .date{
+    font-size:13px;
+    color:var(--muted);
+  }
+
+  h2.section-title{
+    font-size:20px;
+    font-weight:800;
+    color:var(--primary);
+    margin:52px 0 16px;
+    padding-bottom:10px;
+    border-bottom:2px solid var(--primary);
+    display:flex;
+    align-items:baseline;
+    gap:8px;
+  }
+  h2.section-title:first-of-type{ margin-top:0; }
+
+  h3.ref-title{
+    font-size:16.5px;
+    font-weight:800;
+    color:var(--text);
+    margin:30px 0 8px;
+  }
+  h3.ref-title:first-of-type{ margin-top:6px; }
+
+  .url-row{
+    font-size:13.5px;
+    margin-bottom:10px;
+  }
+  .url-row .label{
+    font-weight:700;
+    color:var(--muted);
+    margin-right:8px;
+  }
+  .url-row a{ color:var(--accent); text-decoration:none; }
+  .url-row a:hover{ text-decoration:underline; }
+
+  p{ margin:0 0 12px; font-size:14.5px; color:#2b2f33; }
+  .desc{ color:#3a3f45; }
+
+  ul.ref-list{
+    margin:0 0 6px;
+    padding-left:20px;
+  }
+  ul.ref-list li{
+    font-size:14.5px;
+    margin-bottom:7px;
+    color:#2b2f33;
+  }
+  ul.ref-list li.arrow{
+    color:var(--primary);
+    font-weight:600;
+  }
+
+  .note{
+    background:var(--shade);
+    border-left:3px solid var(--accent);
+    padding:14px 18px;
+    font-size:13.8px;
+    color:#334;
+    border-radius:2px;
+    margin:18px 0 8px;
+  }
+
+  .table-wrap{
+    width:100%;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    margin:18px 0 8px;
+    border-radius:6px;
+  }
+  table.compare{
+    width:100%;
+    min-width:560px;
+    border-collapse:collapse;
+    margin:0;
+    font-size:13.5px;
+  }
+  table.compare th{
+    background:var(--primary);
+    color:#fff;
+    text-align:left;
+    padding:11px 14px;
+    font-weight:700;
+  }
+  table.compare td{
+    padding:12px 14px;
+    border-bottom:1px solid var(--line);
+    vertical-align:top;
+    color:#2b2f33;
+  }
+  table.compare tr:nth-child(even) td{ background:#fafbfc; }
+  table.compare td:first-child{ font-weight:700; white-space:nowrap; color:var(--primary); }
+
+  .stage{
+    margin:26px 0;
+    padding:20px 22px;
+    border:1px solid var(--line);
+    border-radius:8px;
+    background:#fcfdfe;
+  }
+  .stage-title{
+    font-size:16px;
+    font-weight:800;
+    color:var(--primary);
+    margin:0 0 8px;
+  }
+  .stage-desc{ font-size:13.8px; color:var(--muted); margin-bottom:12px; }
+  .stage ul{ margin:0; padding-left:20px; }
+  .stage li{ font-size:14.5px; margin-bottom:6px; }
+
+  .why-box{
+    margin-top:18px;
+    padding:16px 20px;
+    background:var(--shade);
+    border-radius:8px;
+  }
+  .why-box .why-title{
+    font-weight:800;
+    color:var(--primary);
+    font-size:14px;
+    margin-bottom:6px;
+  }
+  .why-box p{ font-size:13.8px; margin:0; color:#334; }
+
+  .numlist{
+    counter-reset:step;
+    margin:20px 0;
+    padding:0;
+    list-style:none;
+  }
+  .numlist > li{
+    counter-increment:step;
+    margin-bottom:20px;
+    padding-left:38px;
+    position:relative;
+  }
+  .numlist > li::before{
+    content: counter(step);
+    position:absolute;
+    left:0; top:1px;
+    width:26px; height:26px;
+    border-radius:50%;
+    background:var(--primary);
+    color:#fff;
+    font-size:13px;
+    font-weight:800;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .numlist > li .item-title{
+    font-weight:800;
+    font-size:15px;
+    color:var(--text);
+    margin-bottom:6px;
+  }
+  .numlist > li ul{ margin:4px 0 0; padding-left:18px; }
+  .numlist > li ul li{ font-size:14px; margin-bottom:4px; color:#2b2f33; }
+
+  .process-flow{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+    margin:20px 0 24px;
+    padding:18px 20px;
+    background:var(--shade);
+    border-radius:8px;
+  }
+  .process-flow .step{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:8px 16px;
+    font-size:13.5px;
+    font-weight:700;
+    color:var(--primary);
+  }
+  .process-flow .arrow{ color:var(--accent); font-weight:700; }
+
+  footer.meta{
+    margin-top:64px;
+    padding-top:20px;
+    border-top:1px solid var(--line);
+    font-size:12px;
+    color:#9aa3ab;
+    text-align:center;
+  }
+
+  @media (max-width: 640px){
+    .sheet{ padding:32px 18px 48px; margin:0; border-radius:0; }
+    header.titleblock h1{ font-size:21px; }
+    header.titleblock .subtitle{ font-size:15px; }
+    h2.section-title{ font-size:16.5px; margin:40px 0 14px; }
+    h3.ref-title{ font-size:15px; }
+    p, ul.ref-list li, .stage li{ font-size:13.8px; }
+    .stage{ padding:16px 16px; }
+    .numlist > li{ padding-left:32px; }
+    .numlist > li::before{ width:22px; height:22px; font-size:12px; }
+    .process-flow{ padding:14px; gap:8px; }
+    .process-flow .step{ font-size:12.5px; padding:6px 12px; }
+  }
+
+  @media (max-width: 420px){
+    .process-flow{ flex-direction:column; align-items:stretch; }
+    .process-flow .arrow{ text-align:center; transform:rotate(90deg); }
+  }
+
+  @media print{
+    body{ background:#fff; }
+    .sheet{ box-shadow:none; margin:0; padding:0 6mm; max-width:none; }
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <header class="titleblock">
+    <div class="eyebrow">Proposal Document</div>
+    <h1>지식산업센터 관리단 홈페이지 제작</h1>
+    <div class="subtitle">레퍼런스 조사 &amp; 사이트 구성 제안서</div>
+    <div class="date">작성일: 2026년 8월 9일</div>
+  </header>
+
+  <!-- 1 -->
+  <h2 class="section-title">1. 프로젝트 개요</h2>
+  <p class="desc">본 문서는 지식산업센터 관리단 홈페이지 제작을 위한 레퍼런스 조사 결과와, 이를 바탕으로 한 사이트 구성(정보구조) 제안을 정리한 자료입니다.</p>
+  <div class="note">
+    ※ 참고 요청 사이트의 목적은 청약 일정·평면도·관심고객 등록 등 마케팅이 목적입니다. 이와 관련한 본 프로젝트는 입주 이후 운영관리를 목적으로 하는 성격이 다른 별도의 레퍼런스를 조사해 보았습니다.
+  </div>
+
+  <!-- 2 -->
+  <h2 class="section-title">2. 레퍼런스 사이트 (총 5개)</h2>
+
+  <h3 class="ref-title">① 신내 SK V1 관리단</h3>
+  <div class="url-row"><span class="label">URL</span><a href="https://skv1.kr/" target="_blank" rel="noopener">https://skv1.kr/</a></div>
+  <p>중랑구 신내동 지식산업센터, 600여 개 입주기업 규모의 실제 운영 중인 관리단 홈페이지.</p>
+  <ul class="ref-list">
+    <li>공지사항, 입주기업 안내, 중고장터, 업체광고 게시판</li>
+    <li>관리위원회 회의록, 관리규약(전자책 뷰어 링크), 연혁(History) 섹션</li>
+    <li>회원가입/로그인 체계로 입주사 전용 콘텐츠 구분</li>
+    <li class="arrow">→ 지식산업센터 관리단 사이트의 "기본기"를 잘 갖춘 구조. 벤치마킹 1순위.</li>
+  </ul>
+
+  <h3 class="ref-title">② 오피스너 (Officener)</h3>
+  <div class="url-row"><span class="label">URL</span><a href="https://www.officener.com/" target="_blank" rel="noopener">https://www.officener.com/</a></div>
+  <p>개별 건물 사이트가 아닌, 오피스·상가 건물 관리단을 위한 전문 플랫폼(SaaS).</p>
+  <ul class="ref-list">
+    <li>민원 접수·처리, 관리비 조회, 세금계산서 발행 등 기능 중심</li>
+    <li>한국지식산업센터연합회에서도 회원 혜택으로 무상 제공할 만큼 업계에서 실제 사용 중</li>
+    <li class="arrow">→ 기능 구성(민원 / 관리비 / 공지)을 참고하기 좋은 레퍼런스</li>
+  </ul>
+
+  <h3 class="ref-title">③ 아파트아이 (APTi)</h3>
+  <div class="url-row"><span class="label">URL</span><a href="https://www.apti.co.kr/" target="_blank" rel="noopener">https://www.apti.co.kr/</a></div>
+  <p>아파트 중심이지만 전국 3만 단지가 사용하는 "표준 관리사무소 홈페이지" 플랫폼. 전국 단지에 동일한 포맷을 공급하는 서비스 자체를 살펴보기에 좋은 레퍼런스.</p>
+  <ul class="ref-list">
+    <li>관리비 고지서 조회, 공지사항, 게시판, 전자투표 등 핵심 메뉴를 표준 패키지로 제공</li>
+    <li class="arrow">→ "플랫폼 소개" 성격이 강하므로, 실제 단지에서 어떻게 작동하는지는 아래 ④ 사례로 확인 가능</li>
+  </ul>
+
+  <h3 class="ref-title">④ 부평현대1단지아파트 관리사무소 (APTi 실제 적용 사례)</h3>
+  <div class="url-row"><span class="label">URL</span><a href="https://hd1.apti.co.kr/" target="_blank" rel="noopener">https://hd1.apti.co.kr/</a></div>
+  <p>아파트아이(APTi) 플랫폼이 실제 개별 단지에 적용된 살아있는 사례. "표준 포맷이 실전에서 어떻게 보이는지" 확인할 수 있어 별도로 정리.</p>
+  <ul class="ref-list">
+    <li>관리비 고지서 조회 화면이 실제로 구동 — 관리비 안내/조회 UX를 구체적으로 참고하기에 가장 좋은 예시</li>
+    <li>공지사항, 게시판이 실제 단지 운영 데이터로 채워져 있어 콘텐츠 볼륨감을 가늠하기 좋음</li>
+    <li>디자인은 다소 노후(레이아웃·폰트가 구형 웹 스타일)하지만, 기능·정보구조는 매우 완성도 높음</li>
+    <li class="arrow">→ "관리비 조회 시스템을 넣는다면 이런 형태"라는 실물 예시로 클라이언트에게 보여주기 좋음</li>
+  </ul>
+
+  <h3 class="ref-title">⑤ 성남우림라이온스밸리2차 관리사무소</h3>
+  <div class="url-row"><span class="label">URL</span><a href="http://www.wl2.co.kr/" target="_blank" rel="noopener">http://www.wl2.co.kr/</a></div>
+  <p>실제 운영 중인 지식산업센터 관리사무소 홈페이지.</p>
+  <ul class="ref-list">
+    <li>단지소개, 면적현황, 자료실, 설비현황, 입주사 메뉴 구성</li>
+    <li>관리비 입금 계좌 안내, 공지사항 게시판 운영</li>
+    <li>디자인은 옛날 스타일(그누보드4 + 이미지 배너)이지만, "관리사무소가 실제로 무엇을 게시·관리하는지" 콘텐츠 구성 참고에는 유용</li>
+  </ul>
+
+  <!-- 3 -->
+  <h2 class="section-title">3. 레퍼런스 종합 비교</h2>
+  <div class="table-wrap">
+  <table class="compare">
+    <thead>
+      <tr><th>사이트</th><th>강점</th><th>약점</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>신내 SK V1<br>(skv1.kr)</td>
+        <td>게시판 다양성(공지/입주기업/중고장터/업체광고), 연혁·관리규약 섹션 보유</td>
+        <td>디자인은 평범한 반응형 수준</td>
+      </tr>
+      <tr>
+        <td>오피스너<br>(officener.com)</td>
+        <td>민원·관리비·세금계산서 기능 UX가 세련된 SaaS형</td>
+        <td>개별 건물 도메인이 아닌 플랫폼 서비스</td>
+      </tr>
+      <tr>
+        <td>아파트아이<br>(apti.co.kr)</td>
+        <td>전국 표준 정보구조(IA), 전자투표 등 기능 폭넓음</td>
+        <td>브랜드/플랫폼 소개 위주로 특정 단지 실사용 화면 확인은 별도</td>
+      </tr>
+      <tr>
+        <td>부평현대1단지<br>(hd1.apti.co.kr)</td>
+        <td>관리비 고지서 조회, 공지사항, 게시판이 실제 단지 기준으로 구동되는 살아있는 예시. 관리비 조회 UX 참고에 최적</td>
+        <td>디자인이 다소 노후(레이아웃·폰트가 구형 웹 스타일)</td>
+      </tr>
+      <tr>
+        <td>성남우림라이온스밸리2차<br>(wl2.co.kr)</td>
+        <td>실제 관리비 계좌, 설비현황 등 현장 밀착 콘텐츠</td>
+        <td>디자인이 매우 구식</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+  <p style="font-size:12px;color:var(--muted);margin-top:-2px;">※ 모바일에서는 표를 옆으로 슬라이드해서 볼 수 있어요</p>
+
+  <!-- 4 -->
+  <h2 class="section-title">4. 지식산업센터 관리단 홈페이지 구성 제안</h2>
+  <p>위 5개 레퍼런스를 종합하여, 다음과 같은 사이트 구성을 고려 해보았습니다.</p>
+
+  <ol class="numlist">
+    <li>
+      <div class="item-title">메인(홈)</div>
+      <ul>
+        <li>상단 배너: 단지 전경 이미지 + 관리단 명칭</li>
+        <li>최신 공지사항 3~5개 자동 노출</li>
+        <li>빠른메뉴: 관리비 조회 / 민원접수 / 시설예약 / 오시는길</li>
+      </ul>
+    </li>
+    <li>
+      <div class="item-title">관리단 소개</div>
+      <ul>
+        <li>인사말, 연혁(History) — 신내 SK V1 참고</li>
+        <li>관리규약 (PDF 또는 전자책 뷰어)</li>
+        <li>관리위원회 구성 및 회의록</li>
+      </ul>
+    </li>
+    <li>
+      <div class="item-title">공지사항 / 소식</div>
+      <ul>
+        <li>공지사항 게시판</li>
+        <li>입주기업 안내 (선택)</li>
+        <li>커뮤니티 게시판: 중고장터·업체홍보 등 (선택사항)</li>
+      </ul>
+    </li>
+    <li>
+      <div class="item-title">관리비 안내</div>
+      <ul>
+        <li>관리비 부과 기준 안내</li>
+        <li>납부계좌 명시 (성남우림2차 사례 참고)</li>
+        <li>이상적으로는 로그인 후 개별 고지서 확인까지 연동 (오피스너·hd1.apti.co.kr 방식 참고)</li>
+      </ul>
+    </li>
+    <li>
+      <div class="item-title">민원접수</div>
+      <ul>
+        <li>온라인 민원 신청 폼 (오피스너 벤치마킹)</li>
+        <li>카테고리별 분류: 시설 / 청소 / 주차 / 기타</li>
+        <li>가능하다면 처리현황 확인 기능 포함</li>
+      </ul>
+    </li>
+    <li>
+      <div class="item-title">시설안내</div>
+      <ul>
+        <li>주차장, 공용공간, 회의실 등 안내</li>
+        <li>예약 시스템 (있다면)</li>
+      </ul>
+    </li>
+    <li>
+      <div class="item-title">자료실</div>
+      <ul>
+        <li>서식 다운로드: 임대차 신고서, 용도변경 신청서 등</li>
+        <li>안전관리 자료</li>
+      </ul>
+    </li>
+    <li>
+      <div class="item-title">오시는 길 / 연락처</div>
+      <ul>
+        <li>관리사무소 위치, 전화번호, 지도</li>
+      </ul>
+    </li>
+  </ol>
+
+  <!-- 5 -->
+  <h2 class="section-title">5. 진행</h2>
+  <p>빠른 오픈과 안정적인 운영을 위해, 아래와 같이 단계적으로 구축하는 방식을 제안드립니다. 1단계에서 핵심 기능을 중심으로 먼저 오픈하고, 운영 데이터가 쌓이는 것을 지켜보며 2단계에서 편의 기능을 확장하는 방식입니다.</p>
+
+  <div class="stage">
+    <div class="stage-title">1단계 — 기본 (핵심 기능)</div>
+    <div class="stage-desc">입주사와 관리단 운영에 바로 필요한 필수 기능으로 구성하여, 빠르게 오픈하고 안정적으로 운영을 시작합니다.</div>
+    <ul>
+      <li>공지사항 게시판</li>
+      <li>관리비 안내 (부과 기준, 납부계좌, 고지서 PDF 업로드 방식)</li>
+      <li>민원접수 (온라인 신청 폼)</li>
+      <li>자료실 (서식 다운로드)</li>
+      <li>오시는 길 / 관리사무소 연락처</li>
+    </ul>
+  </div>
+
+  <div class="stage">
+    <div class="stage-title">2단계 — 확장 및 고도화 (선택 기능)</div>
+    <div class="stage-desc">1단계 운영 이후, 입주사 편의성과 커뮤니티 활성화를 위해 필요에 따라 순차적으로 추가할 수 있는 기능입니다.</div>
+    <ul>
+      <li>입주기업 소개 페이지</li>
+      <li>커뮤니티 게시판 (중고장터 · 업체광고 등)</li>
+      <li>시설 예약 시스템 (회의실, 공용공간 등)</li>
+      <li>로그인 기반 개인별 관리비 조회 시스템</li>
+    </ul>
+  </div>
+
+  <div class="why-box">
+    <div class="why-title">사유</div>
+    <p>특히 로그인 기반의 개인별 관리비 조회 기능은 결제·인증 연동이 필요해 개발 기간과 비용이 상대적으로 크게 소요됩니다. 이에 따라 1단계에서는 관리비 고지서를 PDF로 업로드하고 공지사항으로 안내하는 방식으로 우선 운영하며, 이후 상황에 맞추어 2단계 기능을 확장해 나가는 방향을 제안드립니다.</p>
+  </div>
+
+  <!-- 6 -->
+  <h2 class="section-title">6. 참고 · 제작 프로세스</h2>
+  <p>홈페이지 제작 초기 단계에서는 디자인 시안보다, "어떤 기능이 필요한가(Scope)"를 먼저 명확히 정하는 것을 권장드립니다.</p>
+
+  <div class="process-flow">
+    <div class="step">기능 정의 (Scope)</div>
+    <div class="arrow">→</div>
+    <div class="step">디자인 시안</div>
+    <div class="arrow">→</div>
+    <div class="step">오픈</div>
+    <div class="arrow">→</div>
+    <div class="step">필요시 디자인 개선</div>
+  </div>
+
+  <ul class="ref-list">
+    <li>디자인은 확정된 기능 위에 입히는 작업이라, 완성된 뒤에도 비교적 쉽고 빠르게 개선·리뉴얼이 가능합니다.</li>
+    <li>반면 기능/구성이 진행 도중 계속 바뀌면, 이미 작업된 디자인과 개발 내용을 다시 수정해야 해 오히려 일정이 지연됩니다.</li>
+    <li>따라서 본 제안서의 목적은 "예쁜 화면"이 아니라, 위 1~2단계 기준으로 "무엇을 넣을지"를 먼저 논의하는 데 있습니다.</li>
+  </ul>
+  <p>기능 범위(Scope)가 확정되면 그에 맞춰 디자인 시안을 빠르게 진행할 수 있고, 오픈 이후에도 필요에 따라 얼마든지 디자인만 개선해 나갈 수 있습니다. 정의가 먼저, 디자인은 그다음이라는 순서로 진행할 것을 제안드립니다.</p>
+
+  <footer class="meta">지식산업센터 관리단 홈페이지 제작 · 레퍼런스 조사 &amp; 사이트 구성 제안서</footer>
+</div>
+</body>
+</html>
